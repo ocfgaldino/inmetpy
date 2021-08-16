@@ -1,0 +1,11 @@
+*.pyc
+__pycache__/
+
+
+# Enviromnet
+.env
+
+
+# Editores
+.vscode/
+.idea/
