@@ -83,7 +83,7 @@ class InmetStation:
         date_col = df["DATE"]
         
         date_time_str = date_col + " " + time_col 
-        date_time = pd.to_datetime(date_time_str,  "%Y-%m-%d %H%M")
+        date_time = pd.to_datetime(date_time_str,  format = "%Y-%m-%d %H%M")
         
         df.insert(0, "date_time", date_time)
         
@@ -91,7 +91,20 @@ class InmetStation:
         df.drop(columns=cols_drop, inplace=True)
         
         return df
+    
+    def __change_data_type(df:DataFrame) -> DataFrame:
         
+        to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
+        to_float = ["PRES","TEM_SEN","LAT","MAX_PRES","DWPT","MIN_TEMP",
+                    "LONG","MAX_DWPT","RAIN","MIN_PRES","WSPD","MIN_DWPT",
+                    "MAX_TEMP","WGST","TEMP"]
+        
+        df[to_int] = df[to_int].astype("int64")
+        df[to_float] = df[to_float].astype("float64")
+        
+        df[["LAT","LONG"]] = round(df[["LAT","LONG"]], 5)
+        
+        return df
         
     def list_stations(self, type:str) -> Union[DataFrame, str]:
         
