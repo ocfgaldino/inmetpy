@@ -15,15 +15,18 @@ class InmetStation:
         if request.status_code == 200:
             stations = request.json()
             df_stations = pd.json_normalize(stations)
+            df_stations = self.__rename_hourly_vars_to_cf(df_stations)
+            df_stations = self.__create_date_time(df_stations)
+            
             return df_stations
         else:
             return request.status_code
         
-    def __rename_vars_to_cf(df:DataFrame):
+    def __rename_hourly_vars_to_cf(self, df:DataFrame) -> DataFrame:
         
         cols_hourly_cf = {"DC_NOME": "STATION_NAME",
                           "PRE_INS": "PRES",
-                          "TEM_SEN": "",
+                          "TEM_SEN": "TEM_SEN",
                           "VL_LATITUDE":"LAT",
                           "PRE_MAX":"MAX_PRES",
                           "UF": "ST",
@@ -47,9 +50,20 @@ class InmetStation:
                           "CD_ESTACAO":"STATION_ID",
                           "HR_MEDICAO":"TIME"}
         
+        df.rename(columns = cols_hourly_cf, inplace = True)
+        
+        return df
+        
+        
+    def __rename_daily_vars_to_cf(self, df:DataFrame) -> DataFrame:
+    
         cols_daily_cf = {"UMID_MED":"",
-                         "DT_MEDICAO":"date",
-                         "DC_NOME":"station_name"}
+                        "DT_MEDICAO":"date",
+                        "DC_NOME":"station_name"}
+        
+        df.columns = cols_daily_cf 
+        
+        return df
         
         
     def __check_date_format(self, date:str) -> bool:
@@ -62,6 +76,21 @@ class InmetStation:
         
     #def __check_data_station(self, df:DataFrame) -> bool:
         
+    
+    def __create_date_time(self, df:DataFrame) -> DataFrame:
+        
+        time_col = df["TIME"]
+        date_col = df["DATE"]
+        
+        date_time_str = date_col + " " + time_col 
+        date_time = pd.to_datetime(date_time_str,  "%Y-%m-%d %H%M")
+        
+        df.insert(0, "date_time", date_time)
+        
+        cols_drop = ["DATE","TIME"]
+        df.drop(columns=cols_drop, inplace=True)
+        
+        return df
         
         
     def list_stations(self, type:str) -> Union[DataFrame, str]:
@@ -87,7 +116,7 @@ class InmetStation:
         return self.__get_request(r)
     
         
-    def get_station_data(self, start_date:str, end_date:str, station_id:Union[str,List[str]]) -> DataFrame:
+    def get_data_station_by_hour(self, start_date:str, end_date:str, station_id:Union[str,List[str]]) -> DataFrame:
         
         self.__check_date_format(start_date)
         self.__check_date_format(end_date)
@@ -112,12 +141,22 @@ class InmetStation:
                     
                     continue
                 
+        elif isinstance(station_id, str):
+            
+                r = requests.get("/".join([self.api, 
+                            "estacao",
+                            start_date,
+                            end_date,
+                            station_id]))
                 
-        
-
-        
-        
-        return self.__get_request(r)
+                return self.__get_request(r)
+            
+        else:
+            raise ValueError("station_id shoud be list or str.")
+            
+            
+                
+                
     
     
         
