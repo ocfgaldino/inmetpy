@@ -144,25 +144,29 @@ class InmetStation:
                             "estacao",
                             start_date,
                             end_date,
-                            station_id]))
+                            station]))
                 
                 if r.status_code == 200:
                     df_station = pd.json_normalize(r.json())
-                    stations_df = pd.append(stations_df, df_station)
+                    stations_df = stations_df.append(df_station)
                 elif r.status_code == 204:
                     print(f"No data for station {station}")
-                    
                     continue
+                
+            stations_df = self.__rename_hourly_vars_to_cf(stations_df)
+            stations_df = self.__create_date_time(stations_df)
+            
+            return stations_df
                 
         elif isinstance(station_id, str):
             
-                r = requests.get("/".join([self.api, 
-                            "estacao",
-                            start_date,
-                            end_date,
-                            station_id]))
-                
-                return self.__get_request(r)
+            r = requests.get("/".join([self.api, 
+                        "estacao",
+                        start_date,
+                        end_date,
+                        station_id]))
+            
+            return self.__get_request(r)
             
         else:
             raise ValueError("station_id shoud be list or str.")
