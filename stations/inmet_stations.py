@@ -21,31 +21,31 @@ class InmetStation:
         
     def __rename_vars_to_cf(df:DataFrame):
         
-        cols_hourly_cf = {"DC_NOME": "station_name",
-                          "PRE_INS": "",
+        cols_hourly_cf = {"DC_NOME": "STATION_NAME",
+                          "PRE_INS": "PRES",
                           "TEM_SEN": "",
-                          "VL_LATITUDE":"latitude",
-                          "PRE_MAX":"",
+                          "VL_LATITUDE":"LAT",
+                          "PRE_MAX":"MAX_PRES",
                           "UF": "ST",
-                          "RAD_GLO":"",
-                          "PTO_INS":"",
-                          "TEM_MIN":"",
-                          "VL_LONGITUDE":"longitude",
-                          "UMD_MIN":"",
-                          "PTO_MAX":"",
-                          "VEN_DIR":"wind_direction",
-                          "DT_MEDICAO":"",
-                          "CHUVA":"",
-                          "PRE_MIN":"",
-                          "UMD_MAX":"",
-                          "VEN_VEL":"wind_speed",
-                          "PTO_MIN":"",
-                          "TEM_MAX":"",
-                          "VEN_RAJ":"wind_gust",
-                          "TEM_INS":"",
-                          "UMD_INS":"",
-                          "CD_ESTACAO":"station_id",
-                          "HR_MEDICA":"time"}
+                          "RAD_GLO":"GLO_RAD",
+                          "PTO_INS":"DWPT",
+                          "TEM_MIN":"MIN_TEMP",
+                          "VL_LONGITUDE":"LONG",
+                          "UMD_MIN":"MIN_RH",
+                          "PTO_MAX":"MAX_DWPT",
+                          "VEN_DIR":"WDIR",
+                          "DT_MEDICAO":"DATE",
+                          "CHUVA":"RAIN",
+                          "PRE_MIN":"MIN_PRES",
+                          "UMD_MAX":"MAX_RH",
+                          "VEN_VEL":"WSPD",
+                          "PTO_MIN":"MIN_DWPT",
+                          "TEM_MAX":"MAX_TEMP",
+                          "VEN_RAJ":"WGST",
+                          "TEM_INS":"TEMP",
+                          "UMD_INS":"HUMI",
+                          "CD_ESTACAO":"STATION_ID",
+                          "HR_MEDICAO":"TIME"}
         
         cols_daily_cf = {"UMID_MED":"",
                          "DT_MEDICAO":"date",
@@ -60,7 +60,7 @@ class InmetStation:
             print("Incorrect date format, date should be in 'YYYY-MM-DD' format.")
             return False
         
-    def __check_data_station(self, df:DataFrame) -> bool:
+    #def __check_data_station(self, df:DataFrame) -> bool:
         
         
         
