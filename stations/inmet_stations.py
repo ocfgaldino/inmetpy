@@ -15,8 +15,6 @@ class InmetStation:
         if request.status_code == 200:
             stations = request.json()
             df_stations = pd.json_normalize(stations)
-            df_stations = self.__rename_hourly_vars_to_cf(df_stations)
-            df_stations = self.__create_date_time(df_stations)
             
             return df_stations
         else:
@@ -74,9 +72,15 @@ class InmetStation:
             print("Incorrect date format, date should be in 'YYYY-MM-DD' format.")
             return False
         
-    #def __check_data_station(self, df:DataFrame) -> bool:
+    def __check_data_station_hr(self, df:DataFrame) -> bool:
         
-    
+        cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
+        
+        if any(t.drop(columns = cols_filled).count() != 0):
+            return True # has data
+        else:
+            return False # no data for this period
+        
     def __create_date_time(self, df:DataFrame) -> DataFrame:
         
         time_col = df["TIME"]
@@ -148,9 +152,13 @@ class InmetStation:
                 
                 if r.status_code == 200:
                     df_station = pd.json_normalize(r.json())
-                    stations_df = stations_df.append(df_station)
+                    if self.__check_data_station_hr(df_station):
+                        print(f"No data available for this period for station {station}")
+                    else:
+                        stations_df = stations_df.append(df_station)
+                        
                 elif r.status_code == 204:
-                    print(f"No data for station {station}")
+                    print(f"There is no station {station}")
                     continue
                 
             stations_df = self.__rename_hourly_vars_to_cf(stations_df)
