@@ -76,7 +76,7 @@ class InmetStation:
         
         cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
         
-        if any(t.drop(columns = cols_filled).count() != 0):
+        if any(df.drop(columns = cols_filled).count() != 0):
             return True # has data
         else:
             return False # no data for this period
