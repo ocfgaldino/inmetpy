@@ -153,9 +153,9 @@ class InmetStation:
                 if r.status_code == 200:
                     df_station = pd.json_normalize(r.json())
                     if self.__check_data_station_hr(df_station):
-                        print(f"No data available for this period for station {station}")
-                    else:
                         stations_df = stations_df.append(df_station)
+                    else:
+                        print(f"No data available for this period for station {station}")
                         
                 elif r.status_code == 204:
                     print(f"There is no station {station}")
@@ -163,6 +163,7 @@ class InmetStation:
                 
             stations_df = self.__rename_hourly_vars_to_cf(stations_df)
             stations_df = self.__create_date_time(stations_df)
+            stations_df.reset_index(inplace = True)
             
             return stations_df
                 
