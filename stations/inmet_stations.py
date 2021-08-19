@@ -1,7 +1,7 @@
 import requests 
 import pandas as pd 
 import datetime 
-from typing import Union, List
+from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
 
 
@@ -133,7 +133,11 @@ class InmetStation:
         return self.__get_request(r)
     
         
-    def get_data_station_by_hour(self, start_date:str, end_date:str, station_id:Union[str,List[str]]) -> DataFrame:
+    def get_data_station_by_hour(self, 
+                                 start_date:str, 
+                                 end_date:str, 
+                                 station_id:Union[str,List[str]],
+                                 chunks:Optional[str,int] = None) -> DataFrame:
         
         self.__check_date_format(start_date)
         self.__check_date_format(end_date)
