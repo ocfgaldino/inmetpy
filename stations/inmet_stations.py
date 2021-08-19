@@ -150,63 +150,69 @@ class InmetStation:
         return self.__get_request(r)
     
         
-    def get_data_station_by_hour(self, 
-                                 start_date:str, 
-                                 end_date:str, 
-                                 station_id:Union[str,List[str]],
-                                 chunks:Optional[Union[str,int]] = None) -> DataFrame:
+    def get_data_station(self, 
+                         start_date:str, 
+                         end_date:str, 
+                         station_id:Union[str,List[str]],
+                         by:str,
+                         chunks:Optional[Union[str,int]] = None) -> DataFrame:
         
         self.__check_date_format(start_date)
         self.__check_date_format(end_date)
         
-        if isinstance(station_id, list):
-            
-            stations_df = pd.DataFrame()
-            for station in station_id:
-                print(f"Looking for station {station}...")
+        if by == "hour":
+        
+            if isinstance(station_id, list):
+                
+                stations_df = pd.DataFrame()
+                for station in station_id:
+                    print(f"Looking for station {station}...")
+                    
+                    r = requests.get("/".join([self.api, 
+                                "estacao",
+                                start_date,
+                                end_date,
+                                station]))
+                    
+                    if r.status_code == 200:
+                        df_station = pd.json_normalize(r.json())
+                        if self.__check_data_station_hr(df_station):
+                            stations_df = stations_df.append(df_station)
+                        else:
+                            print(f"No data available for this period for station {station}")
+                            
+                    elif r.status_code == 204:
+                        print(f"There is no station {station}")
+                        continue
+                    
+                    elif r.status_code == 403:
+                        raise MemoryError("""The amount of data is too large for this request.
+                                            Use the 'chunks' argument to split your request.""")
+                        
+                    else:
+                        print(f"Request error: Request status: {r.status_code}")
+                    
+                stations_df = self.__rename_hourly_vars_to_cf(stations_df)
+                stations_df = self.__create_date_time(stations_df)
+                stations_df.reset_index(inplace = True)
+                
+                return stations_df
+                    
+            elif isinstance(station_id, str):
                 
                 r = requests.get("/".join([self.api, 
                             "estacao",
                             start_date,
                             end_date,
-                            station]))
+                            station_id]))
                 
-                if r.status_code == 200:
-                    df_station = pd.json_normalize(r.json())
-                    if self.__check_data_station_hr(df_station):
-                        stations_df = stations_df.append(df_station)
-                    else:
-                        print(f"No data available for this period for station {station}")
-                        
-                elif r.status_code == 204:
-                    print(f"There is no station {station}")
-                    continue
+                return self.__get_request(r)
                 
-                elif r.status_code == 403:
-                    raise MemoryError("""The amount of data is too large for this request.
-                                         Use the 'chunks' argument to split your request.""")
-                    
-                else:
-                    print(f"Request error: Request status: {r.status_code}")
-                
-            stations_df = self.__rename_hourly_vars_to_cf(stations_df)
-            stations_df = self.__create_date_time(stations_df)
-            stations_df.reset_index(inplace = True)
+            else:
+                raise ValueError("station_id shoud be list or str.")
             
-            return stations_df
-                
-        elif isinstance(station_id, str):
-            
-            r = requests.get("/".join([self.api, 
-                        "estacao",
-                        start_date,
-                        end_date,
-                        station_id]))
-            
-            return self.__get_request(r)
-            
-        else:
-            raise ValueError("station_id shoud be list or str.")
+        elif by == "day":
+            pass
             
             
                 
