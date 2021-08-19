@@ -109,6 +109,15 @@ class InmetStation:
         df[["LAT","LONG"]] = round(df[["LAT","LONG"]], 5)
         
         return df
+    
+    def __count_date_diff(self, start_date:str, end_date:str) -> int:
+        
+        date_start = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        date_end = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+        
+        total_days = (date_end - date_start).days
+        
+        return total_days
         
     def list_stations(self, type:str) -> Union[DataFrame, str]:
         
