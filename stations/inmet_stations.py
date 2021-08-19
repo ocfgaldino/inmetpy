@@ -185,6 +185,9 @@ class InmetStation:
                 elif r.status_code == 403:
                     raise MemoryError("""The amount of data is too large for this request.
                                          Use the 'chunks' argument to split your request.""")
+                    
+                else:
+                    print(f"Request error: Request status: {r.status_code}")
                 
             stations_df = self.__rename_hourly_vars_to_cf(stations_df)
             stations_df = self.__create_date_time(stations_df)
