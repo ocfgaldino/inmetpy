@@ -125,8 +125,6 @@ class InmetStation:
         
         if n_chunks == "auto":
             return None
-            
-        
         
         
     def list_stations(self, type:str) -> Union[DataFrame, str]:
@@ -183,6 +181,10 @@ class InmetStation:
                 elif r.status_code == 204:
                     print(f"There is no station {station}")
                     continue
+                
+                elif r.status_code == 403:
+                    raise MemoryError("""The amount of data is too large for this request.
+                                         Use the 'chunks' argument to split your request.""")
                 
             stations_df = self.__rename_hourly_vars_to_cf(stations_df)
             stations_df = self.__create_date_time(stations_df)
