@@ -118,6 +118,16 @@ class InmetStation:
         total_days = (date_end - date_start).days
         
         return total_days
+    
+    def __split_dates(self, start_date:str, end_date:str, n_chunks:Optional[Union[str,int]]) -> int:
+        
+        total_days = self.__count_date_diff(start_date, end_date)
+        
+        if n_chunks == "auto":
+            return None
+            
+        
+        
         
     def list_stations(self, type:str) -> Union[DataFrame, str]:
         
@@ -146,7 +156,7 @@ class InmetStation:
                                  start_date:str, 
                                  end_date:str, 
                                  station_id:Union[str,List[str]],
-                                 chunks:Optional[str,int] = None) -> DataFrame:
+                                 chunks:Optional[Union[str,int]] = None) -> DataFrame:
         
         self.__check_date_format(start_date)
         self.__check_date_format(end_date)
