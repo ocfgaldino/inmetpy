@@ -190,7 +190,7 @@ class InmetStation:
                                             Use the 'chunks' argument to split your request.""")
                         
                     else:
-                        print(f"Request error: Request status: {r.status_code}")
+                        print(f"Request error: Request status {r.status_code}")
                     
                 stations_df = self.__rename_hourly_vars_to_cf(stations_df)
                 stations_df = self.__create_date_time(stations_df)
@@ -201,10 +201,10 @@ class InmetStation:
             elif isinstance(station_id, str):
                 
                 r = requests.get("/".join([self.api, 
-                            "estacao",
-                            start_date,
-                            end_date,
-                            station_id]))
+                                "estacao",
+                                start_date,
+                                end_date,
+                                station_id]))
                 
                 return self.__get_request(r)
                 
