@@ -20,35 +20,54 @@ class InmetStation:
         else:
             return request.status_code
         
-    def __rename_hourly_vars_to_cf(self, df:DataFrame) -> DataFrame:
+    def __rename_vars_to_cf(self, df:DataFrame, by:str) -> DataFrame:
         
-        cols_hourly_cf = {"DC_NOME": "STATION_NAME",
-                          "PRE_INS": "PRES",
-                          "TEM_SEN": "TEM_SEN",
-                          "VL_LATITUDE":"LAT",
-                          "PRE_MAX":"MAX_PRES",
-                          "UF": "ST",
-                          "RAD_GLO":"GLO_RAD",
-                          "PTO_INS":"DWPT",
-                          "TEM_MIN":"MIN_TEMP",
-                          "VL_LONGITUDE":"LONG",
-                          "UMD_MIN":"MIN_RH",
-                          "PTO_MAX":"MAX_DWPT",
-                          "VEN_DIR":"WDIR",
-                          "DT_MEDICAO":"DATE",
-                          "CHUVA":"RAIN",
-                          "PRE_MIN":"MIN_PRES",
-                          "UMD_MAX":"MAX_RH",
-                          "VEN_VEL":"WSPD",
-                          "PTO_MIN":"MIN_DWPT",
-                          "TEM_MAX":"MAX_TEMP",
-                          "VEN_RAJ":"WGST",
-                          "TEM_INS":"TEMP",
-                          "UMD_INS":"HUMI",
-                          "CD_ESTACAO":"STATION_ID",
-                          "HR_MEDICAO":"TIME"}
+        if by == "hour":
         
-        df.rename(columns = cols_hourly_cf, inplace = True)
+            cols_hourly_cf = {"DC_NOME": "STATION_NAME",
+                              "PRE_INS": "PRES",
+                              "TEM_SEN": "TEM_SEN",
+                              "VL_LATITUDE":"LAT",
+                              "PRE_MAX":"MAX_PRES",
+                              "UF": "ST",
+                              "RAD_GLO":"GLO_RAD",
+                              "PTO_INS":"DWPT",
+                              "TEM_MIN":"MIN_TEMP",
+                              "VL_LONGITUDE":"LONG",
+                              "UMD_MIN":"MIN_RH",
+                              "PTO_MAX":"MAX_DWPT",
+                              "VEN_DIR":"WDIR",
+                              "DT_MEDICAO":"DATE",
+                              "CHUVA":"RAIN",
+                              "PRE_MIN":"MIN_PRES",
+                              "UMD_MAX":"MAX_RH",
+                              "VEN_VEL":"WSPD",
+                              "PTO_MIN":"MIN_DWPT",
+                              "TEM_MAX":"MAX_TEMP",
+                              "VEN_RAJ":"WGST",
+                              "TEM_INS":"TEMP",
+                              "UMD_INS":"HUMI",
+                              "CD_ESTACAO":"STATION_ID",
+                              "HR_MEDICAO":"TIME"}
+        
+            df.rename(columns = cols_hourly_cf, inplace = True)
+        
+        if by == "day":
+            "UMID_MED":"73.4","DT_MEDICAO":"2019-10-01","DC_NOME":"RECIFE","UMID_MIN":"55","TEMP_MED":"25.7","CHUVA":"1",
+            "VL_LATITUDE":"-8.05916666","TEMP_MIN":"21.5","TEMP_MAX":"30.4","UF":"PE","VEL_VENTO_MED":null,"CD_ESTACAO":"A301","VL_LONGITUDE":"-34.95916666"
+            
+            cols_dayly_cf = {"DC_NOME": "STATION_NAME",
+                              "VL_LATITUDE":"LAT",
+                              "UF": "ST",
+                              "TEM_MIN":"MIN_TEMP",
+                              "VL_LONGITUDE":"LONG",
+                              "UMID_MIN":"MIN_RH",
+                              "DT_MEDICAO":"DATE",
+                              "CHUVA":"RAIN",
+                              "UMID_MED":"AVG_RH",
+                              "VEL_VENTO_MED":"WSPD",
+                              "TEM_MAX":"MAX_TEMP",
+                              "CD_ESTACAO":"STATION_ID"}
         
         return df
         
@@ -153,70 +172,70 @@ class InmetStation:
     def get_data_station(self, 
                          start_date:str, 
                          end_date:str, 
-                         station_id:Union[str,List[str]],
                          by:str,
+                         station_id:Union[str,List[str]],
                          chunks:Optional[Union[str,int]] = None) -> DataFrame:
         
         self.__check_date_format(start_date)
         self.__check_date_format(end_date)
         
         if by == "hour":
-        
-            if isinstance(station_id, list):
-                
-                stations_df = pd.DataFrame()
-                for station in station_id:
-                    print(f"Looking for station {station}...")
-                    
-                    r = requests.get("/".join([self.api, 
-                                "estacao",
-                                start_date,
-                                end_date,
-                                station]))
-                    
-                    if r.status_code == 200:
-                        df_station = pd.json_normalize(r.json())
-                        if self.__check_data_station_hr(df_station):
-                            stations_df = stations_df.append(df_station)
-                        else:
-                            print(f"No data available for this period for station {station}")
-                            
-                    elif r.status_code == 204:
-                        print(f"There is no station {station}")
-                        continue
-                    
-                    elif r.status_code == 403:
-                        raise MemoryError("""The amount of data is too large for this request.
-                                            Use the 'chunks' argument to split your request.""")
-                        
-                    else:
-                        print(f"Request error: Request status {r.status_code}")
-                    
-                stations_df = self.__rename_hourly_vars_to_cf(stations_df)
-                stations_df = self.__create_date_time(stations_df)
-                stations_df.reset_index(inplace = True)
-                
-                return stations_df
-                    
-            elif isinstance(station_id, str):
-                
-                r = requests.get("/".join([self.api, 
-                                "estacao",
-                                start_date,
-                                end_date,
-                                station_id]))
-                
-                return self.__get_request(r)
-                
-            else:
-                raise ValueError("station_id shoud be list or str.")
-            
+            query = [self.api, "estacao", start_date, end_date]
         elif by == "day":
-            pass
+            query = [self.api, "estacao", "diaria", start_date, end_date]
+        else:
+            raise ValueError("by argument is missing")
+    
+        if isinstance(station_id, list):
+            
+            stations_df = pd.DataFrame()
+            for station in station_id:
+                print(f"Looking for station {station}...")
+                
+                query.append(station)
+                r = requests.get("/".join(query))
+                
+                if r.status_code == 200:
+                    df_station = pd.json_normalize(r.json())
+                    if self.__check_data_station_hr(df_station):
+                        stations_df = stations_df.append(df_station)
+                    else:
+                        print(f"No data available for this period for station {station}")
+                        
+                elif r.status_code == 204:
+                    print(f"There is no station {station}")
+                    continue
+                
+                elif r.status_code == 403:
+                    raise MemoryError("""The amount of data is too large for this request.
+                                        Use the 'chunks' argument to split your request.""")
+                    
+                else:
+                    print(f"Request error: Request status {r.status_code}")
+                
+            stations_df = self.__rename_hourly_vars_to_cf(stations_df)
+            stations_df = self.__create_date_time(stations_df)
+            stations_df.reset_index(inplace = True)
+            
+            return stations_df
+                
+        elif isinstance(station_id, str):
+            
+            r = requests.get("/".join([self.api, 
+                            "estacao",
+                            start_date,
+                            end_date,
+                            station_id]))
+            
+            return self.__get_request(r)
+            
+        else:
+            raise ValueError("station_id shoud be list or str.")
+        
+        
+        
             
             
-                
-                
     
     
         
