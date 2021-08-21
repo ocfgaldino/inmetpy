@@ -91,28 +91,41 @@ class InmetStation:
             print("Incorrect date format, date should be in 'YYYY-MM-DD' format.")
             return False
         
-    def __check_data_station_hr(self, df:DataFrame) -> bool:
+    def __check_data_station(self, df:DataFrame, by:str) -> bool:
         
-        cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
+        if by == "hour":
+            cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
+        
+        elif by == "day":
+            cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO"]
         
         if any(df.drop(columns = cols_filled).count() != 0):
             return True # has data
         else:
             return False # no data for this period
         
-    def __create_date_time(self, df:DataFrame) -> DataFrame:
+    def __create_date_time(self, df:DataFrame, by:str) -> DataFrame:
         
-        time_col = df["TIME"]
-        date_col = df["DATE"]
+        if by == "hour":
+            time_col = df["TIME"]
+            date_col = df["DATE"]
+            
+            date_time_str = date_col + " " + time_col 
+            date_time = pd.to_datetime(date_time_str,  format = "%Y-%m-%d %H%M")
+            
+            df.insert(0, "date_time", date_time)
+            
+            cols_drop = ["DATE","TIME"]
         
-        date_time_str = date_col + " " + time_col 
-        date_time = pd.to_datetime(date_time_str,  format = "%Y-%m-%d %H%M")
-        
-        df.insert(0, "date_time", date_time)
-        
-        cols_drop = ["DATE","TIME"]
+        elif by == "day":
+            date_col = ["DATE"]
+            date_dt = pd.to_datetime(date_col, format = "%Y-%m-%d")
+            
+            df.insert(0,"date",date_dt)
+            
+            cols_drop = ["DATE"]
+            
         df.drop(columns=cols_drop, inplace=True)
-        
         return df
     
     def __change_data_type(df:DataFrame) -> DataFrame:
@@ -197,7 +210,7 @@ class InmetStation:
                 
                 if r.status_code == 200:
                     df_station = pd.json_normalize(r.json())
-                    if self.__check_data_station_hr(df_station):
+                    if self.__check_data_station(df_station, by):
                         stations_df = stations_df.append(df_station)
                     else:
                         print(f"No data available for this period for station {station}")
