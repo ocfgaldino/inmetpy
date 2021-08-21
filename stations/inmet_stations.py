@@ -53,10 +53,8 @@ class InmetStation:
             df.rename(columns = cols_hourly_cf, inplace = True)
         
         if by == "day":
-            "UMID_MED":"73.4","DT_MEDICAO":"2019-10-01","DC_NOME":"RECIFE","UMID_MIN":"55","TEMP_MED":"25.7","CHUVA":"1",
-            "VL_LATITUDE":"-8.05916666","TEMP_MIN":"21.5","TEMP_MAX":"30.4","UF":"PE","VEL_VENTO_MED":null,"CD_ESTACAO":"A301","VL_LONGITUDE":"-34.95916666"
             
-            cols_dayly_cf = {"DC_NOME": "STATION_NAME",
+            cols_daily_cf = {"DC_NOME": "STATION_NAME",
                               "VL_LATITUDE":"LAT",
                               "UF": "ST",
                               "TEM_MIN":"MIN_TEMP",
@@ -68,6 +66,8 @@ class InmetStation:
                               "VEL_VENTO_MED":"WSPD",
                               "TEM_MAX":"MAX_TEMP",
                               "CD_ESTACAO":"STATION_ID"}
+            
+            df.rename(columns = cols_daily_cf, inplace = True)
         
         return df
         
@@ -213,7 +213,7 @@ class InmetStation:
                 else:
                     print(f"Request error: Request status {r.status_code}")
                 
-            stations_df = self.__rename_hourly_vars_to_cf(stations_df)
+            stations_df = self.__rename_vars_to_cf(stations_df, by)
             stations_df = self.__create_date_time(stations_df)
             stations_df.reset_index(inplace = True)
             
