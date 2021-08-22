@@ -52,7 +52,7 @@ class InmetStation:
         
             df.rename(columns = cols_hourly_cf, inplace = True)
         
-        if by == "day":
+        elif by == "day":
             
             cols_daily_cf = {"DC_NOME": "STATION_NAME",
                               "VL_LATITUDE":"LAT",
@@ -113,15 +113,15 @@ class InmetStation:
             date_time_str = date_col + " " + time_col 
             date_time = pd.to_datetime(date_time_str,  format = "%Y-%m-%d %H%M")
             
-            df.insert(0, "date_time", date_time)
+            df.insert(0, "DATETIME", date_time)
             
             cols_drop = ["DATE","TIME"]
         
         elif by == "day":
-            date_col = ["DATE"]
+            date_col = df["DATE"]
             date_dt = pd.to_datetime(date_col, format = "%Y-%m-%d")
             
-            df.insert(0,"date",date_dt)
+            df.insert(0,"DATE",date_dt)
             
             cols_drop = ["DATE"]
             
@@ -227,7 +227,7 @@ class InmetStation:
                     print(f"Request error: Request status {r.status_code}")
                 
             stations_df = self.__rename_vars_to_cf(stations_df, by)
-            stations_df = self.__create_date_time(stations_df)
+            stations_df = self.__create_date_time(stations_df, by)
             stations_df.reset_index(inplace = True)
             
             return stations_df
