@@ -104,27 +104,33 @@ class InmetStation:
             df.insert(0, "DATETIME", date_time)
             
             cols_drop = ["DATE","TIME"]
+            df.drop(columns=cols_drop, inplace=True)
         
         elif by == "day":
             date_col = df["DATE"]
             date_dt = pd.to_datetime(date_col, format = "%Y-%m-%d")
+            cols_drop = ["DATE"]
+            df.drop(columns=cols_drop, inplace=True)
             
             df.insert(0,"DATE",date_dt)
             
-            cols_drop = ["DATE"]
-            
-        df.drop(columns=cols_drop, inplace=True)
         return df
     
-    def __change_data_type(df:DataFrame) -> DataFrame:
+    def __change_data_type(self, df:DataFrame, by:str) -> DataFrame:
         
-        to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
-        to_float = ["PRES","TEM_SEN","LAT","MAX_PRES","DWPT","MIN_TEMP",
-                    "LONG","MAX_DWPT","RAIN","MIN_PRES","WSPD","MIN_DWPT",
-                    "MAX_TEMP","WGST","TEMP"]
+        if by == "hour":
         
-        df[to_int] = df[to_int].astype("int64")
-        df[to_float] = df[to_float].astype("float64")
+            to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
+            to_float = ["PRES","TEM_SEN","LAT","MAX_PRES","DWPT","MIN_TEMP",
+                        "LONG","MAX_DWPT","RAIN","MIN_PRES","WSPD","MIN_DWPT",
+                        "MAX_TEMP","WGST","TEMP"]
+            
+            df[to_int] = df[to_int].apply(pd.to_numeric, errors="coerce").astype("Int64")
+            df[to_float] = df[to_float].apply(pd.to_numeric, errors="coerce").astype("float64")
+            
+        elif by == "day":
+            pass
+            
         
         df[["LAT","LONG"]] = round(df[["LAT","LONG"]], 5)
         
@@ -216,6 +222,7 @@ class InmetStation:
                 
             stations_df = self.__rename_vars_to_cf(stations_df, by)
             stations_df = self.__create_date_time(stations_df, by)
+            stations_df = self.__change_data_type(stations_df, by)
             stations_df.reset_index(inplace = True)
             
             return stations_df
