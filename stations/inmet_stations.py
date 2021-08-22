@@ -71,18 +71,6 @@ class InmetStation:
         
         return df
         
-        
-    def __rename_daily_vars_to_cf(self, df:DataFrame) -> DataFrame:
-    
-        cols_daily_cf = {"UMID_MED":"",
-                        "DT_MEDICAO":"date",
-                        "DC_NOME":"station_name"}
-        
-        df.columns = cols_daily_cf 
-        
-        return df
-        
-        
     def __check_date_format(self, date:str) -> bool:
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
