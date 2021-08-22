@@ -119,19 +119,19 @@ class InmetStation:
     def __change_data_type(self, df:DataFrame, by:str) -> DataFrame:
         
         if by == "hour":
-        
             to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
             to_float = ["PRES","TEM_SEN","LAT","MAX_PRES","DWPT","MIN_TEMP",
                         "LONG","MAX_DWPT","RAIN","MIN_PRES","WSPD","MIN_DWPT",
                         "MAX_TEMP","WGST","TEMP"]
             
-            df[to_int] = df[to_int].apply(pd.to_numeric, errors="coerce").astype("Int64")
-            df[to_float] = df[to_float].apply(pd.to_numeric, errors="coerce").astype("float64")
-            
         elif by == "day":
-            pass
+            to_int = ["MIN_RH"]
+            to_float = ["LAT","LONG","AVG_RH","TEMP_MED","RAIN","TEMP_MIN","TEMP_MAX",
+                        "WSPD"]
             
         
+        df[to_int] = df[to_int].apply(pd.to_numeric, errors="coerce").astype("Int64")
+        df[to_float] = df[to_float].apply(pd.to_numeric, errors="coerce").astype("float64")
         df[["LAT","LONG"]] = round(df[["LAT","LONG"]], 5)
         
         return df
