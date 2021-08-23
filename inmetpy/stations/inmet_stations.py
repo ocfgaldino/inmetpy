@@ -75,9 +75,9 @@ class InmetStation:
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
             return True
-        except ValueError:
-            print("Incorrect date format, date should be in 'YYYY-MM-DD' format.")
-            return False
+        except:
+            raise ValueError("Incorrect date format, date should be in 'YYYY-MM-DD' format.")
+            
         
     def __check_data_station(self, df:DataFrame, by:str) -> bool:
         
