@@ -92,6 +92,13 @@ class TestInmetStation(unittest.TestCase):
         col_names_result = station_data.columns.tolist()
         self.assertEqual(col_names_result, col_names)
         
+    def test_get_all_stations_wrong_date_format(self):
+        
+        api = InmetStation()
+        self.assertRaises(ValueError, api.get_all_stations,"2021/05/01")
+        
+        
+        
         
     
         
