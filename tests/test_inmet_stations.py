@@ -30,7 +30,36 @@ class TestInmetStation(unittest.TestCase):
         col_names_stations = stations.columns.tolist()
         self.assertEqual(col_names_stations, col_names)
         
+        
+    def test_list_stations_M(self):
+        col_names = ['CD_OSCAR',
+                     'DC_NOME',
+                     'FL_CAPITAL',
+                     'DT_FIM_OPERACAO',
+                     'CD_SITUACAO',
+                     'TP_ESTACAO',
+                     'VL_LATITUDE',
+                     'CD_WSI',
+                     'CD_DISTRITO',
+                     'VL_ALTITUDE',
+                     'SG_ESTADO',
+                     'SG_ENTIDADE',
+                     'CD_ESTACAO',
+                     'VL_LONGITUDE',
+                     'DT_INICIO_OPERACAO']
+        
+        api = InmetStation()
+        stations = api.list_stations("M")
+        col_names_stations = stations.columns.tolist()
+        self.assertEqual(col_names_stations, col_names)
+        
+        
+    def test_list_stations_wrong_input(self):
     
+        api = InmetStation()
+        self.assertRaises(ValueError, api.list_stations, "s")
+        
+        
     def test_get_all_stations(self):
         
         col_names = ['VEN_DIR',
@@ -62,6 +91,9 @@ class TestInmetStation(unittest.TestCase):
         station_data = api.get_all_stations("2021-05-01")
         col_names_result = station_data.columns.tolist()
         self.assertEqual(col_names_result, col_names)
+        
+        
+    
         
         
     
