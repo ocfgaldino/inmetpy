@@ -9,3 +9,11 @@ __pycache__/
 # Editores
 .vscode/
 .idea/
+
+*.egg-info
+.coverage
+.ipynb_checkpoints
+.DS_Store
+raw_data/
+*.csv
+**/__pycache__/
