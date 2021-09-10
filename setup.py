@@ -13,5 +13,5 @@ setup(name='inmetpy',
       test_suite='tests',
       # include_package_data: to install data from MANIFEST.in
       include_package_data=True,
-      scripts=['scripts/inmetpy-run'],
+      scripts=['scripts/inmetpy'],
       zip_safe=False)

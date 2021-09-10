@@ -10,13 +10,33 @@ class InmetStation:
     def __init__(self):
         self.api = "https://apitempo.inmet.gov.br"
         
-    def __get_request(self, request:requests.models.Response) -> Union[DataFrame,int]:
+    def __get_request(self,
+            request:requests.models.Response,
+            save_file=False,
+            date=None,
+            station_id=None,
+            start_date=None,
+            end_date=None) -> Union[DataFrame,int]:
         
         if request.status_code == 200:
             stations = request.json()
             df_stations = pd.json_normalize(stations)
-            
-            return df_stations
+
+            if save_file:
+                if station_id:
+                    print('date')
+                    print('station_id')
+
+                    df_stations.to_csv(f"inmet_data_{station_id}_{start_date}_{end_date}.csv", index=False)
+                    print(f"file 'inmet_data_{station_id}_{start_date}_{end_date}.csv' was downloaded")
+                if date:
+                    print('date')
+                    print('station_id')
+
+                    df_stations.to_csv(f"inmet_data_{date}.csv", index=False)
+                    print(f"file 'inmet_data_{date}.csv' was downloaded")
+            else:
+                return df_stations
         else:
             return request.status_code
         
@@ -153,34 +173,42 @@ class InmetStation:
             return None
         
         
-    def list_stations(self, type:str) -> Union[DataFrame, str]:
+    def list_stations(self, station_type:str="T", save_file=False) -> Union[DataFrame, str]:
         
-        if type not in ["T","M"]:
+        if station_type not in ["T","M"]:
             raise ValueError('type must be either "T" (Automatic) or "M" (Manual)')
         else:
-            r = requests.get("/".join([self.api, "estacoes", type]))
+            r = requests.get("/".join([self.api, "estacoes", station_type]))
             if r.status_code == 200:
                 stations = r.json()
                 df_stations = pd.json_normalize(stations)
                 
-                return df_stations
+                if save_file:
+                    df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
+                    print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
+                else:
+                    return df_stations
             else:
                 return r.status_code
             
             
-    def get_all_stations(self, date:str):
+    def get_all_stations(self, date:str=None, save_file=False):
+
+        if date == None:
+            date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
         
         self.__check_date_format(date)
         
         r = requests.get("/".join([self.api, "estacao", "dados", date]))
-        return self.__get_request(r)
+        return self.__get_request(r, save_file=save_file, date=date)
     
         
     def get_data_station(self, 
-                         start_date:str, 
-                         end_date:str, 
-                         by:str,
-                         station_id:Union[str,List[str]],
+                         start_date:str='2020-01-01',
+                         end_date:str='2020-01-02',
+                         by:str='hour',
+                         station_id:Union[str,List[str]]='A652',
+                         save_file=False,
                          chunks:Optional[Union[str,int]] = None) -> DataFrame:
         
         self.__check_date_format(start_date)
@@ -197,10 +225,12 @@ class InmetStation:
             
             stations_df = pd.DataFrame()
             for station in station_id:
+                print(station)
                 print(f"Looking for station {station}...")
                 
-                query.append(station)
-                r = requests.get("/".join(query))
+                query1 = query.copy()
+                query1.append(station)
+                r = requests.get("/".join(query1))
                 
                 if r.status_code == 200:
                     df_station = pd.json_normalize(r.json())
@@ -225,7 +255,11 @@ class InmetStation:
             stations_df = self.__change_data_type(stations_df, by)
             stations_df.reset_index(inplace = True)
             
-            return stations_df
+            if save_file:
+                stations_df.to_csv(f"inmet_data_{start_date}_{end_date}.csv", index=False)
+                print(f"file 'inmet_data_{start_date}_{end_date}.csv' was downloaded")
+            else:
+                return stations_df
                 
         elif isinstance(station_id, str):
             
@@ -235,7 +269,7 @@ class InmetStation:
                             end_date,
                             station_id]))
             
-            return self.__get_request(r)
+            return self.__get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
             
         else:
             raise ValueError("station_id shoud be list or str.")
