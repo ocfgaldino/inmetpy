@@ -15,6 +15,19 @@ deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
 pip install inmetpy
 ```
 
+# Comand Line Library Usage
+
+```bash
+# download a list of inmet stations
+inmetpy-run list_stations "T"
+
+# get data from all inmet station after a selected date
+inmetpy-run get_all_stations 2021-09-01
+
+# get data from a station or a list of stations
+inmetpy get_data_station 2021-09-01 2021-09-10 '[A652,A667]'
+```
+
 # Library Usage
 
 ```bash
