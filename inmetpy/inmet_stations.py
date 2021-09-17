@@ -10,7 +10,7 @@ class InmetStation:
     def __init__(self):
         self.api = "https://apitempo.inmet.gov.br"
         
-    def __get_request(self,
+    def _get_request(self,
             request:requests.models.Response,
             save_file=False,
             date=None,
@@ -40,7 +40,7 @@ class InmetStation:
         else:
             return request.status_code
         
-    def __rename_vars_to_cf(self, df:DataFrame, by:str) -> DataFrame:
+    def _rename_vars_to_cf(self, df:DataFrame, by:str) -> DataFrame:
         
         if by == "hour":
         
@@ -91,7 +91,7 @@ class InmetStation:
         
         return df
         
-    def __check_date_format(self, date:str) -> bool:
+    def _check_date_format(self, date:str) -> bool:
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
             return True
@@ -99,7 +99,7 @@ class InmetStation:
             raise ValueError("Incorrect date format, date should be in 'YYYY-MM-DD' format.")
             
         
-    def __check_data_station(self, df:DataFrame, by:str) -> bool:
+    def _check_data_station(self, df:DataFrame, by:str) -> bool:
         
         if by == "hour":
             cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
@@ -112,7 +112,7 @@ class InmetStation:
         else:
             return False # no data for this period
         
-    def __create_date_time(self, df:DataFrame, by:str) -> DataFrame:
+    def _create_date_time(self, df:DataFrame, by:str) -> DataFrame:
         
         if by == "hour":
             time_col = df["TIME"]
@@ -136,7 +136,7 @@ class InmetStation:
             
         return df
     
-    def __change_data_type(self, df:DataFrame, by:str) -> DataFrame:
+    def _change_data_type(self, df:DataFrame, by:str) -> DataFrame:
         
         if by == "hour":
             to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
@@ -156,7 +156,7 @@ class InmetStation:
         
         return df
     
-    def __count_date_diff(self, start_date:str, end_date:str) -> int:
+    def _count_date_diff(self, start_date:str, end_date:str) -> int:
         
         date_start = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         date_end = datetime.datetime.strptime(end_date, "%Y-%m-%d")
@@ -165,9 +165,9 @@ class InmetStation:
         
         return total_days
     
-    def __split_dates(self, start_date:str, end_date:str, n_chunks:Optional[Union[str,int]]) -> int:
+    def _split_dates(self, start_date:str, end_date:str, n_chunks:Optional[Union[str,int]]) -> int:
         
-        total_days = self.__count_date_diff(start_date, end_date)
+        total_days = self._count_date_diff(start_date, end_date)
         
         if n_chunks == "auto":
             return None
@@ -197,10 +197,10 @@ class InmetStation:
         if date == None:
             date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
         
-        self.__check_date_format(date)
+        self._check_date_format(date)
         
         r = requests.get("/".join([self.api, "estacao", "dados", date]))
-        return self.__get_request(r, save_file=save_file, date=date)
+        return self._get_request(r, save_file=save_file, date=date)
     
         
     def get_data_station(self, 
@@ -211,8 +211,8 @@ class InmetStation:
                          save_file=False,
                          chunks:Optional[Union[str,int]] = None) -> DataFrame:
         
-        self.__check_date_format(start_date)
-        self.__check_date_format(end_date)
+        self._check_date_format(start_date)
+        self._check_date_format(end_date)
         
         if by == "hour":
             query = [self.api, "estacao", start_date, end_date]
@@ -234,7 +234,7 @@ class InmetStation:
                 
                 if r.status_code == 200:
                     df_station = pd.json_normalize(r.json())
-                    if self.__check_data_station(df_station, by):
+                    if self._check_data_station(df_station, by):
                         stations_df = stations_df.append(df_station)
                     else:
                         print(f"No data available for this period for station {station}")
@@ -250,9 +250,9 @@ class InmetStation:
                 else:
                     print(f"Request error: Request status {r.status_code}")
                 
-            stations_df = self.__rename_vars_to_cf(stations_df, by)
-            stations_df = self.__create_date_time(stations_df, by)
-            stations_df = self.__change_data_type(stations_df, by)
+            stations_df = self._rename_vars_to_cf(stations_df, by)
+            stations_df = self._create_date_time(stations_df, by)
+            stations_df = self._change_data_type(stations_df, by)
             stations_df.reset_index(inplace = True)
             
             if save_file:
@@ -269,7 +269,7 @@ class InmetStation:
                             end_date,
                             station_id]))
             
-            return self.__get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
+            return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
             
         else:
             raise ValueError("station_id shoud be list or str.")
