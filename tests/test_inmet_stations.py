@@ -3,7 +3,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import unittest
 
-from inmetpy.stations.inmet_stations import InmetStation
+from inmetpy.inmet_stations import InmetStation
 
 class TestInmetStation(unittest.TestCase):
     
