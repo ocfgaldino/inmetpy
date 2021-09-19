@@ -172,6 +172,21 @@ class InmetStation:
         if n_chunks == "auto":
             return None
         
+    def _is_state(self, st:List) -> None:
+        
+        br_states = ["AC","AL","AP","AM","BA",
+                     "CE","DF","ES","GO","MA",
+                     "MT","MS","MG","PA","PB",
+                     "PR","PE","PI","RJ","RN",
+                     "RS","RO","RR","SC","SP",
+                     "SE","TO"]
+        
+        for state in st:
+            
+            if state in br_states:
+                pass
+            else:
+                raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
         
     def list_stations(self, station_type:str="T", save_file=False) -> Union[DataFrame, str]:
         
@@ -277,7 +292,7 @@ class InmetStation:
         
     def search_station_by_state(self, st:List) -> DataFrame:
         
-        #self._is_state(st)
+        self._is_state(st)
         
         all_stations = self.list_stations()
         
