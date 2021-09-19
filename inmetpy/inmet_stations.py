@@ -204,11 +204,11 @@ class InmetStation:
     
         
     def get_data_station(self, 
-                         start_date:str='2020-01-01',
-                         end_date:str='2020-01-02',
-                         by:str='hour',
-                         station_id:Union[str,List[str]]='A652',
-                         save_file=False,
+                         start_date:str,
+                         end_date:str,
+                         by:str,
+                         station_id:Union[str,List[str]],
+                         save_file:bool = False,
                          chunks:Optional[Union[str,int]] = None) -> DataFrame:
         
         self._check_date_format(start_date)
