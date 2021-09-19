@@ -275,6 +275,18 @@ class InmetStation:
             raise ValueError("station_id should be list or str.")
         
         
+    def search_station_by_state(self, st:List) -> DataFrame:
+        
+        #self._is_state(st)
+        
+        all_stations = self.list_stations()
+        
+        stations = all_stations[all_stations['SG_ESTADO'].isin(st)]
+        
+        return stations 
+            
+        
+        
         
             
             
