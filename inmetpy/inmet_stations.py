@@ -272,7 +272,7 @@ class InmetStation:
             return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
             
         else:
-            raise ValueError("station_id shoud be list or str.")
+            raise ValueError("station_id should be list or str.")
         
         
         
