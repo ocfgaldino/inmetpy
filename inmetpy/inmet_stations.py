@@ -202,19 +202,25 @@ class InmetStation:
             
         
     def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
-        """ List all stations available on INMET API.
+        """List all stations available on INMET API.
 
-        Args:
-            station_type (str): Station type. "T" for automatic station and "M" for manual stations.
-            save_file (bool, optional): Save output to csv file. Defaults to False.
+        Parameters
+        ----------
+        station_type : str
+            Station type. "T" for automatic station and "M" for manual stations.
+        save_file : bool, optional
+            Save output to csv file, by default False
 
-        Raises:
-            ValueError: Wrong input for station_type.
+        Returns
+        -------
+        Union[DataFrame, str]
+            A pandas dataframe containing all stations.
 
-        Returns:
-            Union[DataFrame, str]: A pandas dataframe containing all stations.
-        
-        """     
+        Raises
+        ------
+        ValueError
+            Wrong input for station_type.
+        """        
         
         if station_type not in ["T","M"]:
             raise ValueError('type must be either "T" (Automatic) or "M" (Manual)')
