@@ -188,7 +188,20 @@ class InmetStation:
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
         
-    def list_stations(self, station_type:str="T", save_file=False) -> Union[DataFrame, str]:
+    def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
+        """ List all stations available on INMET API.
+
+        Args:
+            station_type (str): Station type. "T" for automatic station and "M" for manual stations.
+            save_file (bool, optional): Save output to csv file. Defaults to False.
+
+        Raises:
+            ValueError: Wrong input for station_type.
+
+        Returns:
+            Union[DataFrame, str]: A pandas dataframe containing all stations.
+        
+        """     
         
         if station_type not in ["T","M"]:
             raise ValueError('type must be either "T" (Automatic) or "M" (Manual)')
