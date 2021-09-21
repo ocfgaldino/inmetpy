@@ -173,6 +173,18 @@ class InmetStation:
             return None
         
     def _is_state(self, st:List) -> None:
+        """Check if input is a valid brazilian state abbreviation
+
+        Parameters
+        ----------
+        st : List
+            A list of brazilian states abbreviated.
+
+        Raises
+        ------
+        ValueError
+            Wrong abbreviation used.
+        """        
         
         br_states = ["AC","AL","AP","AM","BA",
                      "CE","DF","ES","GO","MA",
@@ -187,6 +199,7 @@ class InmetStation:
                 pass
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
+            
         
     def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
         """ List all stations available on INMET API.
