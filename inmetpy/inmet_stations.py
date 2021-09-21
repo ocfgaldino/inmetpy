@@ -92,6 +92,24 @@ class InmetStation:
         return df
         
     def _check_date_format(self, date:str) -> bool:
+        """Check user input date format.
+
+        Parameters
+        ----------
+        date : str
+            A date to check the format. 
+
+        Returns
+        -------
+        bool
+            If date format is valid, True is returned.
+
+        Raises
+        ------
+        ValueError
+            Wrong date format input.
+        """        
+        
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
             return True
