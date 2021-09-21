@@ -98,6 +98,12 @@ class TestInmetStation(unittest.TestCase):
         self.assertRaises(ValueError, api.get_all_stations,"2021/05/01")
         
         
+    def test_filter_state(self):
+        
+        api = InmetStation()
+        self.assertRaises(ValueError, api.search_station_by_state, ["SS"])
+        
+        
         
         
     
