@@ -197,6 +197,20 @@ class InmetStation:
         return df
     
     def _change_data_type(self, df:DataFrame, by:str) -> DataFrame:
+        """Change the data type of each attribute of the queried data.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The queried data.
+        by : str
+            The time resolution of the queried data.
+
+        Returns
+        -------
+        DataFrame
+            The original dataframe with the correct data types format for each attribute.
+        """        
         
         if by == "hour":
             to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
