@@ -411,6 +411,18 @@ class InmetStation:
         
         
     def search_station_by_state(self, st:List) -> DataFrame:
+        """Search available stations for specific states.
+
+        Parameters
+        ----------
+        st : List
+            A list with the brazilian states searched (abbreviated).
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe with all stations available for the searched states.
+        """        
         
         self._is_state(st)
         
