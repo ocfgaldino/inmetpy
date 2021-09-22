@@ -41,6 +41,20 @@ class InmetStation:
             return request.status_code
         
     def _rename_vars_to_cf(self, df:DataFrame, by:str) -> DataFrame:
+        """Rename original columns names to metric systems (https://dev.meteostat.net/formats.html#time-format)
+
+        Parameters
+        ----------
+        df : DataFrame
+            A pandas dataframe with the original columns names (in portuguese)
+        by : str
+            The time resolution of df. Different columns names for "hourly" and "daily".
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe with renamed columns names.
+        """        
         
         if by == "hour":
         
