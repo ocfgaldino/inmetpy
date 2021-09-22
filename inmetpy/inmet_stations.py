@@ -132,6 +132,20 @@ class InmetStation:
             
         
     def _check_data_station(self, df:DataFrame, by:str) -> bool:
+        """Check if the queried data result is empty.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The queried data.
+        by : str
+            The time resolution of the queried data.
+
+        Returns
+        -------
+        bool
+            If the queried result contains data from any station, returns True, False otherwise.
+        """        
         
         if by == "hour":
             cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
@@ -140,9 +154,9 @@ class InmetStation:
             cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO"]
         
         if any(df.drop(columns = cols_filled).count() != 0):
-            return True # has data
+            return True 
         else:
-            return False # no data for this period
+            return False 
         
     def _create_date_time(self, df:DataFrame, by:str) -> DataFrame:
         
