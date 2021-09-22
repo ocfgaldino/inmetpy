@@ -231,6 +231,20 @@ class InmetStation:
         return df
     
     def _count_date_diff(self, start_date:str, end_date:str) -> int:
+        """Count the total of days queried.
+
+        Parameters
+        ----------
+        start_date : str
+            The query start date.
+        end_date : str
+            The query end date.
+
+        Returns
+        -------
+        int
+            The total of days queried.
+        """        
         
         date_start = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         date_end = datetime.datetime.strptime(end_date, "%Y-%m-%d")
