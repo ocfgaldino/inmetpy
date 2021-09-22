@@ -159,6 +159,20 @@ class InmetStation:
             return False 
         
     def _create_date_time(self, df:DataFrame, by:str) -> DataFrame:
+        """Create a datetime column in the queried data.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The queried data.
+        by : str
+            The time resolution. By "hour" or "day".
+
+        Returns
+        -------
+        DataFrame
+            The original dataframe with one more column. A datetime column.
+        """        
         
         if by == "hour":
             time_col = df["TIME"]
