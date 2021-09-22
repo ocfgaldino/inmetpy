@@ -41,6 +41,20 @@ class InmetStation:
             return request.status_code
         
     def _rename_vars_to_cf(self, df:DataFrame, by:str) -> DataFrame:
+        """Rename original columns names to metric systems (https://dev.meteostat.net/formats.html#time-format)
+
+        Parameters
+        ----------
+        df : DataFrame
+            A pandas dataframe with the original columns names (in portuguese)
+        by : str
+            The time resolution of df. Different columns names for "hourly" and "daily".
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe with renamed columns names.
+        """        
         
         if by == "hour":
         
@@ -92,6 +106,24 @@ class InmetStation:
         return df
         
     def _check_date_format(self, date:str) -> bool:
+        """Check user input date format.
+
+        Parameters
+        ----------
+        date : str
+            A date to check the format. 
+
+        Returns
+        -------
+        bool
+            If date format is valid, True is returned.
+
+        Raises
+        ------
+        ValueError
+            Wrong date format input.
+        """        
+        
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
             return True
@@ -100,6 +132,20 @@ class InmetStation:
             
         
     def _check_data_station(self, df:DataFrame, by:str) -> bool:
+        """Check if the queried data result is empty.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The queried data.
+        by : str
+            The time resolution of the queried data.
+
+        Returns
+        -------
+        bool
+            If the queried result contains data from any station, returns True, False otherwise.
+        """        
         
         if by == "hour":
             cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
@@ -108,11 +154,25 @@ class InmetStation:
             cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO"]
         
         if any(df.drop(columns = cols_filled).count() != 0):
-            return True # has data
+            return True 
         else:
-            return False # no data for this period
+            return False 
         
     def _create_date_time(self, df:DataFrame, by:str) -> DataFrame:
+        """Create a datetime column in the queried data.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The queried data.
+        by : str
+            The time resolution. By "hour" or "day".
+
+        Returns
+        -------
+        DataFrame
+            The original dataframe with one more column. A datetime column.
+        """        
         
         if by == "hour":
             time_col = df["TIME"]
@@ -137,6 +197,20 @@ class InmetStation:
         return df
     
     def _change_data_type(self, df:DataFrame, by:str) -> DataFrame:
+        """Change the data type of each attribute of the queried data.
+
+        Parameters
+        ----------
+        df : DataFrame
+            The queried data.
+        by : str
+            The time resolution of the queried data.
+
+        Returns
+        -------
+        DataFrame
+            The original dataframe with the correct data types format for each attribute.
+        """        
         
         if by == "hour":
             to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
@@ -157,6 +231,20 @@ class InmetStation:
         return df
     
     def _count_date_diff(self, start_date:str, end_date:str) -> int:
+        """Count the total of days queried.
+
+        Parameters
+        ----------
+        start_date : str
+            The query start date.
+        end_date : str
+            The query end date.
+
+        Returns
+        -------
+        int
+            The total of days queried.
+        """        
         
         date_start = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         date_end = datetime.datetime.strptime(end_date, "%Y-%m-%d")
@@ -173,6 +261,18 @@ class InmetStation:
             return None
         
     def _is_state(self, st:List) -> None:
+        """Check if input is a valid brazilian state abbreviation
+
+        Parameters
+        ----------
+        st : List
+            A list of brazilian states abbreviated.
+
+        Raises
+        ------
+        ValueError
+            Wrong abbreviation used.
+        """        
         
         br_states = ["AC","AL","AP","AM","BA",
                      "CE","DF","ES","GO","MA",
@@ -187,8 +287,28 @@ class InmetStation:
                 pass
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
+            
         
-    def list_stations(self, station_type:str="T", save_file=False) -> Union[DataFrame, str]:
+    def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
+        """List all stations available on INMET API.
+
+        Parameters
+        ----------
+        station_type : str
+            Station type. "T" for automatic station and "M" for manual stations.
+        save_file : bool, optional
+            Save output to csv file, by default False
+
+        Returns
+        -------
+        Union[DataFrame, str]
+            A pandas dataframe containing all stations.
+
+        Raises
+        ------
+        ValueError
+            Wrong input for station_type.
+        """        
         
         if station_type not in ["T","M"]:
             raise ValueError('type must be either "T" (Automatic) or "M" (Manual)')
@@ -291,6 +411,18 @@ class InmetStation:
         
         
     def search_station_by_state(self, st:List) -> DataFrame:
+        """Search available stations for specific states.
+
+        Parameters
+        ----------
+        st : List
+            A list with the brazilian states searched (abbreviated).
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe with all stations available for the searched states.
+        """        
         
         self._is_state(st)
         
