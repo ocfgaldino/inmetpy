@@ -344,7 +344,7 @@ class InmetStation:
                          by:str,
                          station_id:Union[str,List[str]],
                          save_file:bool = False,
-                         chunks:Optional[Union[str,int]] = None) -> DataFrame:
+                         chunks:Optional[bool] = False) -> DataFrame:
         
         self._check_date_format(start_date)
         self._check_date_format(end_date)
