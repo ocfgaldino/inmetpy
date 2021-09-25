@@ -3,6 +3,7 @@ import pandas as pd
 import datetime 
 from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
+import math
 
 
 class InmetStation:
@@ -253,12 +254,31 @@ class InmetStation:
         
         return total_days
     
-    def _split_dates(self, start_date:str, end_date:str, n_chunks:Optional[Union[str,int]]) -> int:
+    def _split_dates(self, start_date:str, end_date:str) -> int:
         
         total_days = self._count_date_diff(start_date, end_date)
         
-        if n_chunks == "auto":
-            return None
+        if total_days < 2000:
+            pass
+        
+        else:
+            total_chunks = math.ceil(total_days/2000)
+            
+            list_dates = {'start_date':[],'end_date':[]}
+            
+            list_dates["start_date"].append(start_date) 
+            list_dates["end_date"].append(start_date + datetime.timedelta(days=2000))
+            
+            
+            for n in total_chunks:
+                
+                if n == total_chunks:
+                    days = total_days % 2000 
+                else:
+                    days = n * 2000
+                    
+                
+                
         
     def _is_state(self, st:List) -> None:
         """Check if input is a valid brazilian state abbreviation
@@ -344,11 +364,15 @@ class InmetStation:
                          by:str,
                          station_id:Union[str,List[str]],
                          save_file:bool = False,
-                         chunks:Optional[Union[str,int]] = None) -> DataFrame:
+                         chunks:Optional[bool] = False) -> DataFrame:
         
         self._check_date_format(start_date)
         self._check_date_format(end_date)
         
+        if chunks == True:
+        
+        
+        ####
         if by == "hour":
             query = [self.api, "estacao", start_date, end_date]
         elif by == "day":
@@ -380,7 +404,7 @@ class InmetStation:
                 
                 elif r.status_code == 403:
                     raise MemoryError("""The amount of data is too large for this request.
-                                        Use the 'chunks' argument to split your request.""")
+                                        Use 'chunks = True' to split your request.""")
                     
                 else:
                     print(f"Request error: Request status {r.status_code}")
