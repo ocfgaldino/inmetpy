@@ -3,6 +3,7 @@ import pandas as pd
 import datetime 
 from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
+import math
 
 
 class InmetStation:
@@ -257,8 +258,16 @@ class InmetStation:
         
         total_days = self._count_date_diff(start_date, end_date)
         
-        if n_chunks == "auto":
-            return None
+        if total_days < 2000:
+            pass
+        
+        else:
+            total_chunks = math.ceil(total_days/2000)
+            
+            list_dates = dict.fromkeys(['start_date','end_date'])
+            
+            for n in total_chunks:
+                
         
     def _is_state(self, st:List) -> None:
         """Check if input is a valid brazilian state abbreviation
@@ -349,6 +358,10 @@ class InmetStation:
         self._check_date_format(start_date)
         self._check_date_format(end_date)
         
+        if chunks == True:
+        
+        
+        ####
         if by == "hour":
             query = [self.api, "estacao", start_date, end_date]
         elif by == "day":
