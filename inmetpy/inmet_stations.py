@@ -253,7 +253,7 @@ class InmetStation:
         
         return total_days
     
-    def _split_dates(self, start_date:str, end_date:str, n_chunks:Optional[Union[str,int]]) -> int:
+    def _split_dates(self, start_date:str, end_date:str) -> int:
         
         total_days = self._count_date_diff(start_date, end_date)
         
@@ -380,7 +380,7 @@ class InmetStation:
                 
                 elif r.status_code == 403:
                     raise MemoryError("""The amount of data is too large for this request.
-                                        Use the 'chunks' argument to split your request.""")
+                                        Use the 'chunks = True' to split your request.""")
                     
                 else:
                     print(f"Request error: Request status {r.status_code}")
