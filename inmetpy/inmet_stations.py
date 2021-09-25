@@ -264,9 +264,20 @@ class InmetStation:
         else:
             total_chunks = math.ceil(total_days/2000)
             
-            list_dates = dict.fromkeys(['start_date','end_date'])
+            list_dates = {'start_date':[],'end_date':[]}
+            
+            list_dates["start_date"].append(start_date) 
+            list_dates["end_date"].append(start_date + datetime.timedelta(days=2000))
+            
             
             for n in total_chunks:
+                
+                if n == total_chunks:
+                    days = total_days % 2000 
+                else:
+                    days = n * 2000
+                    
+                
                 
         
     def _is_state(self, st:List) -> None:
