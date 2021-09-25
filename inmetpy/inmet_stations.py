@@ -380,7 +380,7 @@ class InmetStation:
                 
                 elif r.status_code == 403:
                     raise MemoryError("""The amount of data is too large for this request.
-                                        Use the 'chunks = True' to split your request.""")
+                                        Use 'chunks = True' to split your request.""")
                     
                 else:
                     print(f"Request error: Request status {r.status_code}")
