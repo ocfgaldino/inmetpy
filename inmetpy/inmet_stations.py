@@ -281,7 +281,7 @@ class InmetStation:
                     days_end = days_start + days_diff
 
                     start_date = first_date + datetime.timedelta(days=days_start)
-                    end_date = start_date + datetime.timedelta(days=days_end)
+                    end_date = first_date + datetime.timedelta(days=days_end)
 
                 list_dates["start_date"].append(start_date)
                 list_dates["end_date"].append(end_date)
