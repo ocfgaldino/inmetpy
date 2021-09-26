@@ -530,3 +530,11 @@ class InmetStation:
         stations = all_stations[all_stations['SG_ESTADO'].isin(st)]
 
         return stations
+
+
+    def search_station_by_coords(self,
+                                 lat:float,
+                                 lon:float,
+                                 n_stations:int) -> DataFrame:
+
+        return list_stations
