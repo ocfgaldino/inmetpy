@@ -535,6 +535,7 @@ class InmetStation:
     def search_station_by_coords(self,
                                  lat:float,
                                  lon:float,
+                                 station_type:str,
                                  n_stations:int = 1) -> DataFrame:
         """Search the closest 'n' stations for a given coordinate.
 
@@ -544,6 +545,8 @@ class InmetStation:
             The latitude of point searched.
         lon : float
             The longitude of point searched.
+        station_type: str
+            Type of stations searched. It can be either "T","M" or "ALL".
         n_stations : int
             The number of stations to return. Default is 1.
 
