@@ -339,6 +339,33 @@ class InmetStation:
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
 
+    def _haversine(self,
+                   lat_1:float,
+                   lon_1:float,
+                   lat_2:float,
+                   lon_2:float) -> float:
+        """Calculate distance between two points using the Haversine Formula.
+        (https://en.wikipedia.org/wiki/Haversine_formula)
+
+        Parameters
+        ----------
+        lat_1 : float
+            Latitude for point 1.
+        lon_1 : float
+            Longitude for point 1.
+        lat_2 : float
+            Latitudade for point 2.
+        lon_2 : float
+            Longitude for point 2.
+
+        Returns
+        -------
+        float
+            The distance, in kilometers, between the two coordinates.
+        """
+
+
+
 
     def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
         """List all stations available on INMET API.
@@ -556,6 +583,8 @@ class InmetStation:
             A pandas dataframe with details of the closest 'n' stations for
             the given coordinates.
         """
+
+        stations = self.list_stations()
 
 
 
