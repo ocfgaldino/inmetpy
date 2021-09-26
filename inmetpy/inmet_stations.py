@@ -395,6 +395,26 @@ class InmetStation:
                          station_id:Union[str,List[str]],
                          save_file:bool = False,
                          chunks:Optional[bool] = False) -> DataFrame:
+        """Get data from all stations in 'stations_id'. The data can be downloaded
+        either by 'hour' or 'day'. In case a long period is request, the 'chunks'
+        argument can be set to True (default is False).
+
+        Returns
+        -------
+        DataFrame
+            A dataframe containing the data for the whole period and all stations
+            requested.
+
+        Raises
+        ------
+        ValueError
+            The 'by' argument should be 'hour' or 'day'.
+        MemoryError
+            The period requested is too large. Use 'chunks=True' to divide
+            the request.
+        ValueError
+            The 'station_id' should be a list.
+        """
 
         self._check_date_format(start_date)
         self._check_date_format(end_date)
