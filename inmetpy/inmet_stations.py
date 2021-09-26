@@ -271,16 +271,20 @@ class InmetStation:
             days_diff = 2000
 
             list_dates = {'start_date':[],'end_date':[]}
+            add_day = 0
 
             for n in range(total_chunks):
 
                 if n + 1 == total_chunks:
                     days_diff = total_days % 2000
 
+                if n != 0:
+                    add_day = 1
+
                 days_start = n * 2000
                 days_end = days_start + days_diff
 
-                start_date = first_date + datetime.timedelta(days=days_start)
+                start_date = first_date + datetime.timedelta(days=days_start + add_day)
                 end_date = first_date + datetime.timedelta(days=days_end)
 
                 list_dates["start_date"].append(start_date)
