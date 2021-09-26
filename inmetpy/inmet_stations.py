@@ -378,7 +378,7 @@ class InmetStation:
 
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
-        """Get data from all stations at given date at "date" argument.
+        """Get data from all stations at given date at "date".
 
         Returns
         -------
