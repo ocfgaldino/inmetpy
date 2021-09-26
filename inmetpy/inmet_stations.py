@@ -255,7 +255,22 @@ class InmetStation:
         return total_days
 
     def _split_dates(self, start_date:str, end_date:str) -> int:
+        """Generate a dictionary with 'start_date's and 'end_date's.
+        Used when 'chunk' argument is set to 'True'. Divide a long period into
+        smaller periods.
 
+        Parameters
+        ----------
+        start_date : str
+            The first date for the whole period.
+        end_date : str
+            The last date for the whole period.
+
+        Returns
+        -------
+        dict
+            A dictionary containing pair of dates.
+        """
         total_days = self._count_date_diff(start_date, end_date)
 
         first_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
