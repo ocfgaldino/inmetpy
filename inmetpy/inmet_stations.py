@@ -22,6 +22,7 @@ class InmetStation:
         if request.status_code == 200:
             stations = request.json()
             df_stations = pd.json_normalize(stations)
+            df_stations = self._rename_vars_to_cf(df_stations, 'hour')
 
             if save_file:
                 if station_id:
@@ -392,6 +393,10 @@ class InmetStation:
         self._check_date_format(date)
 
         r = requests.get("/".join([self.api, "estacao", "dados", date]))
+
+        data = self._get_request(r, save_file=save_file, date=date)
+
+
         return self._get_request(r, save_file=save_file, date=date)
 
 
