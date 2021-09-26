@@ -396,45 +396,58 @@ class InmetStation:
         self._check_date_format(start_date)
         self._check_date_format(end_date)
 
-        #if chunks == True:
+        if chunks == True:
 
+            dates = self._split_dates(start_date, end_date)
 
-        ####
-        if by == "hour":
-            query = [self.api, "estacao", start_date, end_date]
-        elif by == "day":
-            query = [self.api, "estacao", "diaria", start_date, end_date]
         else:
-            raise ValueError("by argument is missing")
+            dates = {'start_date':[start_date], 'end_date':[end_date]}
+
+        start_date_list = dates['start_date']
+        end_date_list = dates['end_date']
+
 
         if isinstance(station_id, list):
 
             stations_df = pd.DataFrame()
-            for station in station_id:
-                print(station)
-                print(f"Looking for station {station}...")
 
-                query1 = query.copy()
-                query1.append(station)
-                r = requests.get("/".join(query1))
+            for period in range(len(start_date_list)):
 
-                if r.status_code == 200:
-                    df_station = pd.json_normalize(r.json())
-                    if self._check_data_station(df_station, by):
-                        stations_df = stations_df.append(df_station)
+                start_date = start_date_list[period]
+                end_date = end_date_list[period]
+
+                for station in station_id:
+                    print(station)
+                    print(f"Looking for station {station}...")
+                            ####
+                    if by == "hour":
+                        query = [self.api, "estacao", start_date, end_date]
+                    elif by == "day":
+                        query = [self.api, "estacao", "diaria", start_date, end_date]
                     else:
-                        print(f"No data available for this period for station {station}")
+                        raise ValueError("by argument is missing")
 
-                elif r.status_code == 204:
-                    print(f"There is no station {station}")
-                    continue
+                    query1 = query.copy()
+                    query1.append(station)
+                    r = requests.get("/".join(query1))
 
-                elif r.status_code == 403:
-                    raise MemoryError("""The amount of data is too large for this request.
-                                        Use 'chunks = True' to split your request.""")
+                    if r.status_code == 200:
+                        df_station = pd.json_normalize(r.json())
+                        if self._check_data_station(df_station, by):
+                            stations_df = stations_df.append(df_station)
+                        else:
+                            print(f"No data available for this period for station {station}")
 
-                else:
-                    print(f"Request error: Request status {r.status_code}")
+                    elif r.status_code == 204:
+                        print(f"There is no station {station}")
+                        continue
+
+                    elif r.status_code == 403:
+                        raise MemoryError("""The amount of data is too large for this request.
+                                            Use 'chunks = True' to split your request.""")
+
+                    else:
+                        print(f"Request error: Request status {r.status_code}")
 
             stations_df = self._rename_vars_to_cf(stations_df, by)
             stations_df = self._create_date_time(stations_df, by)
@@ -447,18 +460,18 @@ class InmetStation:
             else:
                 return stations_df
 
-        elif isinstance(station_id, str):
-
-            r = requests.get("/".join([self.api,
-                            "estacao",
-                            start_date,
-                            end_date,
-                            station_id]))
-
-            return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
+        # elif isinstance(station_id, str):
+        #
+        #     r = requests.get("/".join([self.api,
+        #                     "estacao",
+        #                     start_date,
+        #                     end_date,
+        #                     station_id]))
+        #
+        #     return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
 
         else:
-            raise ValueError("station_id should be list or str.")
+            raise ValueError("station_id should be list.")
 
 
     def search_station_by_state(self, st:List) -> DataFrame:
