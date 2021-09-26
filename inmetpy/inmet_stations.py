@@ -377,7 +377,14 @@ class InmetStation:
                 return r.status_code
 
 
-    def get_all_stations(self, date:str=None, save_file=False):
+    def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
+        """Get data from all stations at given date at "date" argument.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe.
+        """
 
         if date == None:
             date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
