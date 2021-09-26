@@ -274,14 +274,14 @@ class InmetStation:
 
             for n in range(total_chunks):
 
-                if n - 1 == total_chunks:
+                if n + 1 == total_chunks:
                     days_diff = total_days % 2000
-                else:
-                    days_start = n * 2000
-                    days_end = days_start + days_diff
 
-                    start_date = first_date + datetime.timedelta(days=days_start)
-                    end_date = first_date + datetime.timedelta(days=days_end)
+                days_start = n * 2000
+                days_end = days_start + days_diff
+
+                start_date = first_date + datetime.timedelta(days=days_start)
+                end_date = first_date + datetime.timedelta(days=days_end)
 
                 list_dates["start_date"].append(start_date)
                 list_dates["end_date"].append(end_date)
