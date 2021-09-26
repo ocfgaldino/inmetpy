@@ -1,16 +1,16 @@
-import requests 
-import pandas as pd 
-import datetime 
+import requests
+import pandas as pd
+import datetime
 from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
 import math
 
 
 class InmetStation:
-    
+
     def __init__(self):
         self.api = "https://apitempo.inmet.gov.br"
-        
+
     def _get_request(self,
             request:requests.models.Response,
             save_file=False,
@@ -18,7 +18,7 @@ class InmetStation:
             station_id=None,
             start_date=None,
             end_date=None) -> Union[DataFrame,int]:
-        
+
         if request.status_code == 200:
             stations = request.json()
             df_stations = pd.json_normalize(stations)
@@ -40,7 +40,7 @@ class InmetStation:
                 return df_stations
         else:
             return request.status_code
-        
+
     def _rename_vars_to_cf(self, df:DataFrame, by:str) -> DataFrame:
         """Rename original columns names to metric systems (https://dev.meteostat.net/formats.html#time-format)
 
@@ -55,10 +55,10 @@ class InmetStation:
         -------
         DataFrame
             A pandas dataframe with renamed columns names.
-        """        
-        
+        """
+
         if by == "hour":
-        
+
             cols_hourly_cf = {"DC_NOME": "STATION_NAME",
                               "PRE_INS": "PRES",
                               "TEM_SEN": "TEM_SEN",
@@ -84,11 +84,11 @@ class InmetStation:
                               "UMD_INS":"HUMI",
                               "CD_ESTACAO":"STATION_ID",
                               "HR_MEDICAO":"TIME"}
-        
+
             df.rename(columns = cols_hourly_cf, inplace = True)
-        
+
         elif by == "day":
-            
+
             cols_daily_cf = {"DC_NOME": "STATION_NAME",
                               "VL_LATITUDE":"LAT",
                               "UF": "ST",
@@ -101,18 +101,18 @@ class InmetStation:
                               "VEL_VENTO_MED":"WSPD",
                               "TEM_MAX":"MAX_TEMP",
                               "CD_ESTACAO":"STATION_ID"}
-            
+
             df.rename(columns = cols_daily_cf, inplace = True)
-        
+
         return df
-        
+
     def _check_date_format(self, date:str) -> bool:
         """Check user input date format.
 
         Parameters
         ----------
         date : str
-            A date to check the format. 
+            A date to check the format.
 
         Returns
         -------
@@ -123,15 +123,15 @@ class InmetStation:
         ------
         ValueError
             Wrong date format input.
-        """        
-        
+        """
+
         try:
             datetime.datetime.strptime(date, "%Y-%m-%d")
             return True
         except:
             raise ValueError("Incorrect date format, date should be in 'YYYY-MM-DD' format.")
-            
-        
+
+
     def _check_data_station(self, df:DataFrame, by:str) -> bool:
         """Check if the queried data result is empty.
 
@@ -146,19 +146,19 @@ class InmetStation:
         -------
         bool
             If the queried result contains data from any station, returns True, False otherwise.
-        """        
-        
+        """
+
         if by == "hour":
             cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO", "HR_MEDICAO"]
-        
+
         elif by == "day":
             cols_filled = ["DC_NOME", "UF", "DT_MEDICAO","VL_LATITUDE", "VL_LONGITUDE", "CD_ESTACAO"]
-        
+
         if any(df.drop(columns = cols_filled).count() != 0):
-            return True 
+            return True
         else:
-            return False 
-        
+            return False
+
     def _create_date_time(self, df:DataFrame, by:str) -> DataFrame:
         """Create a datetime column in the queried data.
 
@@ -173,30 +173,30 @@ class InmetStation:
         -------
         DataFrame
             The original dataframe with one more column. A datetime column.
-        """        
-        
+        """
+
         if by == "hour":
             time_col = df["TIME"]
             date_col = df["DATE"]
-            
-            date_time_str = date_col + " " + time_col 
+
+            date_time_str = date_col + " " + time_col
             date_time = pd.to_datetime(date_time_str,  format = "%Y-%m-%d %H%M")
-            
+
             df.insert(0, "DATETIME", date_time)
-            
+
             cols_drop = ["DATE","TIME"]
             df.drop(columns=cols_drop, inplace=True)
-        
+
         elif by == "day":
             date_col = df["DATE"]
             date_dt = pd.to_datetime(date_col, format = "%Y-%m-%d")
             cols_drop = ["DATE"]
             df.drop(columns=cols_drop, inplace=True)
-            
+
             df.insert(0,"DATE",date_dt)
-            
+
         return df
-    
+
     def _change_data_type(self, df:DataFrame, by:str) -> DataFrame:
         """Change the data type of each attribute of the queried data.
 
@@ -211,26 +211,26 @@ class InmetStation:
         -------
         DataFrame
             The original dataframe with the correct data types format for each attribute.
-        """        
-        
+        """
+
         if by == "hour":
             to_int = ["MIN_RH","WDIR","MAX_RH","HUMI"]
             to_float = ["PRES","TEM_SEN","LAT","MAX_PRES","DWPT","MIN_TEMP",
                         "LONG","MAX_DWPT","RAIN","MIN_PRES","WSPD","MIN_DWPT",
                         "MAX_TEMP","WGST","TEMP"]
-            
+
         elif by == "day":
             to_int = ["MIN_RH"]
             to_float = ["LAT","LONG","AVG_RH","TEMP_MED","RAIN","TEMP_MIN","TEMP_MAX",
                         "WSPD"]
-            
-        
+
+
         df[to_int] = df[to_int].apply(pd.to_numeric, errors="coerce").astype("Int64")
         df[to_float] = df[to_float].apply(pd.to_numeric, errors="coerce").astype("float64")
         df[["LAT","LONG"]] = round(df[["LAT","LONG"]], 5)
-        
+
         return df
-    
+
     def _count_date_diff(self, start_date:str, end_date:str) -> int:
         """Count the total of days queried.
 
@@ -245,41 +245,71 @@ class InmetStation:
         -------
         int
             The total of days queried.
-        """        
-        
+        """
+
         date_start = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         date_end = datetime.datetime.strptime(end_date, "%Y-%m-%d")
-        
+
         total_days = (date_end - date_start).days
-        
+
         return total_days
-    
+
     def _split_dates(self, start_date:str, end_date:str) -> int:
-        
+        """Generate a dictionary with 'start_date's and 'end_date's.
+        Used when 'chunk' argument is set to 'True'. Divide a long period into
+        smaller periods.
+
+        Parameters
+        ----------
+        start_date : str
+            The first date for the whole period.
+        end_date : str
+            The last date for the whole period.
+
+        Returns
+        -------
+        dict
+            A dictionary containing pair of dates.
+        """
         total_days = self._count_date_diff(start_date, end_date)
-        
+
+        first_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+
         if total_days < 2000:
             pass
-        
+
         else:
             total_chunks = math.ceil(total_days/2000)
-            
+
+            days_begin = list()
+            days_end = list()
+            days_diff = 2000
+
             list_dates = {'start_date':[],'end_date':[]}
-            
-            list_dates["start_date"].append(start_date) 
-            list_dates["end_date"].append(start_date + datetime.timedelta(days=2000))
-            
-            
-            for n in total_chunks:
-                
-                if n == total_chunks:
-                    days = total_days % 2000 
-                else:
-                    days = n * 2000
-                    
-                
-                
-        
+            add_day = 0
+
+            for n in range(total_chunks):
+
+                if n + 1 == total_chunks:
+                    days_diff = total_days % 2000
+
+                if n != 0:
+                    add_day = 1
+
+                days_start = n * 2000
+                days_end = days_start + days_diff
+
+                start_date = first_date + datetime.timedelta(days=days_start + add_day)
+                end_date = first_date + datetime.timedelta(days=days_end)
+
+                start_date_str = datetime.datetime.strftime(start_date, "%Y-%m-%d")
+                end_date_str = datetime.datetime.strftime(end_date, "%Y-%m-%d")
+
+                list_dates["start_date"].append(start_date_str)
+                list_dates["end_date"].append(end_date_str)
+
+        return list_dates
+
     def _is_state(self, st:List) -> None:
         """Check if input is a valid brazilian state abbreviation
 
@@ -292,23 +322,23 @@ class InmetStation:
         ------
         ValueError
             Wrong abbreviation used.
-        """        
-        
+        """
+
         br_states = ["AC","AL","AP","AM","BA",
                      "CE","DF","ES","GO","MA",
                      "MT","MS","MG","PA","PB",
                      "PR","PE","PI","RJ","RN",
                      "RS","RO","RR","SC","SP",
                      "SE","TO"]
-        
+
         for state in st:
-            
+
             if state in br_states:
                 pass
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
-            
-        
+
+
     def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
         """List all stations available on INMET API.
 
@@ -328,8 +358,8 @@ class InmetStation:
         ------
         ValueError
             Wrong input for station_type.
-        """        
-        
+        """
+
         if station_type not in ["T","M"]:
             raise ValueError('type must be either "T" (Automatic) or "M" (Manual)')
         else:
@@ -337,7 +367,7 @@ class InmetStation:
             if r.status_code == 200:
                 stations = r.json()
                 df_stations = pd.json_normalize(stations)
-                
+
                 if save_file:
                     df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
                     print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
@@ -345,95 +375,108 @@ class InmetStation:
                     return df_stations
             else:
                 return r.status_code
-            
-            
+
+
     def get_all_stations(self, date:str=None, save_file=False):
 
         if date == None:
             date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
-        
+
         self._check_date_format(date)
-        
+
         r = requests.get("/".join([self.api, "estacao", "dados", date]))
         return self._get_request(r, save_file=save_file, date=date)
-    
-        
-    def get_data_station(self, 
+
+
+    def get_data_station(self,
                          start_date:str,
                          end_date:str,
                          by:str,
                          station_id:Union[str,List[str]],
                          save_file:bool = False,
                          chunks:Optional[bool] = False) -> DataFrame:
-        
+
         self._check_date_format(start_date)
         self._check_date_format(end_date)
-        
+
         if chunks == True:
-        
-        
-        ####
-        if by == "hour":
-            query = [self.api, "estacao", start_date, end_date]
-        elif by == "day":
-            query = [self.api, "estacao", "diaria", start_date, end_date]
+
+            dates = self._split_dates(start_date, end_date)
+
         else:
-            raise ValueError("by argument is missing")
-    
+            dates = {'start_date':[start_date], 'end_date':[end_date]}
+
+        start_date_list = dates['start_date']
+        end_date_list = dates['end_date']
+
+
         if isinstance(station_id, list):
-            
+
             stations_df = pd.DataFrame()
-            for station in station_id:
-                print(station)
-                print(f"Looking for station {station}...")
-                
-                query1 = query.copy()
-                query1.append(station)
-                r = requests.get("/".join(query1))
-                
-                if r.status_code == 200:
-                    df_station = pd.json_normalize(r.json())
-                    if self._check_data_station(df_station, by):
-                        stations_df = stations_df.append(df_station)
+
+            for period in range(len(start_date_list)):
+
+                start_date = start_date_list[period]
+                end_date = end_date_list[period]
+
+                for station in station_id:
+                    print(station)
+                    print(f"Looking for station {station}...")
+                            ####
+                    if by == "hour":
+                        query = [self.api, "estacao", start_date, end_date]
+                    elif by == "day":
+                        query = [self.api, "estacao", "diaria", start_date, end_date]
                     else:
-                        print(f"No data available for this period for station {station}")
-                        
-                elif r.status_code == 204:
-                    print(f"There is no station {station}")
-                    continue
-                
-                elif r.status_code == 403:
-                    raise MemoryError("""The amount of data is too large for this request.
-                                        Use 'chunks = True' to split your request.""")
-                    
-                else:
-                    print(f"Request error: Request status {r.status_code}")
-                
+                        raise ValueError("by argument is missing")
+
+                    query1 = query.copy()
+                    query1.append(station)
+                    r = requests.get("/".join(query1))
+
+                    if r.status_code == 200:
+                        df_station = pd.json_normalize(r.json())
+                        if self._check_data_station(df_station, by):
+                            stations_df = stations_df.append(df_station)
+                        else:
+                            print(f"No data available for this period for station {station}")
+
+                    elif r.status_code == 204:
+                        print(f"There is no station {station}")
+                        continue
+
+                    elif r.status_code == 403:
+                        raise MemoryError("""The amount of data is too large for this request.
+                                            Use 'chunks = True' to split your request.""")
+
+                    else:
+                        print(f"Request error: Request status {r.status_code}")
+
             stations_df = self._rename_vars_to_cf(stations_df, by)
             stations_df = self._create_date_time(stations_df, by)
             stations_df = self._change_data_type(stations_df, by)
             stations_df.reset_index(inplace = True)
-            
+
             if save_file:
                 stations_df.to_csv(f"inmet_data_{start_date}_{end_date}.csv", index=False)
                 print(f"file 'inmet_data_{start_date}_{end_date}.csv' was downloaded")
             else:
                 return stations_df
-                
-        elif isinstance(station_id, str):
-            
-            r = requests.get("/".join([self.api, 
-                            "estacao",
-                            start_date,
-                            end_date,
-                            station_id]))
-            
-            return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
-            
+
+        # elif isinstance(station_id, str):
+        #
+        #     r = requests.get("/".join([self.api,
+        #                     "estacao",
+        #                     start_date,
+        #                     end_date,
+        #                     station_id]))
+        #
+        #     return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
+
         else:
-            raise ValueError("station_id should be list or str.")
-        
-        
+            raise ValueError("station_id should be list.")
+
+
     def search_station_by_state(self, st:List) -> DataFrame:
         """Search available stations for specific states.
 
@@ -446,22 +489,12 @@ class InmetStation:
         -------
         DataFrame
             A pandas dataframe with all stations available for the searched states.
-        """        
-        
+        """
+
         self._is_state(st)
-        
+
         all_stations = self.list_stations()
-        
+
         stations = all_stations[all_stations['SG_ESTADO'].isin(st)]
-        
-        return stations 
-            
-        
-        
-        
-            
-            
-    
-    
-        
-                
+
+        return stations
