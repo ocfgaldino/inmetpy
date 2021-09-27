@@ -22,6 +22,7 @@ class InmetStation:
         if request.status_code == 200:
             stations = request.json()
             df_stations = pd.json_normalize(stations)
+            df_stations = self._rename_vars_to_cf(df_stations, 'hour')
 
             if save_file:
                 if station_id:
@@ -338,6 +339,33 @@ class InmetStation:
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
 
+    def _haversine(self,
+                   lat_1:float,
+                   lon_1:float,
+                   lat_2:float,
+                   lon_2:float) -> float:
+        """Calculate distance between two points using the Haversine Formula.
+        (https://en.wikipedia.org/wiki/Haversine_formula)
+
+        Parameters
+        ----------
+        lat_1 : float
+            Latitude for point 1.
+        lon_1 : float
+            Longitude for point 1.
+        lat_2 : float
+            Latitudade for point 2.
+        lon_2 : float
+            Longitude for point 2.
+
+        Returns
+        -------
+        float
+            The distance, in kilometers, between the two coordinates.
+        """
+
+
+
 
     def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
         """List all stations available on INMET API.
@@ -392,6 +420,10 @@ class InmetStation:
         self._check_date_format(date)
 
         r = requests.get("/".join([self.api, "estacao", "dados", date]))
+
+        data = self._get_request(r, save_file=save_file, date=date)
+
+
         return self._get_request(r, save_file=save_file, date=date)
 
 
@@ -525,3 +557,35 @@ class InmetStation:
         stations = all_stations[all_stations['SG_ESTADO'].isin(st)]
 
         return stations
+
+
+    def search_station_by_coords(self,
+                                 lat:float,
+                                 lon:float,
+                                 station_type:str,
+                                 n_stations:int = 1) -> DataFrame:
+        """Search the closest 'n' stations for a given coordinate.
+
+        Parameters
+        ----------
+        lat : float
+            The latitude of point searched.
+        lon : float
+            The longitude of point searched.
+        station_type: str
+            Type of stations searched. It can be either "T","M" or "ALL".
+        n_stations : int
+            The number of stations to return. Default is 1.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe with details of the closest 'n' stations for
+            the given coordinates.
+        """
+
+        stations = self.list_stations()
+
+
+
+        return list_stations
