@@ -10,17 +10,26 @@ import sys
 args = sys.argv[1:]
 
 if args[0] == 'list_stations':
-    print(args[0])
-    s.list_stations(station_type=args[1], save_file=True)
+    try:
+        s.list_stations(station_type=args[1], save_file=True)
+    except:
+        print('Wrong number of arguments or incorrect argument values')
 
 elif args[0] == 'get_all_stations':
-    s.get_all_stations(date=args[1], save_file=True)
+    try:
+        s.get_all_stations(date=args[1], save_file=True)
+    except:
+        print('Wrong number of arguments or incorrect argument values')
 
 elif args[0] == 'get_data_station':
-    station_id = args[3].strip('[]').replace(" ", "").split(',')
-    if len(station_id) == 1:
-        station_id = station_id[0]
-    s.get_data_station(start_date=args[1], end_date=args[2], station_id=station_id, save_file=True)
+    try:
+        station_id = args[4].strip('[]').replace(" ", "").split(',')
+        if len(station_id) == 1:
+            station_id = station_id[0]
+        s.get_data_station(start_date=args[1], end_date=args[2], by=args[3], station_id=station_id, save_file=True)
+        print('')
+    except:
+        print('Wrong number of arguments or incorrect argument values')
 
 else:
     print("Wrong arguments")

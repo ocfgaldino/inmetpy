@@ -407,19 +407,19 @@ class InmetStation:
         
         if station_type == "A":
             station_type = "T"
-        else:
-            r = requests.get("/".join([self.api, "estacoes", station_type]))
-            if r.status_code == 200:
-                stations = r.json()
-                df_stations = pd.json_normalize(stations)
 
-                if save_file:
-                    df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
-                    print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
-                else:
-                    return df_stations
+        r = requests.get("/".join([self.api, "estacoes", station_type]))
+        if r.status_code == 200:
+            stations = r.json()
+            df_stations = pd.json_normalize(stations)
+
+            if save_file:
+                df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
+                print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
             else:
-                return r.status_code
+                return df_stations
+        else:
+            return r.status_code
 
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
