@@ -4,7 +4,7 @@ import datetime
 from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
 import math
-
+import numpy as np
 
 class InmetStation:
 
@@ -364,7 +364,19 @@ class InmetStation:
             The distance, in kilometers, between the two coordinates.
         """
 
+        lon_1, lat_1, lon_2, lat_2 = map(math.radians, [lon_1, lat_1, lon_2, lat_2])
+        dlon = lon_2 - lon_1
+        dlat = lat_2 - lat_1
 
+        hav = np.sin(dlat/2)**2 + np.cos(lat_1) * np.cos(lat_2) * np.sin(dlon/2)**2
+
+        d = 2 * np.arcsin(np.sqrt(hav))
+
+        earth_radius_km = 6371
+
+        km = earth_radius_km * d
+
+        return km
 
 
     def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
@@ -584,8 +596,12 @@ class InmetStation:
             the given coordinates.
         """
 
-        stations = self.list_stations()
+        stations = self.list_stations(station_type)
 
+        distance = []
+        for index, row in stations.iterrows():           
+            distance.append(self._haversine(float(row['VL_LATITUDE']), float(row['VL_LONGITUDE']), lat, lon))
 
+        stations['DISTANCE'] = distance
 
-        return list_stations
+        return stations.sort_values(by='DISTANCE').iloc[0:n_stations]
