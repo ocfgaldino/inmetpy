@@ -19,7 +19,7 @@ pip install inmetpy
 
 ```bash
 # download a list of inmet stations
-inmetpy-run list_stations "T"
+inmetpy-run list_stations "A"
 
 # get data from all inmet station after a selected date
 inmetpy-run get_all_stations 2021-09-01
@@ -42,5 +42,5 @@ inmet.list_stations(type) # type must be either "T" (Automatic) or "M" (Manual)
 inmet.get_all_stations(date) # date in format YYYY-MM-DD"
 
 # get data from a station or a list of stations
-inmet.get_data_station(stations) # stations must be a string or a list of strings of the "CD_ESTACAO" ID of the stations you want
+inmet.get_data_station(start_date, end_date, by, station_id) # stations must be a string or a list of strings of the "CD_ESTACAO" ID of the stations you want
 ```
