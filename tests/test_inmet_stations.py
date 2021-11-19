@@ -60,38 +60,6 @@ class TestInmetStation(unittest.TestCase):
         self.assertRaises(ValueError, api.list_stations, "s")
         
         
-    def test_get_all_stations(self):
-        
-        col_names = ['VEN_DIR',
-                     'DT_MEDICAO',
-                     'DC_NOME',
-                     'CHUVA',
-                     'PRE_INS',
-                     'VL_LATITUDE',
-                     'PRE_MIN',
-                     'UMD_MAX',
-                     'PRE_MAX',
-                     'VEN_VEL',
-                     'UF',
-                     'PTO_MIN',
-                     'TEM_MAX',
-                     'RAD_GLO',
-                     'PTO_INS',
-                     'VEN_RAJ',
-                     'TEM_INS',
-                     'UMD_INS',
-                     'CD_ESTACAO',
-                     'TEM_MIN',
-                     'VL_LONGITUDE',
-                     'HR_MEDICAO',
-                     'UMD_MIN',
-                     'PTO_MAX']
-        
-        api = InmetStation()
-        station_data = api.get_all_stations("2021-05-01")
-        col_names_result = station_data.columns.tolist()
-        self.assertEqual(col_names_result, col_names)
-        
     def test_get_all_stations_wrong_date_format(self):
         
         api = InmetStation()
