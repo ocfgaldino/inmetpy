@@ -388,11 +388,13 @@ class InmetStation:
             Wrong input for station_type.
         """
         
-        if station_type == "T":
-            station_type = "A"
-
+        
         if station_type not in ["A","M"]:
             raise ValueError('type must be either "A" (Automatic) or "M" (Manual)')
+        
+        
+        if station_type == "A":
+            station_type = "T"
         else:
             r = requests.get("/".join([self.api, "estacoes", station_type]))
             if r.status_code == 200:
