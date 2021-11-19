@@ -19,10 +19,10 @@ pip install inmetpy
 
 ```bash
 # download a list of inmet stations
-inmetpy-run list_stations "A"
+inmetpy list_stations "A"
 
 # get data from all inmet station after a selected date
-inmetpy-run get_all_stations 2021-09-01
+inmetpy get_all_stations 2021-09-01
 
 # get data from a station or a list of stations
 inmetpy get_data_station 2021-09-01 2021-09-10 '[A652,A667]'
