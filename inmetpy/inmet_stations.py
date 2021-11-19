@@ -373,7 +373,7 @@ class InmetStation:
         Parameters
         ----------
         station_type : str
-            Station type. "T" for automatic station and "M" for manual stations.
+            Station type. "A" for automatic station and "M" for manual stations.
         save_file : bool, optional
             Save output to csv file, by default False
 
@@ -387,9 +387,12 @@ class InmetStation:
         ValueError
             Wrong input for station_type.
         """
+        
+        if station_type == "T":
+            station_type = "A"
 
-        if station_type not in ["T","M"]:
-            raise ValueError('type must be either "T" (Automatic) or "M" (Manual)')
+        if station_type not in ["A","M"]:
+            raise ValueError('type must be either "A" (Automatic) or "M" (Manual)')
         else:
             r = requests.get("/".join([self.api, "estacoes", station_type]))
             if r.status_code == 200:
