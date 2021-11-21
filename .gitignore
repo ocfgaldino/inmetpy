@@ -17,3 +17,7 @@ __pycache__/
 raw_data/
 *.csv
 **/__pycache__/
+
+
+#Sphinx
+docs/_build/
