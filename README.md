@@ -1,5 +1,5 @@
 [![PyPI version](https://badge.fury.io/py/inmetpy.svg)](https://badge.fury.io/py/inmetpy)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/inmetpy)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/inmetpy?color=blue)
 ![PyPI - License](https://img.shields.io/pypi/l/inmetpy)
 
 # InmetPy - A Python API Client for the Brazilian National Institute of Meteorology - INMet
