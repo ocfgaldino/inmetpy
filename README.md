@@ -1,19 +1,21 @@
-# Project Description
+# InmetPy - A Python API Client for the Brazilian National Institute of Meteorology - INMet
 
-Please document the project the better you can.
+*This is an **unofficial** python package for the INMET API.*
+
+
+- List all stations over Brazil (Manual and Automatic);
+- Get historical data for each station;
+- Search the stations near by at given location;
 
 # Install
 
 Install using pip
 
 ```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
-```bash
 pip install inmetpy
 ```
+
+
 
 # Comand Line Library Usage
 
