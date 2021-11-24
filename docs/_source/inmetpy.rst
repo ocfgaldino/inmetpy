@@ -8,8 +8,6 @@ inmetpy.inmet\_stations module
 ------------------------------
 
 .. automodule:: inmetpy.inmet_stations
-
-.. autoclass:: InmetStation
    :members:
    :undoc-members:
    :show-inheritance:
