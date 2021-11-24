@@ -4,7 +4,7 @@
 
 # InmetPy - A Python API Client for the Brazilian National Institute of Meteorology - INMet
 
-*This is an **unofficial** python package for the INMET API.*
+*This is an **unofficial** (from INMET) python package for the INMET API.*
 
 
 - List all stations over Brazil (Manual and Automatic);
