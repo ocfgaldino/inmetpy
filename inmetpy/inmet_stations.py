@@ -379,7 +379,7 @@ class InmetStation:
         return km
 
 
-    def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
+    def list_stations(self, station_type:str, save_file:bool = False) -> Union[DataFrame, str]:
         """List all stations available on INMET API.
 
         Parameters
