@@ -379,7 +379,24 @@ class InmetStation:
         return km
 
 
-    def list_stations(self, station_type:str, save_file=False) -> Union[DataFrame, str]:
+    def _get_stations_details(self, type):
+        
+        if type == "A":
+            type = "T"
+        
+        r = requests.get("/".join([self.api, "estacoes", type]))
+        if r.status_code == 200:
+            stations = r.json()
+            df_stations = pd.json_normalize(stations)
+            
+            return df_stations
+        else:
+            raise ConnectionError(f"API error code: {r.status_code}")
+            
+        
+        
+
+    def list_stations(self, station_type:str, save_file:bool = False) -> DataFrame:
         """List all stations available on INMET API.
 
         Parameters
@@ -401,25 +418,27 @@ class InmetStation:
         """
         
         
-        if station_type not in ["A","M"]:
-            raise ValueError('type must be either "A" (Automatic) or "M" (Manual)')
+        if station_type not in ["A","M", "ALL"]:
+            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL"')
         
         
         if station_type == "A":
             station_type = "T"
-
-        r = requests.get("/".join([self.api, "estacoes", station_type]))
-        if r.status_code == 200:
-            stations = r.json()
-            df_stations = pd.json_normalize(stations)
-
-            if save_file:
-                df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
-                print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
-            else:
-                return df_stations
+            
+        if station_type == "ALL":
+            df_automatic_stations = self._get_stations_details("A")
+            df_manual_stations = self._get_stations_details("M")
+            
+            df_stations = df_automatic_stations.append(df_manual_stations)
+        
         else:
-            return r.status_code
+            df_stations = self._get_stations_details(station_type)
+
+        if save_file:
+            df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
+            print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
+        else:
+            return df_stations
 
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
