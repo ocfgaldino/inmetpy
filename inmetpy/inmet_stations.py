@@ -107,15 +107,13 @@ class InmetStation:
 
         return df
     
-    def _rename_cols_to_en(self, df:DataFrame, by:str) -> DataFrame:
+    def _rename_cols_to_en(self, df:DataFrame) -> DataFrame:
         """Rename original columns names from portuguese to english
 
         Parameters
         ----------
         df : DataFrame
             A pandas dataframe with the original columns names (in portuguese)
-        by : str
-            The time resolution of df. Different columns names for "hourly" and "daily".
 
         Returns
         -------
@@ -146,7 +144,7 @@ class InmetStation:
         df.loc[df['TP_STATION']=="Convencional", "TP_STATION"] = "Traditional"
        
         # Situation Status
-        df.loc[df['CD_SITUATION']=="Operativa", "CD_SITUATION"] = "Operative"
+        df.loc[df['CD_SITUATION']=="Operante", "CD_SITUATION"] = "Operative"
         df.loc[df['CD_SITUATION']=="Pane", "CD_SITUATION"] = "Down"
         
         
@@ -477,10 +475,13 @@ class InmetStation:
             df_manual_stations = self._get_stations_details("M")
             
             df_stations = df_automatic_stations.append(df_manual_stations)
+            
         
         else:
             df_stations = self._get_stations_details(station_type)
 
+        df_stations = self._rename_cols_to_en(df_stations)
+        
         if save_file:
             df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
             print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
