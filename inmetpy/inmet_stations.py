@@ -106,6 +106,53 @@ class InmetStation:
             df.rename(columns = cols_daily_cf, inplace = True)
 
         return df
+    
+    def _rename_cols_to_en(self, df:DataFrame, by:str) -> DataFrame:
+        """Rename original columns names from portuguese to english
+
+        Parameters
+        ----------
+        df : DataFrame
+            A pandas dataframe with the original columns names (in portuguese)
+        by : str
+            The time resolution of df. Different columns names for "hourly" and "daily".
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe with renamed columns names.
+        """
+        
+        cols_to_en = {
+                    "DC_NOME": "STATION_NAME",
+                    "DT_FIM_OPERACAO":"END_DATE_OPERATION",
+                    "CD_SITUACAO":"CD_SITUATION",
+                    "TP_ESTACAO":"TP_STATION",
+                    "SG_ESTADO":"STATE",
+                    "VL_LATITUDE":"LATITUDE",
+                    "VL_LONGITUDE":"LONGITUDE",
+                    "VL_ALTITUDE":"HEIGHT",
+                    "DT_INICIO_OPERACAO":"START_DATE_OPERATION",
+                    "SG_ENTIDADE":"INSTITUTE"
+                    }
+        
+        
+        
+        df.rename(columns = cols_to_en, inplace = True)
+        
+        # Replace attribute values.
+        # Station Type
+        df.loc[df['TP_STATION']=="Automatica", "TP_STATION"] = "Automatic"
+        df.loc[df['TP_STATION']=="Convencional", "TP_STATION"] = "Traditional"
+       
+        # Situation Status
+        df.loc[df['CD_SITUATION']=="Operativa", "CD_SITUATION"] = "Operative"
+        df.loc[df['CD_SITUATION']=="Pane", "CD_SITUATION"] = "Down"
+        
+        
+        return df
+        
+        
 
     def _check_date_format(self, date:str) -> bool:
         """Check user input date format.
