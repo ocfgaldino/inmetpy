@@ -606,16 +606,6 @@ class InmetStation:
             else:
                 return stations_df
 
-        # elif isinstance(station_id, str):
-        #
-        #     r = requests.get("/".join([self.api,
-        #                     "estacao",
-        #                     start_date,
-        #                     end_date,
-        #                     station_id]))
-        #
-        #     return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
-
         else:
             raise ValueError("station_id should be list.")
 
