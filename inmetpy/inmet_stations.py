@@ -106,6 +106,51 @@ class InmetStation:
             df.rename(columns = cols_daily_cf, inplace = True)
 
         return df
+    
+    def _rename_cols_to_en(self, df:DataFrame) -> DataFrame:
+        """Rename original columns names from portuguese to english
+
+        Parameters
+        ----------
+        df : DataFrame
+            A pandas dataframe with the original columns names (in portuguese)
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe with renamed columns names.
+        """
+        
+        cols_to_en = {
+                    "DC_NOME": "STATION_NAME",
+                    "DT_FIM_OPERACAO":"END_DATE_OPERATION",
+                    "CD_SITUACAO":"CD_SITUATION",
+                    "TP_ESTACAO":"TP_STATION",
+                    "SG_ESTADO":"STATE",
+                    "VL_LATITUDE":"LATITUDE",
+                    "VL_LONGITUDE":"LONGITUDE",
+                    "VL_ALTITUDE":"HEIGHT",
+                    "DT_INICIO_OPERACAO":"START_DATE_OPERATION",
+                    "SG_ENTIDADE":"INSTITUTE"
+                    }
+        
+        
+        
+        df.rename(columns = cols_to_en, inplace = True)
+        
+        # Replace attribute values.
+        # Station Type
+        df.loc[df['TP_STATION']=="Automatica", "TP_STATION"] = "Automatic"
+        df.loc[df['TP_STATION']=="Convencional", "TP_STATION"] = "Traditional"
+       
+        # Situation Status
+        df.loc[df['CD_SITUATION']=="Operante", "CD_SITUATION"] = "Operative"
+        df.loc[df['CD_SITUATION']=="Pane", "CD_SITUATION"] = "Down"
+        
+        
+        return df
+        
+        
 
     def _check_date_format(self, date:str) -> bool:
         """Check user input date format.
@@ -430,10 +475,13 @@ class InmetStation:
             df_manual_stations = self._get_stations_details("M")
             
             df_stations = df_automatic_stations.append(df_manual_stations)
+            
         
         else:
             df_stations = self._get_stations_details(station_type)
 
+        df_stations = self._rename_cols_to_en(df_stations)
+        
         if save_file:
             df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
             print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
@@ -557,16 +605,6 @@ class InmetStation:
                 print(f"file 'inmet_data_{start_date}_{end_date}.csv' was downloaded")
             else:
                 return stations_df
-
-        # elif isinstance(station_id, str):
-        #
-        #     r = requests.get("/".join([self.api,
-        #                     "estacao",
-        #                     start_date,
-        #                     end_date,
-        #                     station_id]))
-        #
-        #     return self._get_request(r, save_file=save_file, station_id=station_id, start_date=start_date, end_date=end_date)
 
         else:
             raise ValueError("station_id should be list.")
