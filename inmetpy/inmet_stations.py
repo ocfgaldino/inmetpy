@@ -10,7 +10,7 @@ class InmetStation:
 
     def __init__(self):
         self.api = "https://apitempo.inmet.gov.br"
-        self.stations = self.list_stations("ALL")
+        self.stations = self._get_all_stations()
 
     def _get_request(self,
             request:requests.models.Response,
@@ -463,9 +463,9 @@ class InmetStation:
         df_automatic_stations = self._get_stations_details("A")
         df_manual_stations = self._get_stations_details("M")
         
-        stations = pd.concat(df_automatic_stations, df_manual_stations)
+        stations = pd.concat([df_automatic_stations, df_manual_stations])
 
-        self.stations = stations
+        return self._rename_cols_to_en(stations)
 
 
     def list_stations(self, station_type:str, save_file:bool = False) -> DataFrame:
@@ -490,20 +490,12 @@ class InmetStation:
         """
         
         
-        if station_type not in ["A","M", "ALL"]:
-            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL"')
-        
+        if station_type not in ["A","M"]:
+            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual)"')
         
         if station_type == "A":
             station_type = "T"
-            
-        if station_type == "ALL":
-            df_automatic_stations = self._get_stations_details("A")
-            df_manual_stations = self._get_stations_details("M")
-            
-            df_stations = df_automatic_stations.append(df_manual_stations)
-            
-        
+                          
         else:
             df_stations = self._get_stations_details(station_type)
 
