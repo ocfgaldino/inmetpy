@@ -10,6 +10,7 @@ class InmetStation:
 
     def __init__(self):
         self.api = "https://apitempo.inmet.gov.br"
+        self.stations = self.list_stations("ALL")
 
     def _get_request(self,
             request:requests.models.Response,
@@ -384,6 +385,24 @@ class InmetStation:
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
 
+    def _is_station(self, st:List) -> None:
+        """Check if station list input has only valid stations
+
+        Parameters
+        ----------
+        st : List
+            A list of stations.
+
+        Raises
+        ------
+        ValueError
+            Wrong station code.
+        """
+        return None
+
+
+
+
     def _haversine(self,
                    lat_1:float,
                    lon_1:float,
@@ -439,7 +458,15 @@ class InmetStation:
             raise ConnectionError(f"API error code: {r.status_code}")
             
         
+    def _get_all_stations(self):
+
+        df_automatic_stations = self._get_stations_details("A")
+        df_manual_stations = self._get_stations_details("M")
         
+        stations = pd.concat(df_automatic_stations, df_manual_stations)
+
+        self.stations = stations
+
 
     def list_stations(self, station_type:str, save_file:bool = False) -> DataFrame:
         """List all stations available on INMET API.
