@@ -583,6 +583,7 @@ class InmetStation:
                             stations_df = stations_df.append(df_station)
                         else:
                             print(f"No data available for this period for station {station}")
+                            return None
 
                     elif r.status_code == 204:
                         print(f"There is no station {station}")
