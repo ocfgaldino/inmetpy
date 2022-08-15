@@ -490,48 +490,7 @@ class InmetStation:
 
         stations = self.stations 
         return stations[stations['TP_STATION']=='Automatic']
-
-
-
-    def list_stations(self, station_type:str, save_file:bool = False) -> DataFrame:
-        """List all stations available on INMET API.
-
-        Parameters
-        ----------
-        station_type : str
-            Station type. "A" for automatic station and "M" for manual stations.
-        save_file : bool, optional
-            Save output to csv file, by default False
-
-        Returns
-        -------
-        Union[DataFrame, str]
-            A pandas dataframe containing all stations.
-
-        Raises
-        ------
-        ValueError
-            Wrong input for station_type.
-        """
         
-        
-        if station_type not in ["A","M"]:
-            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual)"')
-        
-        if station_type == "A":
-            station_type = "T"
-                          
-        else:
-            df_stations = self._get_stations_details(station_type)
-
-        df_stations = self._rename_cols_to_en(df_stations)
-        
-        if save_file:
-            df_stations.to_csv(f"inmet_stations_{station_type}.csv", index=False)
-            print(f"file 'inmet_stations_{station_type}.csv' was downloaded")
-        else:
-            return df_stations
-
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
         """Get data from all stations at given date at "date".
