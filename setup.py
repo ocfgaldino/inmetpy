@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
 requirements = [x.strip() for x in content if 'git+' not in x]
 
 setup(name='inmetpy',
-      version="0.1.1",
+      version="0.1.2a1",
       description="An unofficial package to consume the API of the Brazilian National Institute of Meteorology",
       packages=find_packages(),
       author="Felippe Galdino, Tobias Ferreira",
