@@ -7,7 +7,7 @@
 *This is an **unofficial** (from INMET) python package for the INMET API.*
 
 
-- List all stations over Brazil (Manual and Automatic);
+- Get all stations over Brazil (Manual and Automatic);
 - Get historical data for each station;
 - Search the stations near by at given location;
 
