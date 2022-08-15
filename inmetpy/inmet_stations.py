@@ -680,7 +680,7 @@ class InmetStation:
         else:
             stations = self.stations
 
-        stations = all_stations[all_stations['SG_ESTADO'].isin(st)]
+        stations = stations[stations['STATE'].isin(st)]
 
         return stations
 
