@@ -10,6 +10,7 @@ class InmetStation:
 
     def __init__(self):
         self.api = "https://apitempo.inmet.gov.br"
+        self.stations = self._get_all_stations()
 
     def _get_request(self,
             request:requests.models.Response,
@@ -131,7 +132,9 @@ class InmetStation:
                     "VL_LONGITUDE":"LONGITUDE",
                     "VL_ALTITUDE":"HEIGHT",
                     "DT_INICIO_OPERACAO":"START_DATE_OPERATION",
-                    "SG_ENTIDADE":"INSTITUTE"
+                    "SG_ENTIDADE":"INSTITUTE",
+                    "CD_DISTRITO":"CD_DISTRICT",
+                    "CD_ESTACAO":"CD_STATION"
                     }
         
         
@@ -434,12 +437,61 @@ class InmetStation:
             stations = r.json()
             df_stations = pd.json_normalize(stations)
             
-            return df_stations
+            return self._rename_cols_to_en(df_stations)
         else:
             raise ConnectionError(f"API error code: {r.status_code}")
             
         
+    def _get_all_stations(self):
+
+        df_automatic_stations = self._get_stations_details("A")
+        df_manual_stations = self._get_stations_details("M")
         
+        stations = pd.concat([df_automatic_stations, df_manual_stations])
+        stations.reset_index(inplace=True, drop=True)
+
+        return stations
+
+    def _check_is_station(self, stations:list) -> None:
+        """Check if station list input has only valid stations
+
+        Parameters
+        ----------
+        stations : List
+            A list of stations.
+
+        Raises
+        ------
+        ValueError
+            Wrong station code.
+        """
+
+        unexist_stations = list(set(stations) - set(self.stations.CD_STATION))
+
+        if unexist_stations:
+            raise ValueError("There is no station(s): " + ", ".join(f'"{station}"' for station in unexist_stations))
+        else:
+            pass
+            
+    def _check_station_type(self, station_type):
+
+        if station_type not in ["A","M", "ALL"]:
+            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
+        else:
+            pass
+
+
+    def get_manual_stations(self):
+
+        stations = self.stations 
+        return stations[stations['TP_STATION']=='Traditional']
+
+    def get_auto_stations(self):
+
+        stations = self.stations 
+        return stations[stations['TP_STATION']=='Automatic']
+
+
 
     def list_stations(self, station_type:str, save_file:bool = False) -> DataFrame:
         """List all stations available on INMET API.
@@ -463,20 +515,12 @@ class InmetStation:
         """
         
         
-        if station_type not in ["A","M", "ALL"]:
-            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL"')
-        
+        if station_type not in ["A","M"]:
+            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual)"')
         
         if station_type == "A":
             station_type = "T"
-            
-        if station_type == "ALL":
-            df_automatic_stations = self._get_stations_details("A")
-            df_manual_stations = self._get_stations_details("M")
-            
-            df_stations = df_automatic_stations.append(df_manual_stations)
-            
-        
+                          
         else:
             df_stations = self._get_stations_details(station_type)
 
@@ -541,6 +585,7 @@ class InmetStation:
 
         self._check_date_format(start_date)
         self._check_date_format(end_date)
+        self._check_is_station(station_id)
 
         if chunks == True:
 
@@ -565,7 +610,7 @@ class InmetStation:
                 for station in station_id:
                     print(station)
                     print(f"Looking for station {station}...")
-                            ####
+                            
                     if by == "hour":
                         query = [self.api, "estacao", start_date, end_date]
                     elif by == "day":
@@ -580,9 +625,10 @@ class InmetStation:
                     if r.status_code == 200:
                         df_station = pd.json_normalize(r.json())
                         if self._check_data_station(df_station, by):
-                            stations_df = stations_df.append(df_station)
+                            stations_df = pd.concat([stations_df, df_station])
                         else:
                             print(f"No data available for this period for station {station}")
+                            return None
 
                     elif r.status_code == 204:
                         print(f"There is no station {station}")
@@ -590,7 +636,7 @@ class InmetStation:
 
                     elif r.status_code == 403:
                         raise MemoryError("""The amount of data is too large for this request.
-                                            Use 'chunks = True' to split your request.""")
+                        Use 'chunks = True' to split your request.""")
 
                     else:
                         print(f"Request error: Request status {r.status_code}")
@@ -625,10 +671,16 @@ class InmetStation:
         """
 
         self._is_state(st)
+        self._check_station_type(station_type)
 
-        all_stations = self.list_stations(station_type)
+        if station_type == "A":
+            stations = self.get_auto_stations()
+        elif station_type == "M":
+            stations = self.get_manual_stations()
+        else:
+            stations = self.stations
 
-        stations = all_stations[all_stations['SG_ESTADO'].isin(st)]
+        stations = stations[stations['STATE'].isin(st)]
 
         return stations
 
@@ -636,7 +688,7 @@ class InmetStation:
     def search_station_by_coords(self,
                                  lat:float,
                                  lon:float,
-                                 station_type:str,
+                                 station_type:str="ALL",
                                  n_stations:int = 1) -> DataFrame:
         """Search the closest 'n' stations for a given coordinate.
 
@@ -657,12 +709,21 @@ class InmetStation:
             A pandas dataframe with details of the closest 'n' stations for
             the given coordinates.
         """
+        if type(lat) != float or type(lon) != float:
+            raise TypeError("Coordinates (lat,lon) values must be type 'float'")
 
-        stations = self.list_stations(station_type)
+        self._check_station_type(station_type)
+
+        if station_type == "A":
+            stations = self.get_auto_stations()
+        elif station_type == "M":
+            stations = self.get_manual_stations()
+        else:
+            stations = self.stations
 
         distance = []
-        for index, row in stations.iterrows():           
-            distance.append(self._haversine(float(row['VL_LATITUDE']), float(row['VL_LONGITUDE']), lat, lon))
+        for _, row in stations.iterrows():           
+            distance.append(self._haversine(float(row['LATITUDE']), float(row['LONGITUDE']), lat, lon))
 
         stations['DISTANCE'] = distance
 
