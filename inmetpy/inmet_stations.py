@@ -448,6 +448,7 @@ class InmetStation:
         df_manual_stations = self._get_stations_details("M")
         
         stations = pd.concat([df_automatic_stations, df_manual_stations])
+        stations.reset_index(inplace=True)
 
         return stations
 
