@@ -473,6 +473,14 @@ class InmetStation:
         else:
             pass
             
+    def _check_station_type(self, station_type):
+
+        if station_type not in ["A","M", "ALL"]:
+            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
+        else:
+            pass
+
+
     def get_manual_stations(self):
 
         stations = self.stations 
@@ -663,8 +671,14 @@ class InmetStation:
         """
 
         self._is_state(st)
+        self._check_station_type(station_type)
 
-        all_stations = self.list_stations(station_type)
+        if station_type == "A":
+            stations = self.get_auto_stations()
+        elif station_type == "M":
+            stations = self.get_manual_stations()
+        else:
+            stations = self.stations
 
         stations = all_stations[all_stations['SG_ESTADO'].isin(st)]
 
@@ -698,8 +712,7 @@ class InmetStation:
         if type(lat) != float or type(lon) != float:
             raise TypeError("Coordinates (lat,lon) values must be type 'float'")
 
-        if station_type not in ["A","M", "ALL"]:
-            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
+        self._check_station_type(station_type)
 
         if station_type == "A":
             stations = self.get_auto_stations()
