@@ -19,14 +19,24 @@ Install using pip
 pip install inmetpy
 ```
 
+# Class attributes
+
+The InmetStation class has only one instance attributes:
+- InmetStations.stations -> A list of all stations available at INMET API.
+
+# Methods
+- get_manual_stations -> Filter the manual stations;
+- get_auto_stations -> Filter the automatic stations;
+- get_all_stations: get data from all stations at given date;
+- get_data_station: get data for a list of stations for a given date interval;
+- search_station_by_state: search for all stations available for a given state(s);
+- search_station_by_coords: search the closest *n* stations available for a given coordinate (latitude, longitude); 
+
 
 
 # Comand Line Library Usage
 
 ```bash
-# download a list of inmet stations
-inmetpy list_stations "A"
-
 # get data from all inmet station after a selected date
 inmetpy get_all_stations 2021-09-01
 
@@ -34,9 +44,9 @@ inmetpy get_all_stations 2021-09-01
 inmetpy get_data_station 2021-09-01 2021-09-10 '[A652,A667]'
 ```
 
-# Library Usage
+# Basic usage
 
-```bash
+```python
 # import the library
 from inmetpy.inmet_stations import InmetStation
 inmet = InmetStation()
@@ -51,5 +61,5 @@ manual_stations = inmet.get_manual_stations() # details of all manual stations
 inmet.get_all_stations(date) # date in format YYYY-MM-DD"
 
 # get data from a station or a list of stations
-inmet.get_data_station(start_date, end_date, by, station_id) # stations must be a string or a list of strings of the "CD_STATION" ID of the stations you want
+inmet.get_data_station(start_date, end_date, by, station_id) # stations must be a list of strings with the "CD_STATION" (ID) of the stations desired.
 ```
