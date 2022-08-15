@@ -42,11 +42,14 @@ from inmetpy.inmet_stations import InmetStation
 inmet = InmetStation()
 
 # list all inmet stations available
-inmet.list_stations(type) # type must be either "T" (Automatic) or "M" (Manual)
+stations = inmet.stations # get details of all stations available
+
+auto_stations = inmet.get_auto_stations() # details of all automatic stations
+manual_stations = inmet.get_manual_stations() # details of all manual stations
 
 # get data from all inmet station after a selected date
 inmet.get_all_stations(date) # date in format YYYY-MM-DD"
 
 # get data from a station or a list of stations
-inmet.get_data_station(start_date, end_date, by, station_id) # stations must be a string or a list of strings of the "CD_ESTACAO" ID of the stations you want
+inmet.get_data_station(start_date, end_date, by, station_id) # stations must be a string or a list of strings of the "CD_STATION" ID of the stations you want
 ```
