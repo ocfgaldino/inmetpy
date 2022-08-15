@@ -1,0 +1,41 @@
+#!python
+# -*- coding: utf-8 -*-
+
+from inmetpy.inmet_stations import InmetStation
+
+s = InmetStation()
+
+import sys
+
+args = sys.argv[1:]
+
+if args[0] == 'list_stations':
+    try:
+        s.list_stations(station_type=args[1], save_file=True)
+    except (ValueError) as e:
+        print(e)
+    except (IndexError) as e:
+        print("Missing 1 required positional argument 'station_type'")
+
+elif args[0] == 'get_all_stations':
+    try:
+        s.get_all_stations(date=args[1], save_file=True)
+    except (IndexError) as e:
+        print("Missing 1 required positional argument 'date'")
+    except Exception as e:
+        print(e)
+
+elif args[0] == 'get_data_station':
+    try:
+        station_id = args[4].strip('[]').replace(" ", "").split(',')
+        if len(station_id) == 1:
+            station_id = station_id[0]
+        s.get_data_station(start_date=args[1], end_date=args[2], by=args[3], station_id=station_id, save_file=True)
+        print('')
+    except (IndexError) as e:
+        print("Missing 1 or more required positional arguments: 'start_date', 'end_date', 'by' and/or 'station_id'")
+    except Exception as e:
+        print(e)
+
+else:
+    print("Wrong arguments. You need to use the one of the following arguments: 'list_stations', 'get_all_stations', 'get_data_station'")
