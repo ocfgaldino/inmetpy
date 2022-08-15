@@ -9,7 +9,7 @@ import numpy as np
 class InmetStation:
 
     def __init__(self):
-        self.api = "https://apitempo.inmet.gov.br"]
+        self.api = "https://apitempo.inmet.gov.br"
         self.stations = self._get_all_stations()
 
     def _get_request(self,
@@ -132,7 +132,9 @@ class InmetStation:
                     "VL_LONGITUDE":"LONGITUDE",
                     "VL_ALTITUDE":"HEIGHT",
                     "DT_INICIO_OPERACAO":"START_DATE_OPERATION",
-                    "SG_ENTIDADE":"INSTITUTE"
+                    "SG_ENTIDADE":"INSTITUTE",
+                    "CD_DISTRITO":"CD_DISTRICT",
+                    "CD_ESTACAO":"CD_STATION"
                     }
         
         
@@ -467,19 +469,24 @@ class InmetStation:
 
         return stations
 
-    def _check_is_stations(self, station:str) -> None:
+    def _check_is_station(self, stations:list) -> None:
 
-        if stations in self.stat
+        unexist_stations = list(set(stations) - set(self.stations.CD_STATION))
 
+        if unexist_stations:
+            raise ValueError("There is no station(s): " + ", ".join(f'"{station}"' for station in unexist_stations))
+        else:
+            pass
+            
     def get_manual_stations(self):
 
         stations = self.stations 
-        return stations[stations['TP_STATIONS']=='Traditional']
+        return stations[stations['TP_STATION']=='Traditional']
 
     def get_auto_stations(self):
 
         stations = self.stations 
-        return stations[stations['TP_STATIONS']=='Automatic']
+        return stations[stations['TP_STATION']=='Automatic']
 
 
 
@@ -575,6 +582,7 @@ class InmetStation:
 
         self._check_date_format(start_date)
         self._check_date_format(end_date)
+        self._check_is_station(station_id)
 
         if chunks == True:
 
