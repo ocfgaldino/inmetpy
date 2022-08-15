@@ -387,24 +387,6 @@ class InmetStation:
             else:
                 raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
 
-    def _is_station(self, st:List) -> None:
-        """Check if station list input has only valid stations
-
-        Parameters
-        ----------
-        st : List
-            A list of stations.
-
-        Raises
-        ------
-        ValueError
-            Wrong station code.
-        """
-        return None
-
-
-
-
     def _haversine(self,
                    lat_1:float,
                    lon_1:float,
@@ -470,6 +452,18 @@ class InmetStation:
         return stations
 
     def _check_is_station(self, stations:list) -> None:
+        """Check if station list input has only valid stations
+
+        Parameters
+        ----------
+        stations : List
+            A list of stations.
+
+        Raises
+        ------
+        ValueError
+            Wrong station code.
+        """
 
         unexist_stations = list(set(stations) - set(self.stations.CD_STATION))
 
@@ -607,7 +601,7 @@ class InmetStation:
                 for station in station_id:
                     print(station)
                     print(f"Looking for station {station}...")
-                            ####
+                            
                     if by == "hour":
                         query = [self.api, "estacao", start_date, end_date]
                     elif by == "day":
@@ -622,7 +616,7 @@ class InmetStation:
                     if r.status_code == 200:
                         df_station = pd.json_normalize(r.json())
                         if self._check_data_station(df_station, by):
-                            stations_df = stations_df.append(df_station)
+                            stations_df = pd.concat([stations_df, df_station])
                         else:
                             print(f"No data available for this period for station {station}")
                             return None
@@ -633,7 +627,7 @@ class InmetStation:
 
                     elif r.status_code == 403:
                         raise MemoryError("""The amount of data is too large for this request.
-                                            Use 'chunks = True' to split your request.""")
+                        Use 'chunks = True' to split your request.""")
 
                     else:
                         print(f"Request error: Request status {r.status_code}")
@@ -679,7 +673,7 @@ class InmetStation:
     def search_station_by_coords(self,
                                  lat:float,
                                  lon:float,
-                                 station_type:str,
+                                 station_type:str="ALL",
                                  n_stations:int = 1) -> DataFrame:
         """Search the closest 'n' stations for a given coordinate.
 
@@ -700,12 +694,19 @@ class InmetStation:
             A pandas dataframe with details of the closest 'n' stations for
             the given coordinates.
         """
+        if station_type not in ["A","M", "ALL"]:
+            raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
 
-        stations = self.list_stations(station_type)
+        if station_type == "A":
+            stations = self.get_auto_stations()
+        elif station_type == "M":
+            stations = self.get_manual_stations()
+        else:
+            stations = self.stations
 
         distance = []
         for index, row in stations.iterrows():           
-            distance.append(self._haversine(float(row['VL_LATITUDE']), float(row['VL_LONGITUDE']), lat, lon))
+            distance.append(self._haversine(float(row['LATITUDE']), float(row['LONGITUDE']), lat, lon))
 
         stations['DISTANCE'] = distance
 
