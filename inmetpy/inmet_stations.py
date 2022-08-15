@@ -448,7 +448,7 @@ class InmetStation:
         df_manual_stations = self._get_stations_details("M")
         
         stations = pd.concat([df_automatic_stations, df_manual_stations])
-        stations.reset_index(inplace=True)
+        stations.reset_index(inplace=True, drop=True)
 
         return stations
 
@@ -695,6 +695,9 @@ class InmetStation:
             A pandas dataframe with details of the closest 'n' stations for
             the given coordinates.
         """
+        if type(lat) != float or type(lon) != float:
+            raise TypeError("Coordinates (lat,lon) values must be type 'float'")
+
         if station_type not in ["A","M", "ALL"]:
             raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
 
@@ -706,7 +709,7 @@ class InmetStation:
             stations = self.stations
 
         distance = []
-        for index, row in stations.iterrows():           
+        for _, row in stations.iterrows():           
             distance.append(self._haversine(float(row['LATITUDE']), float(row['LONGITUDE']), lat, lon))
 
         stations['DISTANCE'] = distance
