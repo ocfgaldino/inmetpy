@@ -9,7 +9,7 @@ import numpy as np
 class InmetStation:
 
     def __init__(self):
-        self.api = "https://apitempo.inmet.gov.br"
+        self.api = "https://apitempo.inmet.gov.br"]
         self.stations = self._get_all_stations()
 
     def _get_request(self,
@@ -453,7 +453,7 @@ class InmetStation:
             stations = r.json()
             df_stations = pd.json_normalize(stations)
             
-            return df_stations
+            return self._rename_cols_to_en(df_stations)
         else:
             raise ConnectionError(f"API error code: {r.status_code}")
             
@@ -465,7 +465,22 @@ class InmetStation:
         
         stations = pd.concat([df_automatic_stations, df_manual_stations])
 
-        return self._rename_cols_to_en(stations)
+        return stations
+
+    def _check_is_stations(self, station:str) -> None:
+
+        if stations in self.stat
+
+    def get_manual_stations(self):
+
+        stations = self.stations 
+        return stations[stations['TP_STATIONS']=='Traditional']
+
+    def get_auto_stations(self):
+
+        stations = self.stations 
+        return stations[stations['TP_STATIONS']=='Automatic']
+
 
 
     def list_stations(self, station_type:str, save_file:bool = False) -> DataFrame:
