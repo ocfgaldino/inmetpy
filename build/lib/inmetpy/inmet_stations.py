@@ -490,7 +490,7 @@ class InmetStation:
 
         stations = self.stations 
         return stations[stations['TP_STATION']=='Automatic']
-        
+
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
         """Get data from all stations at given date at "date".
@@ -615,7 +615,9 @@ class InmetStation:
             raise ValueError("station_id should be list.")
 
 
-    def search_station_by_state(self, st:List, station_type:str) -> DataFrame:
+    def search_station_by_state(self, 
+                                st:List, 
+                                station_type:str="ALL") -> DataFrame:
         """Search available stations for specific states.
 
         Parameters
