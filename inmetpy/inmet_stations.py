@@ -642,11 +642,13 @@ class InmetStation:
         ----------
         st : List
             A list with the brazilian states searched (abbreviated).
+        station_type : Type of station searched. "A" for automatic, "M" for manual
+        and "ALL" for both types. Default is "ALL".
 
         Returns
         -------
         DataFrame
-            A pandas dataframe with all stations available for the searched states.
+            A pandas dataframe with all stations available in the searched states.
         """
 
         self._is_state(st)
@@ -677,8 +679,8 @@ class InmetStation:
             The latitude of point searched.
         lon : float
             The longitude of point searched.
-        station_type: str
-            Type of stations searched. It can be either "T","M" or "ALL".
+        station_type : Type of station searched. "A" for automatic, "M" for manual
+        and "ALL" for both types. Default is "ALL".
         n_stations : int
             The number of stations to return. Default is 1.
 
