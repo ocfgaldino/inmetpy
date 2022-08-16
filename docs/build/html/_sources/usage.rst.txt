@@ -83,3 +83,7 @@ n stations near by a given location.
    stations = inmet.search_station_by_coords(lat=-22.4212, lon=-42.4518, n_stations = 2)
 
    print(stations.head(5).to_markdown())
+
+
+Data from stations
+------------------
