@@ -10,8 +10,19 @@ To use InmetPy, install it with pip:
    pip install inmetpy
 
 
-Getting Started
-===============
+Package Overview
+================
+
+The inmetpy package is a library which provides a python interface to request data from the Official INMET API. This API provides
+access to information and data from all INMET meteorological stations installed in Brazil. The INMET owns more than 700 stations, which
+the first one dates from 1925!
+
+You can know more about INMET in the official site (https://portal.inmet.gov.br/) and more about the meteorological stations 
+in this nice interface, also official from INMET, https://mapas.inmet.gov.br/.
+
+The link to the API manual is https://portal.inmet.gov.br/manual/manual-de-uso-da-api-esta%C3%A7%C3%B5es
+
+
 
 List stations
 -------------

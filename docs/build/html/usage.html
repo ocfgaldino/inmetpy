@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -44,7 +45,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#instalation">Instalation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#getting-started">Getting Started</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="#package-overview">Package Overview</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#list-stations">List stations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#search-stations">Search Stations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#data-from-stations">Data from stations</a></li>
@@ -78,7 +79,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="usage">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="usage">
 <h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h1>
 <section id="instalation">
 <h2>Instalation<a class="headerlink" href="#instalation" title="Permalink to this heading"></a></h2>
@@ -88,8 +113,14 @@
 </div>
 </section>
 </section>
-<section id="getting-started">
-<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<section id="package-overview">
+<h1>Package Overview<a class="headerlink" href="#package-overview" title="Permalink to this heading"></a></h1>
+<p>The inmetpy package is a library which provides a python interface to request data from the Official INMET API. This API provides
+access to information and data from all INMET meteorological stations installed in Brazil. The INMET owns more than 700 stations, which
+the first one dates from 1925!</p>
+<p>You can know more about INMET in the official site (<a class="reference external" href="https://portal.inmet.gov.br/">https://portal.inmet.gov.br/</a>) and more about the meteorological stations
+in this nice interface, also official from INMET, <a class="reference external" href="https://mapas.inmet.gov.br/">https://mapas.inmet.gov.br/</a>.</p>
+<p>The link to the API manual is <a class="reference external" href="https://portal.inmet.gov.br/manual/manual-de-uso-da-api-esta%C3%A7%C3%B5es">https://portal.inmet.gov.br/manual/manual-de-uso-da-api-esta%C3%A7%C3%B5es</a></p>
 <section id="list-stations">
 <h2>List stations<a class="headerlink" href="#list-stations" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">inmetpy.inmet_stations</span> <span class="kn">import</span> <span class="n">InmetStation</span>

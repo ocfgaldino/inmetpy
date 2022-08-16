@@ -24,7 +24,8 @@ extensions = [
         'sphinx.ext.autodoc',
         'sphinx.ext.autosummary',
         'sphinx.ext.napoleon',
-        'sphinx_exec_code'
+        'sphinx_exec_code',
+        'nbsphinx'
 ]
 
 templates_path = ['_templates']
@@ -42,6 +43,7 @@ html_static_path = ['_static']
 html_context = {
     "display_github": True, 
     "github_user": "ocfgaldino",
+    "github_username":"ocfgaldino",
     "github_repo": "inmetpy",
     "github_version": "master", 
     "conf_py_path": "/source/", 
