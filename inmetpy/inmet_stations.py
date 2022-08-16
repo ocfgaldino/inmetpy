@@ -481,12 +481,26 @@ class InmetStation:
             pass
 
 
-    def get_manual_stations(self):
+    def get_manual_stations(self)  -> DataFrame:
+        """Get a list of detailhs of all traditional/manual stations.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of all manual stations.
+        """
 
         stations = self.stations 
         return stations[stations['TP_STATION']=='Traditional']
 
-    def get_auto_stations(self):
+    def get_auto_stations(self) -> DataFrame:
+        """Get a list of detailhs of all automatic stations.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of all automatic stations.
+        """
 
         stations = self.stations 
         return stations[stations['TP_STATION']=='Automatic']
@@ -495,10 +509,14 @@ class InmetStation:
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
         """Get data from all stations at given date at "date".
 
+        Parameters
+        ----------
+        date : str
+            Date to query data.
         Returns
         -------
         DataFrame
-            A pandas dataframe.
+            A pandas dataframe with data from all stations available at given date.
         """
 
         if date == None:
