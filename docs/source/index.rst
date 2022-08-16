@@ -3,6 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+
+
 .. image:: https://img.shields.io/pypi/v/inmetpy?color=red&label=PyPI
    :alt: PyPI
 
@@ -31,8 +33,10 @@ with data from more than 700 meteorological stations spread across Brazil.
    usage
    modules
    getting_started
+   notebooks/getting_started_inmetpy
    
-
+:doc:`notebooks/getting_started_inmetpy`
+    Displaying Jupyter notebook
    
 
 

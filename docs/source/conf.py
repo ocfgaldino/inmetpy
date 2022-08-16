@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, os.path.abspath('../..'))
 
 
+
 project = 'InmetPy'
 copyright = '2022, Felippe Galdino, Tobias Ramalho'
 author = 'Felippe Galdino'
@@ -25,8 +26,9 @@ extensions = [
         'sphinx.ext.autosummary',
         'sphinx.ext.napoleon',
         'sphinx_exec_code',
-        'nbsphinx'
+        'nbsphinx',
 ]
+
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -38,13 +40,14 @@ pygments_style = "sphinx"
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_js_files = ['https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js']
 
 
 html_context = {
     "display_github": True, 
     "github_user": "ocfgaldino",
-    "github_username":"ocfgaldino",
     "github_repo": "inmetpy",
     "github_version": "master", 
     "conf_py_path": "/source/", 
 }
+
