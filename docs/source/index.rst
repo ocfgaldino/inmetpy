@@ -15,11 +15,13 @@ with data from more than 700 meteorological stations spread across Brazil.
 
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
    :caption: Contents:
 
    usage
    modules
+   getting_started
+   
 
    
 
