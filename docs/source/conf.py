@@ -28,7 +28,9 @@ extensions = [
         'sphinx.ext.napoleon',
         'sphinx_exec_code',
         'nbsphinx',
-]
+        'sphinx_rtd_size'
+
+] 
 
 
 templates_path = ['_templates']
@@ -52,3 +54,4 @@ html_context = {
     "conf_py_path": "/source/", 
 }
 
+sphinx_rtd_size_width = "90%"
