@@ -5,13 +5,15 @@ from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
 import math
 import numpy as np
+from yaspin import yaspin
 # from exceptions import BadRequest
+
 
 
 class InmetStation:
 
     def __init__(self):
-        self.api = "https://apitempo.inmet.gov.br"
+        self._api = "https://apitempo.inmet.gov.br"
         self.stations = self._get_all_stations()
 
     def _get_request(self,
@@ -436,7 +438,7 @@ class InmetStation:
         if type == "A":
             type = "T"
         
-        r = requests.get("/".join([self.api, "estacoes", type]))
+        r = requests.get("/".join([self._api, "estacoes", type]))
         if r.status_code == 200:
             stations = r.json()
             df_stations = pd.json_normalize(stations)
@@ -537,7 +539,7 @@ class InmetStation:
 
         self._check_date_format(date)
 
-        r = requests.get("/".join([self.api, "estacao", "dados", date]))
+        r = requests.get("/".join([self._api, "estacao", "dados", date]))
 
         data = self._get_request(r, save_file=save_file, date=date)
 
@@ -566,10 +568,7 @@ class InmetStation:
         ------
         ValueError
             The 'by' argument should be 'hour' or 'day'.
-        MemoryError
-            The period requested is too large. Use 'chunks=True' to divide
-            the request.
-        ValueError
+        TypeError
             The 'station_id' should be a list.
         """
 
@@ -587,6 +586,13 @@ class InmetStation:
         start_date_list = dates['start_date']
         end_date_list = dates['end_date']
 
+        if by == "hour":
+            base_query = [self._api, "estacao"]
+        elif by == "day":
+            base_query = [self._api, "estacao", "diaria"]
+        else:
+            raise ValueError("by argument is missing") 
+
 
         if isinstance(station_id, list):
 
@@ -598,43 +604,33 @@ class InmetStation:
                 end_date = end_date_list[period]
 
                 for station in station_id:
-                    print(station)
-                    print(f"Looking for station {station}...")
-                            
-                    if by == "hour":
-                        query = [self.api, "estacao", start_date, end_date]
-                    elif by == "day":
-                        query = [self.api, "estacao", "diaria", start_date, end_date]
-                    else:
-                        raise ValueError("by argument is missing")
+                    print(f"Requesting data for station {station} from {start_date} to {end_date}.")
+                    
+                    full_query = base_query.copy()                            
+                    full_query.extend([start_date, end_date, station])
+                    with yaspin(text="Loading", color="yellow") as spinner:
+                        r = requests.get("/".join(full_query))
 
-                    query1 = query.copy()
-                    query1.append(station)
-                    r = requests.get("/".join(query1))
-
-                    if r.status_code == 200:
-                        df_station = pd.json_normalize(r.json())
-                        if self._check_data_station(df_station, by):
-                            stations_df = pd.concat([stations_df, df_station])
+                        if r.status_code == 200:
+                            df_station = pd.json_normalize(r.json())
+                            if self._check_data_station(df_station, by):
+                                stations_df = pd.concat([stations_df, df_station])
+                                spinner.ok("✅ ")
+                                print("="*63)
+                                print("="*63)
+                            else:
+                                spinner.fail("💥 ")
+                                print(f"No data available from {start_date} to {end_date} for station {station}")
+                                print("="*63)
+                                print("="*63)
+                                continue
                         else:
-                            print(f"No data available for this period for station {station}")
-                            return None
-
-                    elif r.status_code == 204:
-                        print(f"There is no station {station}")
-                        continue
-
-                    elif r.status_code == 403:
-                        raise MemoryError("""The amount of data is too large for this request.
-                        Use 'chunks = True' to split your request.""")
-
-                    else:
-                        print(f"Request error: Request status {r.status_code}")
+                            print(f"Request error: Request status {r.status_code}")
 
             stations_df = self._rename_vars_to_cf(stations_df, by)
             stations_df = self._create_date_time(stations_df, by)
             stations_df = self._change_data_type(stations_df, by)
-            stations_df.reset_index(inplace = True)
+            stations_df.reset_index(inplace = True, drop=True)
 
             if save_file:
                 stations_df.to_csv(f"inmet_data_{start_date}_{end_date}.csv", index=False)
@@ -643,7 +639,7 @@ class InmetStation:
                 return stations_df
 
         else:
-            raise ValueError("station_id should be list.")
+            raise TypeError("station_id should be list.")
 
 
     def search_station_by_state(self, 
