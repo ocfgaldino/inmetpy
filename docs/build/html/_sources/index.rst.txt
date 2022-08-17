@@ -35,9 +35,6 @@ with data from more than 700 meteorological stations spread across Brazil.
    getting_started
    notebooks/getting_started_inmetpy
    
-:doc:`notebooks/getting_started_inmetpy`
-    Displaying Jupyter notebook
-   
 
 
 
