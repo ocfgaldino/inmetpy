@@ -5,7 +5,7 @@ from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
 import math
 import numpy as np
-from exceptions import BadRequest
+# from exceptions import BadRequest
 
 
 class InmetStation:
@@ -308,7 +308,7 @@ class InmetStation:
     def _split_dates(self, start_date:str, end_date:str) -> int:
         """Generate a dictionary with 'start_date's and 'end_date's.
         Used when 'chunk' argument is set to 'True'. Divide a long period into
-        smaller periods.
+        smaller periods, of 1 year maximum.
 
         Parameters
         ----------
@@ -326,15 +326,17 @@ class InmetStation:
 
         first_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
 
-        if total_days < 2000:
-            pass
+        max_days = 366
+
+        if total_days < max_days:
+            return None
 
         else:
-            total_chunks = math.ceil(total_days/2000)
+            total_chunks = math.ceil(total_days/max_days)
 
             days_begin = list()
             days_end = list()
-            days_diff = 2000
+            days_diff = max_days
 
             list_dates = {'start_date':[],'end_date':[]}
             add_day = 0
@@ -342,12 +344,12 @@ class InmetStation:
             for n in range(total_chunks):
 
                 if n + 1 == total_chunks:
-                    days_diff = total_days % 2000
+                    days_diff = total_days % max_days
 
                 if n != 0:
                     add_day = 1
 
-                days_start = n * 2000
+                days_start = n * max_days
                 days_end = days_start + days_diff
 
                 start_date = first_date + datetime.timedelta(days=days_start + add_day)
@@ -359,7 +361,7 @@ class InmetStation:
                 list_dates["start_date"].append(start_date_str)
                 list_dates["end_date"].append(end_date_str)
 
-        return list_dates
+            return list_dates
 
     def _is_state(self, st:List) -> None:
         """Check if input is a valid brazilian state abbreviation
@@ -574,6 +576,7 @@ class InmetStation:
         self._check_date_format(start_date)
         self._check_date_format(end_date)
         self._check_is_station(station_id)
+        self._check_request_size(start_date, end_date)
 
         if chunks == True:
 
