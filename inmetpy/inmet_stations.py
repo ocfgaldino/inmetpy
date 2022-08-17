@@ -576,14 +576,13 @@ class InmetStation:
         self._check_date_format(start_date)
         self._check_date_format(end_date)
         self._check_is_station(station_id)
-        self._check_request_size(start_date, end_date)
+                
 
-        if chunks == True:
-
-            dates = self._split_dates(start_date, end_date)
-
-        else:
+        if chunks == False:
+            self._check_request_size(start_date, end_date)
             dates = {'start_date':[start_date], 'end_date':[end_date]}
+        else:
+            dates = self._split_dates(start_date, end_date)
 
         start_date_list = dates['start_date']
         end_date_list = dates['end_date']
