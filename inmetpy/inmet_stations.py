@@ -5,6 +5,8 @@ from typing import Optional, Union, List
 from pandas.core.frame import DataFrame
 import math
 import numpy as np
+from exceptions import BadRequest
+
 
 class InmetStation:
 
@@ -477,6 +479,15 @@ class InmetStation:
 
         if station_type not in ["A","M", "ALL"]:
             raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
+        else:
+            pass
+
+    def _check_request_size(self, start_date, end_date):
+
+        date_format = "%Y-%m-%d"
+
+        if (datetime.datetime.strptime(end_date, date_format) - datetime.datetime.strptime(start_date, date_format)).days > 366:
+            raise BadRequest("""The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request""")
         else:
             pass
 
