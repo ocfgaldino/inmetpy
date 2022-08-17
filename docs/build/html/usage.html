@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage &mdash; InmetPy 0.1.3 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/sphinx_rtd_size.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="inmetpy" href="modules.html" />
+    <link rel="prev" title="Welcome to InmetPy’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> InmetPy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#instalation">Instalation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#package-overview">Package Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#list-stations">List stations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#search-stations">Search Stations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data-from-stations">Data from stations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">inmetpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/getting_started_inmetpy.html">Getting Started with Inmetpy</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">InmetPy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Usage</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ocfgaldino/inmetpy/blob/master/source/usage.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h1>
+<section id="instalation">
+<h2>Instalation<a class="headerlink" href="#instalation" title="Permalink to this heading"></a></h2>
+<p>To use InmetPy, install it with pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install inmetpy
+</pre></div>
+</div>
+</section>
+</section>
+<section id="package-overview">
+<h1>Package Overview<a class="headerlink" href="#package-overview" title="Permalink to this heading"></a></h1>
+<p>The inmetpy package is a library which provides a python interface to request data from the Official INMET API. This API provides
+access to information and data from all INMET meteorological stations installed in Brazil. The INMET owns more than 700 stations, which
+the first one dates from 1925!</p>
+<p>You can know more about INMET in the official site (<a class="reference external" href="https://portal.inmet.gov.br/">https://portal.inmet.gov.br/</a>) and more about the meteorological stations
+in this nice interface, also official from INMET, <a class="reference external" href="https://mapas.inmet.gov.br/">https://mapas.inmet.gov.br/</a>.</p>
+<p>The link to the API manual is <a class="reference external" href="https://portal.inmet.gov.br/manual/manual-de-uso-da-api-esta%C3%A7%C3%B5es">https://portal.inmet.gov.br/manual/manual-de-uso-da-api-esta%C3%A7%C3%B5es</a></p>
+<section id="list-stations">
+<h2>List stations<a class="headerlink" href="#list-stations" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">inmetpy.inmet_stations</span> <span class="kn">import</span> <span class="n">InmetStation</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="n">inmet</span> <span class="o">=</span> <span class="n">InmetStation</span><span class="p">()</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="nb">print</span><span class="p">(</span><span class="n">inmet</span><span class="o">.</span><span class="n">stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|    | CD_OSCAR       | STATION_NAME    | FL_CAPITAL   | END_DATE_OPERATION   | CD_SITUATION   | TP_STATION   |   LATITUDE | CD_WSI                  |   CD_DISTRICT |   HEIGHT | STATE   | INSTITUTE   | CD_STATION   |   LONGITUDE | START_DATE_OPERATION          |
+|---:|:---------------|:----------------|:-------------|:---------------------|:---------------|:-------------|-----------:|:------------------------|--------------:|---------:|:--------|:------------|:-------------|------------:|:------------------------------|
+|  0 | 0-2000-0-86765 | ABROLHOS        | N            |                      | Down           | Automatic    |  -17.9631  | 0-76-0-2906907000000408 |            04 |    20.93 | BA      | INMET       | A422         |    -38.7033 | 2008-07-20T21:00:00.000-03:00 |
+|  1 | 0-2000-0-81755 | ACARAU          | N            |                      | Operative      | Automatic    |   -3.12111 | 0-76-0-2300200000000446 |            03 |    67.15 | CE      | INMET       | A360         |    -40.0872 | 2009-04-21T21:00:00.000-03:00 |
+|  2 | 0-2000-0-86827 | AFONSO CLAUDIO  |              |                      | Operative      | Automatic    |  -20.1042  | 0-76-0-3200102000000478 |            06 |   507.48 | ES      | INMET       | A657         |    -41.1069 | 2011-09-23T21:00:00.000-03:00 |
+|  3 | 0-2000-0-86686 | AGUA BOA        | N            |                      | Operative      | Automatic    |  -14.0164  | 0-76-0-5100201000000157 |            09 |   440    | MT      | INMET       | A908         |    -52.2117 | 2006-12-15T21:00:00.000-03:00 |
+|  4 | 0-2000-0-86812 | AGUA CLARA      | N            |                      | Operative      | Automatic    |  -20.4444  | 0-76-0-5000203000000463 |            07 |   323.63 | MS      | INMET       | A756         |    -52.8758 | 2010-08-13T21:00:00.000-03:00 |
+|  5 | 0-2000-0-86716 | AGUAS EMENDADAS |              |                      | Operative      | Automatic    |  -15.5965  | 0-76-0-5300108000000435 |            10 |  1030.36 | DF      | INMET       | A045         |    -47.6258 | 2008-10-02T21:00:00.000-03:00 |
+|  6 | 0-2000-0-86722 | AGUAS VERMELHAS | N            |                      | Operative      | Automatic    |  -15.7515  | 0-76-0-3101003000000252 |            05 |   754.07 | MG      | INMET       | A549         |    -41.4578 | 2007-09-08T21:00:00.000-03:00 |
+|  7 | 0-2000-0-86803 | AIMORES         | N            |                      | Operative      | Automatic    |  -19.5328  | 0-76-0-3101102000000239 |            05 |   287.74 | MG      | INMET       | A534         |    -41.0908 | 2007-08-04T21:00:00.000-03:00 |
+|  8 | 0-2000-0-86828 | ALEGRE          | N            |                      | Operative      | Automatic    |  -20.7506  | 0-76-0-3200201000000125 |            06 |   138    | ES      | INMET       | A617         |    -41.4889 | 2006-10-24T21:00:00.000-03:00 |
+|  9 | 0-2000-0-86975 | ALEGRETE        | N            |                      | Operative      | Automatic    |  -29.7092  | 0-76-0-4300406000000113 |            08 |   120.88 | RS      | INMET       | A826         |    -55.5256 | 2006-09-27T21:00:00.000-03:00 |
+</pre></div>
+</div>
+<p>The ´inmet´ object contains a list of all stations available at
+the INMET API, since the first convetional stations to the modern ones.</p>
+<p>It has two types of stations, “Automatic” stations (“A”) and “Traditional” stations (“M”, from “Manual”).</p>
+<p>To get filter out just the automatic stations:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">inmetpy.inmet_stations</span> <span class="kn">import</span> <span class="n">InmetStation</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="n">inmet</span> <span class="o">=</span> <span class="n">InmetStation</span><span class="p">()</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="n">automatic_stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">get_auto_stations</span><span class="p">()</span>
+<span class="linenos">6</span>
+<span class="linenos">7</span><span class="nb">print</span><span class="p">(</span><span class="n">automatic_stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+<span class="linenos">8</span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">automatic_stations</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|    | CD_OSCAR       | STATION_NAME    | FL_CAPITAL   | END_DATE_OPERATION   | CD_SITUATION   | TP_STATION   |   LATITUDE | CD_WSI                  |   CD_DISTRICT |   HEIGHT | STATE   | INSTITUTE   | CD_STATION   |   LONGITUDE | START_DATE_OPERATION          |
+|---:|:---------------|:----------------|:-------------|:---------------------|:---------------|:-------------|-----------:|:------------------------|--------------:|---------:|:--------|:------------|:-------------|------------:|:------------------------------|
+|  0 | 0-2000-0-86765 | ABROLHOS        | N            |                      | Down           | Automatic    |  -17.9631  | 0-76-0-2906907000000408 |            04 |    20.93 | BA      | INMET       | A422         |    -38.7033 | 2008-07-20T21:00:00.000-03:00 |
+|  1 | 0-2000-0-81755 | ACARAU          | N            |                      | Operative      | Automatic    |   -3.12111 | 0-76-0-2300200000000446 |            03 |    67.15 | CE      | INMET       | A360         |    -40.0872 | 2009-04-21T21:00:00.000-03:00 |
+|  2 | 0-2000-0-86827 | AFONSO CLAUDIO  |              |                      | Operative      | Automatic    |  -20.1042  | 0-76-0-3200102000000478 |            06 |   507.48 | ES      | INMET       | A657         |    -41.1069 | 2011-09-23T21:00:00.000-03:00 |
+|  3 | 0-2000-0-86686 | AGUA BOA        | N            |                      | Operative      | Automatic    |  -14.0164  | 0-76-0-5100201000000157 |            09 |   440    | MT      | INMET       | A908         |    -52.2117 | 2006-12-15T21:00:00.000-03:00 |
+|  4 | 0-2000-0-86812 | AGUA CLARA      | N            |                      | Operative      | Automatic    |  -20.4444  | 0-76-0-5000203000000463 |            07 |   323.63 | MS      | INMET       | A756         |    -52.8758 | 2010-08-13T21:00:00.000-03:00 |
+|  5 | 0-2000-0-86716 | AGUAS EMENDADAS |              |                      | Operative      | Automatic    |  -15.5965  | 0-76-0-5300108000000435 |            10 |  1030.36 | DF      | INMET       | A045         |    -47.6258 | 2008-10-02T21:00:00.000-03:00 |
+|  6 | 0-2000-0-86722 | AGUAS VERMELHAS | N            |                      | Operative      | Automatic    |  -15.7515  | 0-76-0-3101003000000252 |            05 |   754.07 | MG      | INMET       | A549         |    -41.4578 | 2007-09-08T21:00:00.000-03:00 |
+|  7 | 0-2000-0-86803 | AIMORES         | N            |                      | Operative      | Automatic    |  -19.5328  | 0-76-0-3101102000000239 |            05 |   287.74 | MG      | INMET       | A534         |    -41.0908 | 2007-08-04T21:00:00.000-03:00 |
+|  8 | 0-2000-0-86828 | ALEGRE          | N            |                      | Operative      | Automatic    |  -20.7506  | 0-76-0-3200201000000125 |            06 |   138    | ES      | INMET       | A617         |    -41.4889 | 2006-10-24T21:00:00.000-03:00 |
+|  9 | 0-2000-0-86975 | ALEGRETE        | N            |                      | Operative      | Automatic    |  -29.7092  | 0-76-0-4300406000000113 |            08 |   120.88 | RS      | INMET       | A826         |    -55.5256 | 2006-09-27T21:00:00.000-03:00 |
+573
+</pre></div>
+</div>
+</section>
+<section id="search-stations">
+<h2>Search Stations<a class="headerlink" href="#search-stations" title="Permalink to this heading"></a></h2>
+<p>It is possible to search stations following either two criterias,
+the state (or states) that wanted to search or search the closest
+n stations near by a given location.</p>
+<p><span class="caption-text">Search stations by state</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">inmetpy.inmet_stations</span> <span class="kn">import</span> <span class="n">InmetStation</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="n">inmet</span> <span class="o">=</span> <span class="n">InmetStation</span><span class="p">()</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># Looking for stations in the Amazonas and Rio de Janeiro states.</span>
+<span class="linenos"> 6</span><span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AM&quot;</span><span class="p">,</span><span class="s2">&quot;RJ&quot;</span><span class="p">]</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">search_station_by_state</span><span class="p">(</span><span class="n">states</span><span class="p">)</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="nb">print</span><span class="p">(</span><span class="n">stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|    | CD_OSCAR       | STATION_NAME    | FL_CAPITAL   | END_DATE_OPERATION   | CD_SITUATION   | TP_STATION   |   LATITUDE | CD_WSI                  |   CD_DISTRICT |   HEIGHT | STATE   | INSTITUTE   | CD_STATION   |   LONGITUDE | START_DATE_OPERATION          |
+|---:|:---------------|:----------------|:-------------|:---------------------|:---------------|:-------------|-----------:|:------------------------|--------------:|---------:|:--------|:------------|:-------------|------------:|:------------------------------|
+| 23 |                | ANGRA DOS REIS  | N            |                      | Operative      | Automatic    | -22.9756   | 0-76-0-3300100000000555 |            06 |     6    | RJ      | INMET       | A628         |    -44.3033 | 2017-08-24T21:00:00.000-03:00 |
+| 26 | 0-2000-0-81893 | APUI            |              |                      | Operative      | Automatic    |  -7.20556  | 0-76-0-1300144000000406 |            01 |   156.97 | AM      | INMET       | A113         |    -59.8886 | 2008-07-18T21:00:00.000-03:00 |
+| 41 | 0-2000-0-86892 | ARRAIAL DO CABO | N            |                      | Operative      | Automatic    | -22.9753   | 0-76-0-3300258000000108 |            06 |     5    | RJ      | INMET       | A606         |    -42.0214 | 2006-09-21T21:00:00.000-03:00 |
+| 42 | 0-2000-0-81732 | AUTAZES         |              |                      | Operative      | Automatic    |  -3.58333  | 0-76-0-1300300000000339 |            01 |    19.9  | AM      | INMET       | A120         |    -59.1294 | 2008-04-16T21:00:00.000-03:00 |
+| 51 | 0-2000-0-81648 | BARCELOS        | N            |                      | Operative      | Automatic    |  -0.987222 | 0-76-0-1300409000000344 |            01 |    29.88 | AM      | INMET       | A128         |    -62.9242 | 2008-04-18T21:00:00.000-03:00 |
+</pre></div>
+</div>
+<p><span class="caption-text">Search stations by coordinates</span></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">inmetpy.inmet_stations</span> <span class="kn">import</span> <span class="n">InmetStation</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="n">inmet</span> <span class="o">=</span> <span class="n">InmetStation</span><span class="p">()</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="c1"># Looking for stations in the Amazonas and Rio de Janeiro states.</span>
+<span class="linenos"> 6</span><span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AM&quot;</span><span class="p">,</span><span class="s2">&quot;RJ&quot;</span><span class="p">]</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="n">stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">search_station_by_coords</span><span class="p">(</span><span class="n">lat</span><span class="o">=-</span><span class="mf">22.4212</span><span class="p">,</span> <span class="n">lon</span><span class="o">=-</span><span class="mf">42.4518</span><span class="p">,</span> <span class="n">n_stations</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="nb">print</span><span class="p">(</span><span class="n">stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|     | CD_OSCAR       | STATION_NAME            | FL_CAPITAL   | END_DATE_OPERATION   | CD_SITUATION   | TP_STATION   |   LATITUDE | CD_WSI                  |   CD_DISTRICT |   HEIGHT | STATE   | INSTITUTE   | CD_STATION   |   LONGITUDE | START_DATE_OPERATION          |   DISTANCE |
+|----:|:---------------|:------------------------|:-------------|:---------------------|:---------------|:-------------|-----------:|:------------------------|--------------:|---------:|:--------|:------------|:-------------|------------:|:------------------------------|-----------:|
+| 341 | 0-2000-0-86889 | NOVA FRIBURGO - SALINAS |              |                      | Operative      | Automatic    |   -22.3347 | 0-76-0-3303401000000466 |            06 |     1070 | RJ      | INMET       | A624         |    -42.6769 | 2010-09-17T21:00:00.000-03:00 |    25.0673 |
+| 515 | 0-2000-0-86893 | SILVA JARDIM            | N            |                      | Operative      | Automatic    |   -22.6458 | 0-76-0-3305604000000505 |            06 |       19 | RJ      | INMET       | A659         |    -42.4156 | 2015-08-27T21:00:00.000-03:00 |    25.2539 |
+</pre></div>
+</div>
+</section>
+<section id="data-from-stations">
+<h2>Data from stations<a class="headerlink" href="#data-from-stations" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to InmetPy’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="modules.html" class="btn btn-neutral float-right" title="inmetpy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Felippe Galdino, Tobias Ramalho.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

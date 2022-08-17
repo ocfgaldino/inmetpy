@@ -481,12 +481,26 @@ class InmetStation:
             pass
 
 
-    def get_manual_stations(self):
+    def get_manual_stations(self)  -> DataFrame:
+        """Get a list of detailhs of all traditional/manual stations.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of all manual stations.
+        """
 
         stations = self.stations 
         return stations[stations['TP_STATION']=='Traditional']
 
-    def get_auto_stations(self):
+    def get_auto_stations(self) -> DataFrame:
+        """Get a list of detailhs of all automatic stations.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of all automatic stations.
+        """
 
         stations = self.stations 
         return stations[stations['TP_STATION']=='Automatic']
@@ -495,10 +509,14 @@ class InmetStation:
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
         """Get data from all stations at given date at "date".
 
+        Parameters
+        ----------
+        date : str
+            Date to query data.
         Returns
         -------
         DataFrame
-            A pandas dataframe.
+            A pandas dataframe with data from all stations available at given date.
         """
 
         if date == None:
@@ -624,11 +642,13 @@ class InmetStation:
         ----------
         st : List
             A list with the brazilian states searched (abbreviated).
+        station_type : Type of station searched. "A" for automatic, "M" for manual
+        and "ALL" for both types. Default is "ALL".
 
         Returns
         -------
         DataFrame
-            A pandas dataframe with all stations available for the searched states.
+            A pandas dataframe with all stations available in the searched states.
         """
 
         self._is_state(st)
@@ -659,8 +679,8 @@ class InmetStation:
             The latitude of point searched.
         lon : float
             The longitude of point searched.
-        station_type: str
-            Type of stations searched. It can be either "T","M" or "ALL".
+        station_type : Type of station searched. "A" for automatic, "M" for manual
+        and "ALL" for both types. Default is "ALL".
         n_stations : int
             The number of stations to return. Default is 1.
 
