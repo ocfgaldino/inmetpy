@@ -7,58 +7,28 @@ from inmetpy.inmet_stations import InmetStation
 
 class TestInmetStation(unittest.TestCase):
     
-    def test_list_stations_T(self):
+    def test_get_auto_stations(self):
         
         col_names = ['CD_OSCAR',
-                     'DC_NOME',
+                     'STATION_NAME',
                      'FL_CAPITAL',
-                     'DT_FIM_OPERACAO',
-                     'CD_SITUACAO',
-                     'TP_ESTACAO',
-                     'VL_LATITUDE',
+                     'END_DATE_OPERATION',
+                     'CD_SITUATION',
+                     'TP_STATION',
+                     'LATITUDE',
                      'CD_WSI',
-                     'CD_DISTRITO',
-                     'VL_ALTITUDE',
-                     'SG_ESTADO',
-                     'SG_ENTIDADE',
-                     'CD_ESTACAO',
-                     'VL_LONGITUDE',
-                     'DT_INICIO_OPERACAO']
+                     'CD_DISTRICT',
+                     'HEIGHT',
+                     'STATE',
+                     'INSTITUTE',
+                     'CD_STATION',
+                     'LONGITUDE',
+                     'START_DATE_OPERATION']
         
         api = InmetStation()
-        stations = api.list_stations("T")
+        stations = api.get_auto_stations()
         col_names_stations = stations.columns.tolist()
         self.assertEqual(col_names_stations, col_names)
-        
-        
-    def test_list_stations_M(self):
-        col_names = ['CD_OSCAR',
-                     'DC_NOME',
-                     'FL_CAPITAL',
-                     'DT_FIM_OPERACAO',
-                     'CD_SITUACAO',
-                     'TP_ESTACAO',
-                     'VL_LATITUDE',
-                     'CD_WSI',
-                     'CD_DISTRITO',
-                     'VL_ALTITUDE',
-                     'SG_ESTADO',
-                     'SG_ENTIDADE',
-                     'CD_ESTACAO',
-                     'VL_LONGITUDE',
-                     'DT_INICIO_OPERACAO']
-        
-        api = InmetStation()
-        stations = api.list_stations("M")
-        col_names_stations = stations.columns.tolist()
-        self.assertEqual(col_names_stations, col_names)
-        
-        
-    def test_list_stations_wrong_input(self):
-    
-        api = InmetStation()
-        self.assertRaises(ValueError, api.list_stations, "s")
-        
         
     def test_get_all_stations_wrong_date_format(self):
         
@@ -70,6 +40,8 @@ class TestInmetStation(unittest.TestCase):
         
         api = InmetStation()
         self.assertRaises(ValueError, api.search_station_by_state, ["SS"])
+
+        
         
         
         
