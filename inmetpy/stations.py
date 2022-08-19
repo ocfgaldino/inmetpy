@@ -487,6 +487,18 @@ class InmetStation:
             pass
             
     def _check_station_type(self, station_type):
+        """Check if input for station_type is valid.
+
+        Parameters
+        ----------
+        station_type : str
+            Type of station.
+
+        Raises
+        ------
+        ValueError
+            Wrong station type.
+        """
 
         if station_type not in ["A","M", "ALL"]:
             raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
