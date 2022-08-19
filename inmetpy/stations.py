@@ -506,6 +506,20 @@ class InmetStation:
             pass
 
     def _check_request_size(self, start_date, end_date):
+        """Check the size of requested data
+
+        Parameters
+        ----------
+        start_date : str
+            Start date for search.
+        end_date: str
+            End date for search.
+
+        Raises
+        ------
+        RequestTooLarge
+            Requested data greater than one year period.
+        """
 
         date_format = "%Y-%m-%d"
 
