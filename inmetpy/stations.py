@@ -434,6 +434,13 @@ class InmetStation:
 
 
     def _get_stations_details(self, type):
+        """Get details of automatic OR manual stations available on INMET API.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of the stations.
+        """
         
         if type == "A":
             type = "T"
