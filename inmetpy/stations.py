@@ -449,6 +449,13 @@ class InmetStation:
             
         
     def _get_all_stations(self):
+        """Get details of all stations available on INMET API.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of all stations.
+        """
 
         df_automatic_stations = self._get_stations_details("A")
         df_manual_stations = self._get_stations_details("M")
