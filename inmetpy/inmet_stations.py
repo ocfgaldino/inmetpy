@@ -6,7 +6,7 @@ from pandas.core.frame import DataFrame
 import math
 import numpy as np
 from yaspin import yaspin
-# from exceptions import BadRequest
+from exceptions import RequestTooLarge
 
 
 
@@ -491,7 +491,7 @@ class InmetStation:
         date_format = "%Y-%m-%d"
 
         if (datetime.datetime.strptime(end_date, date_format) - datetime.datetime.strptime(start_date, date_format)).days > 366:
-            raise BadRequest("""The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request""")
+            raise RequestTooLarge("""The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request""")
         else:
             pass
 
