@@ -479,7 +479,7 @@ class InmetStation:
             Wrong station code.
         """
 
-        unexist_stations = list(set(stations) - set(self.stations.CD_STATION))
+        unexist_stations = list(set(stations) - set(self.stations['CD_STATION']))
 
         if unexist_stations:
             raise ValueError("There is no station(s): " + ", ".join(f'"{station}"' for station in unexist_stations))
