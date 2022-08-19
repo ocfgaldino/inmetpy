@@ -574,9 +574,6 @@ class InmetStation:
 
         r = requests.get("/".join([self._api, "estacao", "dados", date]))
 
-        data = self._get_request(r, save_file=save_file, date=date)
-
-
         return self._get_request(r, save_file=save_file, date=date)
 
 
