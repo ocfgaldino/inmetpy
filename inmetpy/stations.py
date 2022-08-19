@@ -145,12 +145,9 @@ class InmetStation:
         
         df.rename(columns = cols_to_en, inplace = True)
         
-        # Replace attribute values.
-        # Station Type
         df.loc[df['TP_STATION']=="Automatica", "TP_STATION"] = "Automatic"
         df.loc[df['TP_STATION']=="Convencional", "TP_STATION"] = "Traditional"
        
-        # Situation Status
         df.loc[df['CD_SITUATION']=="Operante", "CD_SITUATION"] = "Operative"
         df.loc[df['CD_SITUATION']=="Pane", "CD_SITUATION"] = "Down"
         
