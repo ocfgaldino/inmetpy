@@ -130,6 +130,7 @@ class InmetStation:
         cols_to_en = {
                     "DC_NOME": "STATION_NAME",
                     "DT_FIM_OPERACAO":"END_DATE_OPERATION",
+                    "FL_CAPITAL":"IS_CAPITAL",
                     "CD_SITUACAO":"CD_SITUATION",
                     "TP_ESTACAO":"TP_STATION",
                     "SG_ESTADO":"STATE",
