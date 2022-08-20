@@ -333,7 +333,6 @@ class InmetStation:
         else:
             total_chunks = math.ceil(total_days/max_days)
 
-            days_begin = list()
             days_end = list()
             days_diff = max_days
 
