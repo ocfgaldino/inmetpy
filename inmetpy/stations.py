@@ -158,7 +158,7 @@ class InmetStation:
         
     def _is_capital(self):
         """Change 'IS_CAPITAL' column from string to boolen"""
-        self.stations = self.stations['IS_CAPITAL'].apply(lambda x: True if x == 'S' else False)
+        self.stations['IS_CAPITAL'] = self.stations['IS_CAPITAL'].apply(lambda x: True if x == 'S' else False)
 
     def _check_date_format(self, date:str) -> bool:
         """Check user input date format.
