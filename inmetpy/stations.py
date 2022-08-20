@@ -625,9 +625,9 @@ class InmetStation:
         Raises
         ------
         ValueError
-            The 'by' argument should be 'hour' or 'day'.
+            The `by` argument should be `'hour'` or `'day'`.
         TypeError
-            The 'station_id' should be a list.
+            The `station_id` should be a list.
         """
 
         self._check_date_format(start_date)
@@ -708,9 +708,11 @@ class InmetStation:
         ----------
         st : List
             A list with the brazilian states searched (abbreviated).
-        station_type : str, default = "ALL"
-            Type of station searched. "A" for automatic, "M" for manual
-        and "ALL" for both types.
+        station_type : {'ALL','A','M'}, default = 'ALL'
+            - If :const: `'ALL'`, then all types of stations will be searched.
+            - If :const: `'A'`, then just automatic stations will be searched.
+            - If :const: `'M'`, then just manual stations will be searched.
+
 
         Returns
         -------
@@ -746,10 +748,12 @@ class InmetStation:
             The latitude of point searched.
         lon : float
             The longitude of point searched.
-        station_type : Type of station searched. "A" for automatic, "M" for manual
-        and "ALL" for both types. Default is "ALL".
-        n_stations : int
-            The number of stations to return. Default is 1.
+        station_type : {'ALL','A','M'}, default = 'ALL'
+            - If :const: `'ALL'`, then all types of stations will be searched.
+            - If :const: `'A'`, then just automatic stations will be searched.
+            - If :const: `'M'`, then just manual stations will be searched.
+        n_stations : int, default = 1
+            The number of stations to return.
 
         Returns
         -------
