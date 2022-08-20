@@ -562,8 +562,10 @@ class InmetStation:
 
         Parameters
         ----------
-        type : str, default = "ALL"
-            Type of station. It can be "ALL", "A" (Automatic) and "M" (Manual). Default is "ALL".
+        type : {``'ALL'``,``'A'``,``'M'``}, default = ``'ALL'``
+            - If ``'ALL'``, then all types of stations will be searched.
+            - If ``'A'``, then just automatic stations will be searched.
+            - If ``'M'``, then just manual stations will be searched.
 
 
         Returns
@@ -583,7 +585,7 @@ class InmetStation:
         return stations
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
-        """Get data from all stations at given date at "date".
+        """Get data from all stations at given date.
 
         Parameters
         ----------
@@ -637,7 +639,7 @@ class InmetStation:
         Raises
         ------
         ValueError
-            The `by` argument should be `'hour'` or `'day'`.
+            The `by` argument should be ``'hour'`` or ``'day'``.
         TypeError
             The `station_id` should be a list.
         """
@@ -721,10 +723,10 @@ class InmetStation:
         ----------
         st : List
             A list with the brazilian states searched (abbreviated).
-        station_type : {'ALL','A','M'}, default = 'ALL'
-            - If :const: `'ALL'`, then all types of stations will be searched.
-            - If :const: `'A'`, then just automatic stations will be searched.
-            - If :const: `'M'`, then just manual stations will be searched.
+        station_type : {``'ALL'``,``'A'``,``'M'``}, default = ``'ALL'``
+            - If ``'ALL'``, then all types of stations will be searched.
+            - If ``'A'``, then just automatic stations will be searched.
+            - If ``'M'``, then just manual stations will be searched.
 
 
         Returns
@@ -761,11 +763,11 @@ class InmetStation:
             The latitude of point searched.
         lon : float
             The longitude of point searched.
-        station_type : {'ALL','A','M'}, default = 'ALL'
-            - If :const: `'ALL'`, then all types of stations will be searched.
-            - If :const: `'A'`, then just automatic stations will be searched.
-            - If :const: `'M'`, then just manual stations will be searched.
-        n_stations : int, default = 1
+        station_type : {``'ALL'``,``'A'``,``'M'``}, default = ``'ALL'``
+            - If ``'ALL'``, then all types of stations will be searched.
+            - If ``'A'``, then just automatic stations will be searched.
+            - If ``'M'``, then just manual stations will be searched.
+        n_stations : int, default = ``1``
             The number of stations to return.
 
         Returns
