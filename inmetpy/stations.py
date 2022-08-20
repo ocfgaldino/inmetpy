@@ -584,7 +584,7 @@ class InmetStation:
                          start_date:str,
                          end_date:str,
                          by:str,
-                         station_id:Union[str,List[str]],
+                         station_id:List[str],
                          save_file:bool = False,
                          chunks:Optional[bool] = False) -> DataFrame:
         """Get data from all stations in 'stations_id'. The data can be downloaded
