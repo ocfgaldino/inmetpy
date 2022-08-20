@@ -791,10 +791,6 @@ class InmetStation:
         else:
             stations = self._stations
 
-        distance = []
-        for _, row in stations.iterrows():           
-            distance.append(self._haversine(float(row['LATITUDE']), float(row['LONGITUDE']), lat, lon))
-
-        stations['DISTANCE'] = distance
+        stations['DISTANCE'] = stations.apply(lambda x: self._haversine(x['LATITUDE'], x['LONGITUDE'], lat, lon), axis = 1)
 
         return stations.sort_values(by='DISTANCE').iloc[0:n_stations]
