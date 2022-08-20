@@ -14,7 +14,7 @@ class InmetStation:
 
     def __init__(self):
         self._api = "https://apitempo.inmet.gov.br"
-        self.stations = self._get_all_stations()
+        self._stations = self._get_all_stations()
         self._is_capital()
         self._change_data_type_station_details()
 
@@ -159,7 +159,7 @@ class InmetStation:
         
     def _is_capital(self) -> DataFrame:
         """Change 'IS_CAPITAL' column from string to boolen"""
-        self.stations['IS_CAPITAL'] = self.stations['IS_CAPITAL'].apply(lambda x: True if x == 'S' else False)
+        self._stations['IS_CAPITAL'] = self._stations['IS_CAPITAL'].apply(lambda x: True if x == 'S' else False)
 
     def _check_date_format(self, date:str) -> bool:
         """Check user input date format.
@@ -291,8 +291,8 @@ class InmetStation:
         to_float = ['HEIGHT','LATITUDE','LONGITUDE']
         to_date_time = ['END_DATE_OPERATION', 'START_DATE_OPERATION']
 
-        self.stations[to_float] = self.stations[to_float].apply(pd.to_numeric, errors='coerce').astype("float64")
-        self.stations[to_date_time] = self.stations[to_date_time].apply(pd.to_datetime, format="%Y-%m-%d", utc=True, errors='coerce')
+        self._stations[to_float] = self._stations[to_float].apply(pd.to_numeric, errors='coerce').astype("float64")
+        self._stations[to_date_time] = self._stations[to_date_time].apply(pd.to_datetime, format="%Y-%m-%d", utc=True, errors='coerce')
 
 
     def _count_date_diff(self, start_date:str, end_date:str) -> int:
@@ -496,7 +496,7 @@ class InmetStation:
             Wrong station code.
         """
 
-        unexist_stations = list(set(stations) - set(self.stations['CD_STATION']))
+        unexist_stations = list(set(stations) - set(self._stations['CD_STATION']))
 
         if unexist_stations:
             raise ValueError("There is no station(s): " + ", ".join(f'"{station}"' for station in unexist_stations))
@@ -545,31 +545,31 @@ class InmetStation:
         else:
             pass
 
+    def get_stations(self, type:str = "ALL") -> DataFrame:
+        """Get details of all stations available at INMET API. It can return
+        either ALL types of stations, automatic stations or manual stations.
 
-    def get_manual_stations(self)  -> DataFrame:
-        """Get a list of detailhs of all traditional/manual stations.
+        Parameters
+        ----------
+        type : str
+            Type of station. It can be "ALL", "A" (Automatic) and "M" (Manual). Default is "ALL".
 
-        Returns
-        -------
-        DataFrame
-            A pandas dataframe containing details of all manual stations.
-        """
-
-        stations = self.stations 
-        return stations[stations['TP_STATION']=='Traditional']
-
-    def get_auto_stations(self) -> DataFrame:
-        """Get a list of detailhs of all automatic stations.
 
         Returns
         -------
         DataFrame
-            A pandas dataframe containing details of all automatic stations.
+            A pandas dataframe containing details of stations.
         """
 
-        stations = self.stations 
-        return stations[stations['TP_STATION']=='Automatic']
+        self._check_station_type(type)
+        stations = self._stations.copy()
 
+        if type == "A":
+            stations = stations[stations['TP_STATION']=='Automatic']
+        elif type == "M":
+            stations = stations[stations['TP_STATION']=='Traditional']
+        
+        return stations
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
         """Get data from all stations at given date at "date".
@@ -714,7 +714,7 @@ class InmetStation:
         elif station_type == "M":
             stations = self.get_manual_stations()
         else:
-            stations = self.stations
+            stations = self._stations
 
         stations = stations[stations['STATE'].isin(st)]
 
@@ -755,7 +755,7 @@ class InmetStation:
         elif station_type == "M":
             stations = self.get_manual_stations()
         else:
-            stations = self.stations
+            stations = self._stations
 
         distance = []
         for _, row in stations.iterrows():           
