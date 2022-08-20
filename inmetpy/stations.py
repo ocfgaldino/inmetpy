@@ -15,6 +15,7 @@ class InmetStation:
     def __init__(self):
         self._api = "https://apitempo.inmet.gov.br"
         self.stations = self._get_all_stations()
+        self._is_capital()
 
     def _get_request(self,
             request:requests.models.Response,
@@ -154,7 +155,9 @@ class InmetStation:
         
         return df
         
-        
+    def _is_capital(self):
+        """Change 'IS_CAPITAL' column from string to boolen"""
+        self.stations = self.stations['IS_CAPITAL'].apply(lambda x: True if x == 'S' else False)
 
     def _check_date_format(self, date:str) -> bool:
         """Check user input date format.
