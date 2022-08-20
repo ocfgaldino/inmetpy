@@ -6,7 +6,8 @@ from pandas.core.frame import DataFrame
 import math
 import numpy as np
 from yaspin import yaspin
-# from exceptions import BadRequest
+from yaspin.spinners import Spinners
+from exceptions import RequestTooLarge
 
 
 
@@ -14,7 +15,10 @@ class InmetStation:
 
     def __init__(self):
         self._api = "https://apitempo.inmet.gov.br"
-        self.stations = self._get_all_stations()
+        self._stations = self._get_all_stations()
+        self._is_capital()
+        self._change_data_type_station_details()
+        self._reorder_station_cols()
 
     def _get_request(self,
             request:requests.models.Response,
@@ -129,6 +133,7 @@ class InmetStation:
         cols_to_en = {
                     "DC_NOME": "STATION_NAME",
                     "DT_FIM_OPERACAO":"END_DATE_OPERATION",
+                    "FL_CAPITAL":"IS_CAPITAL",
                     "CD_SITUACAO":"CD_SITUATION",
                     "TP_ESTACAO":"TP_STATION",
                     "SG_ESTADO":"STATE",
@@ -145,19 +150,27 @@ class InmetStation:
         
         df.rename(columns = cols_to_en, inplace = True)
         
-        # Replace attribute values.
-        # Station Type
         df.loc[df['TP_STATION']=="Automatica", "TP_STATION"] = "Automatic"
         df.loc[df['TP_STATION']=="Convencional", "TP_STATION"] = "Traditional"
        
-        # Situation Status
         df.loc[df['CD_SITUATION']=="Operante", "CD_SITUATION"] = "Operative"
         df.loc[df['CD_SITUATION']=="Pane", "CD_SITUATION"] = "Down"
         
         
         return df
+
+    def _reorder_station_cols(self):
+        """Reorder the columns of station details to more apropriate way."""
+
+        cols = ['CD_OSCAR', 'STATION_NAME', 'CD_STATION', 'TP_STATION','START_DATE_OPERATION',
+                'END_DATE_OPERATION', 'LONGITUDE', 'LATITUDE', 'HEIGHT', 'CD_SITUATION',
+                'CD_WSI', 'IS_CAPITAL', 'CD_DISTRICT', 'INSTITUTE', 'STATE']
+
+        self._stations = self._stations[cols]
         
-        
+    def _is_capital(self) -> DataFrame:
+        """Change 'IS_CAPITAL' column from string to boolen"""
+        self._stations['IS_CAPITAL'] = self._stations['IS_CAPITAL'].apply(lambda x: True if x == 'S' else False)
 
     def _check_date_format(self, date:str) -> bool:
         """Check user input date format.
@@ -284,6 +297,15 @@ class InmetStation:
 
         return df
 
+    def _change_data_type_station_details(self) -> DataFrame:
+
+        to_float = ['HEIGHT','LATITUDE','LONGITUDE']
+        to_date_time = ['END_DATE_OPERATION', 'START_DATE_OPERATION']
+
+        self._stations[to_float] = self._stations[to_float].apply(pd.to_numeric, errors='coerce').astype("float64")
+        self._stations[to_date_time] = self._stations[to_date_time].apply(pd.to_datetime, format="%Y-%m-%d", utc=True, errors='coerce')
+
+
     def _count_date_diff(self, start_date:str, end_date:str) -> int:
         """Count the total of days queried.
 
@@ -336,7 +358,6 @@ class InmetStation:
         else:
             total_chunks = math.ceil(total_days/max_days)
 
-            days_begin = list()
             days_end = list()
             days_diff = max_days
 
@@ -386,12 +407,12 @@ class InmetStation:
                      "RS","RO","RR","SC","SP",
                      "SE","TO"]
 
-        for state in st:
+        unexist_states = list(set(st) - set(br_states))
 
-            if state in br_states:
-                pass
-            else:
-                raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
+        if unexist_states:
+            raise ValueError("There is no state(s): " + ", ".join(f'"{state}"' for state in unexist_states))
+        else:
+            pass
 
     def _haversine(self,
                    lat_1:float,
@@ -434,6 +455,13 @@ class InmetStation:
 
 
     def _get_stations_details(self, type):
+        """Get details of automatic OR manual stations available on INMET API.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of the stations.
+        """
         
         if type == "A":
             type = "T"
@@ -449,6 +477,13 @@ class InmetStation:
             
         
     def _get_all_stations(self):
+        """Get details of all stations available on INMET API.
+
+        Returns
+        -------
+        DataFrame
+            A pandas dataframe containing details of all stations.
+        """
 
         df_automatic_stations = self._get_stations_details("A")
         df_manual_stations = self._get_stations_details("M")
@@ -472,7 +507,7 @@ class InmetStation:
             Wrong station code.
         """
 
-        unexist_stations = list(set(stations) - set(self.stations.CD_STATION))
+        unexist_stations = list(set(stations) - set(self._stations['CD_STATION']))
 
         if unexist_stations:
             raise ValueError("There is no station(s): " + ", ".join(f'"{station}"' for station in unexist_stations))
@@ -480,6 +515,18 @@ class InmetStation:
             pass
             
     def _check_station_type(self, station_type):
+        """Check if input for station_type is valid.
+
+        Parameters
+        ----------
+        station_type : str
+            Type of station.
+
+        Raises
+        ------
+        ValueError
+            Wrong station type.
+        """
 
         if station_type not in ["A","M", "ALL"]:
             raise ValueError('station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"')
@@ -487,47 +534,64 @@ class InmetStation:
             pass
 
     def _check_request_size(self, start_date, end_date):
+        """Check the size of requested data
+
+        Parameters
+        ----------
+        start_date : str
+            Start date for search.
+        end_date: str
+            End date for search.
+
+        Raises
+        ------
+        RequestTooLarge
+            Requested data greater than one year period.
+        """
 
         date_format = "%Y-%m-%d"
 
         if (datetime.datetime.strptime(end_date, date_format) - datetime.datetime.strptime(start_date, date_format)).days > 366:
-            raise BadRequest("""The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request""")
+            raise RequestTooLarge("""The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request""")
         else:
             pass
 
+    def get_stations(self, type:str = "ALL") -> DataFrame:
+        """Get details of all stations available at INMET API. It can return
+        either ALL types of stations, automatic stations or manual stations.
 
-    def get_manual_stations(self)  -> DataFrame:
-        """Get a list of detailhs of all traditional/manual stations.
+        Parameters
+        ----------
+        type : {``'ALL'``,``'A'``,``'M'``}, default = ``'ALL'``
+            - If ``'ALL'``, then all types of stations will be searched.
+            - If ``'A'``, then just automatic stations will be searched.
+            - If ``'M'``, then just manual stations will be searched.
 
-        Returns
-        -------
-        DataFrame
-            A pandas dataframe containing details of all manual stations.
-        """
-
-        stations = self.stations 
-        return stations[stations['TP_STATION']=='Traditional']
-
-    def get_auto_stations(self) -> DataFrame:
-        """Get a list of detailhs of all automatic stations.
 
         Returns
         -------
         DataFrame
-            A pandas dataframe containing details of all automatic stations.
+            A pandas dataframe containing details of stations.
         """
 
-        stations = self.stations 
-        return stations[stations['TP_STATION']=='Automatic']
+        self._check_station_type(type)
+        stations = self._stations.copy()
 
+        if type == "A":
+            stations = stations[stations['TP_STATION']=='Automatic']
+        elif type == "M":
+            stations = stations[stations['TP_STATION']=='Traditional']
+        
+        return stations
 
     def get_all_stations(self, date:str=None, save_file=False) -> DataFrame:
-        """Get data from all stations at given date at "date".
+        """Get data from all stations at given date.
 
         Parameters
         ----------
         date : str
             Date to query data.
+
         Returns
         -------
         DataFrame
@@ -541,9 +605,6 @@ class InmetStation:
 
         r = requests.get("/".join([self._api, "estacao", "dados", date]))
 
-        data = self._get_request(r, save_file=save_file, date=date)
-
-
         return self._get_request(r, save_file=save_file, date=date)
 
 
@@ -551,12 +612,23 @@ class InmetStation:
                          start_date:str,
                          end_date:str,
                          by:str,
-                         station_id:Union[str,List[str]],
+                         station_id:List[str],
                          save_file:bool = False,
                          chunks:Optional[bool] = False) -> DataFrame:
         """Get data from all stations in 'stations_id'. The data can be downloaded
         either by 'hour' or 'day'. In case a long period is request, the 'chunks'
         argument can be set to True (default is False).
+
+        Parameters
+        ----------
+        start_date : str
+            Query start date. Format ``'%Y-%m-%d'``.
+        end_date : str
+            Query end_date. Format ``'%Y-%m-%d'``.
+        by : {``'hour'``, ``'day'``}
+            - If ``'hour'``, then the request will be in hourly resolution.
+            - If ``'day'``, then the request will be in daily resolution. 
+
 
         Returns
         -------
@@ -567,9 +639,9 @@ class InmetStation:
         Raises
         ------
         ValueError
-            The 'by' argument should be 'hour' or 'day'.
+            The `by` argument should be ``'hour'`` or ``'day'``.
         TypeError
-            The 'station_id' should be a list.
+            The `station_id` should be a list.
         """
 
         self._check_date_format(start_date)
@@ -593,39 +665,42 @@ class InmetStation:
         else:
             raise ValueError("by argument is missing") 
 
-
         if isinstance(station_id, list):
 
             stations_df = pd.DataFrame()
 
-            for period in range(len(start_date_list)):
+            with yaspin(Spinners.weather) as spinner:
+                print()
+                for period in range(len(start_date_list)):
 
-                start_date = start_date_list[period]
-                end_date = end_date_list[period]
+                    start_date = start_date_list[period]
+                    end_date = end_date_list[period]
 
-                for station in station_id:
-                    print(f"Requesting data for station {station} from {start_date} to {end_date}.")
-                    
-                    full_query = base_query.copy()                            
-                    full_query.extend([start_date, end_date, station])
-                    with yaspin(text="Loading", color="yellow") as spinner:
+                    for station in station_id:
+                        print(f"Requesting data for station {station} from {start_date} to {end_date}.")
+                        
+                        full_query = base_query.copy()                            
+                        full_query.extend([start_date, end_date, station])
                         r = requests.get("/".join(full_query))
-
                         if r.status_code == 200:
                             df_station = pd.json_normalize(r.json())
-                            if self._check_data_station(df_station, by):
-                                stations_df = pd.concat([stations_df, df_station])
-                                spinner.ok("✅ ")
-                                print("="*63)
-                                print("="*63)
-                            else:
-                                spinner.fail("💥 ")
-                                print(f"No data available from {start_date} to {end_date} for station {station}")
-                                print("="*63)
-                                print("="*63)
-                                continue
+                            with yaspin(Spinners.weather, text=f"Requesting data from station {station} from {start_date} to {end_date}.") as sp:
+                                if self._check_data_station(df_station, by):
+                                    stations_df = pd.concat([stations_df, df_station])
+                                    sp.write("✔ Data available.")
+                                    print("="*63)
+                                else:
+                                    sp.write(f"✕ No data available")
+                                    print("="*63)
+                                    continue
                         else:
                             print(f"Request error: Request status {r.status_code}")
+                spinner.color = 'green'
+                spinner.ok('END')
+
+            if stations_df.empty:
+                print("No data for the whole period for stations: " + ", ".join(f'"{station}"' for station in station_id))
+                return None
 
             stations_df = self._rename_vars_to_cf(stations_df, by)
             stations_df = self._create_date_time(stations_df, by)
@@ -651,8 +726,11 @@ class InmetStation:
         ----------
         st : List
             A list with the brazilian states searched (abbreviated).
-        station_type : Type of station searched. "A" for automatic, "M" for manual
-        and "ALL" for both types. Default is "ALL".
+        station_type : {``'ALL'``,``'A'``,``'M'``}, default = ``'ALL'``
+            - If ``'ALL'``, then all types of stations will be searched.
+            - If ``'A'``, then just automatic stations will be searched.
+            - If ``'M'``, then just manual stations will be searched.
+
 
         Returns
         -------
@@ -668,7 +746,7 @@ class InmetStation:
         elif station_type == "M":
             stations = self.get_manual_stations()
         else:
-            stations = self.stations
+            stations = self._stations
 
         stations = stations[stations['STATE'].isin(st)]
 
@@ -688,10 +766,12 @@ class InmetStation:
             The latitude of point searched.
         lon : float
             The longitude of point searched.
-        station_type : Type of station searched. "A" for automatic, "M" for manual
-        and "ALL" for both types. Default is "ALL".
-        n_stations : int
-            The number of stations to return. Default is 1.
+        station_type : {``'ALL'``,``'A'``,``'M'``}, default = ``'ALL'``
+            - If ``'ALL'``, then all types of stations will be searched.
+            - If ``'A'``, then just automatic stations will be searched.
+            - If ``'M'``, then just manual stations will be searched.
+        n_stations : int, default = ``1``
+            The number of stations to return.
 
         Returns
         -------
@@ -709,12 +789,8 @@ class InmetStation:
         elif station_type == "M":
             stations = self.get_manual_stations()
         else:
-            stations = self.stations
+            stations = self._stations
 
-        distance = []
-        for _, row in stations.iterrows():           
-            distance.append(self._haversine(float(row['LATITUDE']), float(row['LONGITUDE']), lat, lon))
-
-        stations['DISTANCE'] = distance
+        stations['DISTANCE'] = stations.apply(lambda x: self._haversine(x['LATITUDE'], x['LONGITUDE'], lat, lon), axis = 1)
 
         return stations.sort_values(by='DISTANCE').iloc[0:n_stations]

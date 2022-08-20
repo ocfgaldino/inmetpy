@@ -1,3 +1,3 @@
-class BadRequest(Exception):
+class RequestTooLarge(Exception):
     pass 
 
