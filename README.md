@@ -4,6 +4,11 @@
 
 # InmetPy - A Python API Client for the Brazilian National Institute of Meteorology - INMet
 
+
+
+> :warning: **Package development in progress!** 
+
+
 *This is an **unofficial** (from INMET) python package for the INMET API.*
 
 
