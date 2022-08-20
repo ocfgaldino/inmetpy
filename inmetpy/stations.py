@@ -6,6 +6,7 @@ from pandas.core.frame import DataFrame
 import math
 import numpy as np
 from yaspin import yaspin
+from yaspin.spinners import Spinners
 from .exceptions import RequestTooLarge
 
 
@@ -657,23 +658,22 @@ class InmetStation:
 
             stations_df = pd.DataFrame()
 
-            for period in range(len(start_date_list)):
+            with yaspin(Spinners.weather) as spinner:
+                print()
+                for period in range(len(start_date_list)):
 
-                start_date = start_date_list[period]
-                end_date = end_date_list[period]
+                    start_date = start_date_list[period]
+                    end_date = end_date_list[period]
 
-                for station in station_id:
-                    print(f"Requesting data for station {station} from {start_date} to {end_date}.")
-                    
-                    full_query = base_query.copy()                            
-                    full_query.extend([start_date, end_date, station])
-                    with yaspin(text="Requesting data...", color="yellow") as spinner:
+                    for station in station_id:
+                        print(f"Requesting data for station {station} from {start_date} to {end_date}.")
+                        
+                        full_query = base_query.copy()                            
+                        full_query.extend([start_date, end_date, station])
                         r = requests.get("/".join(full_query))
-
                         if r.status_code == 200:
                             df_station = pd.json_normalize(r.json())
-                            with yaspin(text=f"Requesting data from station {station} from {start_date} to {end_date}.",
-                                         color="cyan") as sp:
+                            with yaspin(Spinners.weather, text=f"Requesting data from station {station} from {start_date} to {end_date}.") as sp:
                                 if self._check_data_station(df_station, by):
                                     stations_df = pd.concat([stations_df, df_station])
                                     sp.write("✔ Data available.")
@@ -684,6 +684,8 @@ class InmetStation:
                                     continue
                         else:
                             print(f"Request error: Request status {r.status_code}")
+                spinner.color = 'green'
+                spinner.ok('END')
 
             stations_df = self._rename_vars_to_cf(stations_df, by)
             stations_df = self._create_date_time(stations_df, by)
