@@ -18,6 +18,7 @@ class InmetStation:
         self._stations = self._get_all_stations()
         self._is_capital()
         self._change_data_type_station_details()
+        self._reorder_station_cols()
 
     def _get_request(self,
             request:requests.models.Response,
@@ -157,6 +158,15 @@ class InmetStation:
         
         
         return df
+
+    def _reorder_station_cols(self):
+        """Reorder the columns of station details to more apropriate way."""
+
+        cols = ['CD_OSCAR', 'STATION_NAME', 'CD_STATION', 'TP_STATION','START_DATE_OPERATION',
+                'END_DATE_OPERATION', 'LONGITUDE', 'LATITUDE', 'HEIGHT', 'CD_SITUATION',
+                'CD_WSI', 'IS_CAPITAL', 'CD_DISTRICT', 'INSTITUTE', 'STATE']
+
+        self._stations = self._stations[cols]
         
     def _is_capital(self) -> DataFrame:
         """Change 'IS_CAPITAL' column from string to boolen"""
