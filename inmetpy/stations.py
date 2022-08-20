@@ -16,6 +16,7 @@ class InmetStation:
         self._api = "https://apitempo.inmet.gov.br"
         self.stations = self._get_all_stations()
         self._is_capital()
+        self._change_data_type_station_details()
 
     def _get_request(self,
             request:requests.models.Response,
@@ -156,7 +157,7 @@ class InmetStation:
         
         return df
         
-    def _is_capital(self):
+    def _is_capital(self) -> DataFrame:
         """Change 'IS_CAPITAL' column from string to boolen"""
         self.stations['IS_CAPITAL'] = self.stations['IS_CAPITAL'].apply(lambda x: True if x == 'S' else False)
 
@@ -284,6 +285,15 @@ class InmetStation:
         df[["LAT","LONG"]] = round(df[["LAT","LONG"]], 5)
 
         return df
+
+    def _change_data_type_station_details(self) -> DataFrame:
+
+        to_float = ['HEIGHT','LATITUDE','LONGITUDE']
+        to_date_time = ['END_DATE_OPERATION', 'START_DATE_OPERATION']
+
+        self.stations[to_float] = self.stations[to_float].apply(pd.to_numeric, errors='coerce').astype("float64")
+        self.stations[to_date_time] = self.stations[to_date_time].apply(pd.to_datetime, format="%Y-%m-%d", utc=True, errors='coerce')
+
 
     def _count_date_diff(self, start_date:str, end_date:str) -> int:
         """Count the total of days queried.
