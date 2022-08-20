@@ -7,7 +7,7 @@ import math
 import numpy as np
 from yaspin import yaspin
 from yaspin.spinners import Spinners
-from .exceptions import RequestTooLarge
+from exceptions import RequestTooLarge
 
 
 
@@ -625,7 +625,7 @@ class InmetStation:
             Query start date. Format ``'%Y-%m-%d'``.
         end_date : str
             Query end_date. Format ``'%Y-%m-%d'``.
-        by : {'hour', 'day'}
+        by : {``'hour'``, ``'day'``}
             - If ``'hour'``, then the request will be in hourly resolution.
             - If ``'day'``, then the request will be in daily resolution. 
 
@@ -665,7 +665,6 @@ class InmetStation:
         else:
             raise ValueError("by argument is missing") 
 
-
         if isinstance(station_id, list):
 
             stations_df = pd.DataFrame()
@@ -698,6 +697,10 @@ class InmetStation:
                             print(f"Request error: Request status {r.status_code}")
                 spinner.color = 'green'
                 spinner.ok('END')
+
+            if stations_df.empty:
+                print("No data for the whole period for stations: " + ", ".join(f'"{station}"' for station in station_id))
+                return None
 
             stations_df = self._rename_vars_to_cf(stations_df, by)
             stations_df = self._create_date_time(stations_df, by)
