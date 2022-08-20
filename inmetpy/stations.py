@@ -6,7 +6,7 @@ from pandas.core.frame import DataFrame
 import math
 import numpy as np
 from yaspin import yaspin
-from exceptions import RequestTooLarge
+from .exceptions import RequestTooLarge
 
 
 
@@ -578,6 +578,7 @@ class InmetStation:
         ----------
         date : str
             Date to query data.
+
         Returns
         -------
         DataFrame
@@ -608,12 +609,12 @@ class InmetStation:
         Parameters
         ----------
         start_date : str
-            Query start date. Format "%Y-%m-%d"
+            Query start date. Format ``'%Y-%m-%d'``.
         end_date : str
-            Query end_date. Format "%Y-%m-%d"
+            Query end_date. Format ``'%Y-%m-%d'``.
         by : {'hour', 'day'}
-            - If :const: `'hour'`, then the request will be in hourly resolution.
-            - If :const: `'day'`, then the request will be in daily resolution. 
+            - If ``'hour'``, then the request will be in hourly resolution.
+            - If ``'day'``, then the request will be in daily resolution. 
 
 
         Returns
