@@ -396,12 +396,12 @@ class InmetStation:
                      "RS","RO","RR","SC","SP",
                      "SE","TO"]
 
-        for state in st:
+        unexist_states = list(set(st) - set(br_states))
 
-            if state in br_states:
-                pass
-            else:
-                raise ValueError(f"{state} is not a valid brazilian state abbreviation.")
+        if unexist_states:
+            raise ValueError("There is no state(s): " + ", ".join(f'"{state}"' for state in unexist_states))
+        else:
+            pass
 
     def _haversine(self,
                    lat_1:float,
