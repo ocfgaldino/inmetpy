@@ -642,22 +642,21 @@ class InmetStation:
                     
                     full_query = base_query.copy()                            
                     full_query.extend([start_date, end_date, station])
-                    with yaspin(text="Loading", color="yellow") as spinner:
+                    with yaspin(text="Requesting data...", color="yellow") as spinner:
                         r = requests.get("/".join(full_query))
 
                         if r.status_code == 200:
                             df_station = pd.json_normalize(r.json())
-                            if self._check_data_station(df_station, by):
-                                stations_df = pd.concat([stations_df, df_station])
-                                spinner.ok("✅ ")
-                                print("="*63)
-                                print("="*63)
-                            else:
-                                spinner.fail("💥 ")
-                                print(f"No data available from {start_date} to {end_date} for station {station}")
-                                print("="*63)
-                                print("="*63)
-                                continue
+                            with yaspin(text=f"Requesting data from station {station} from {start_date} to {end_date}.",
+                                         color="cyan") as sp:
+                                if self._check_data_station(df_station, by):
+                                    stations_df = pd.concat([stations_df, df_station])
+                                    sp.write("✔ Data available.")
+                                    print("="*63)
+                                else:
+                                    sp.write(f"✕ No data available")
+                                    print("="*63)
+                                    continue
                         else:
                             print(f"Request error: Request status {r.status_code}")
 
