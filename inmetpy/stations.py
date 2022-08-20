@@ -551,7 +551,7 @@ class InmetStation:
 
         Parameters
         ----------
-        type : str
+        type : str, default = "ALL"
             Type of station. It can be "ALL", "A" (Automatic) and "M" (Manual). Default is "ALL".
 
 
@@ -604,6 +604,17 @@ class InmetStation:
         """Get data from all stations in 'stations_id'. The data can be downloaded
         either by 'hour' or 'day'. In case a long period is request, the 'chunks'
         argument can be set to True (default is False).
+
+        Parameters
+        ----------
+        start_date : str
+            Query start date. Format "%Y-%m-%d"
+        end_date : str
+            Query end_date. Format "%Y-%m-%d"
+        by : {'hour', 'day'}
+            - If :const: `'hour'`, then the request will be in hourly resolution.
+            - If :const: `'day'`, then the request will be in daily resolution. 
+
 
         Returns
         -------
@@ -697,8 +708,9 @@ class InmetStation:
         ----------
         st : List
             A list with the brazilian states searched (abbreviated).
-        station_type : Type of station searched. "A" for automatic, "M" for manual
-        and "ALL" for both types. Default is "ALL".
+        station_type : str, default = "ALL"
+            Type of station searched. "A" for automatic, "M" for manual
+        and "ALL" for both types.
 
         Returns
         -------
