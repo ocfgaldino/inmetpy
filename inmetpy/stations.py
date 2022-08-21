@@ -7,7 +7,7 @@ import math
 import numpy as np
 from yaspin import yaspin
 from yaspin.spinners import Spinners
-from exceptions import RequestTooLarge
+from .exceptions import RequestTooLarge
 
 
 class InmetStation:
