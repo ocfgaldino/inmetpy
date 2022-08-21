@@ -739,13 +739,7 @@ class InmetStation:
 
         self._is_state(st)
         self._check_station_type(station_type)
-
-        if station_type == "A":
-            stations = self.get_auto_stations()
-        elif station_type == "M":
-            stations = self.get_manual_stations()
-        else:
-            stations = self._stations
+        stations = self.get_stations(type=station_type)
 
         stations = stations[stations['STATE'].isin(st)]
 
