@@ -784,7 +784,7 @@ class InmetStation:
 
         self._check_station_type(station_type)
 
-        stations = self.get_all_stations(type=station_type)
+        stations = self.get_stations(type=station_type)
 
         stations['DISTANCE'] = stations.apply(lambda x: self._haversine(x['LATITUDE'], x['LONGITUDE'], lat, lon), axis = 1)
 
