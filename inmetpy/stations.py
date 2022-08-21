@@ -663,7 +663,7 @@ class InmetStation:
         elif by == "day":
             base_query = [self._api, "estacao", "diaria"]
         else:
-            raise ValueError("by argument is missing") 
+            raise ValueError("Wrong time resolution. by should be 'hour' or 'day'.") 
 
         if isinstance(station_id, list):
 
@@ -784,12 +784,7 @@ class InmetStation:
 
         self._check_station_type(station_type)
 
-        if station_type == "A":
-            stations = self.get_auto_stations()
-        elif station_type == "M":
-            stations = self.get_manual_stations()
-        else:
-            stations = self._stations
+        stations = self.get_stations(type=station_type)
 
         stations['DISTANCE'] = stations.apply(lambda x: self._haversine(x['LATITUDE'], x['LONGITUDE'], lat, lon), axis = 1)
 
