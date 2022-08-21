@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -24,7 +23,8 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
-      - name: Black
-        runs-on: ubuntu-latest
-          - uses: actions/checkout@v2
-          - uses: psf/black@stable
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: psf/black@stable
