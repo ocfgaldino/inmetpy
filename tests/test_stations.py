@@ -36,7 +36,7 @@ def test_get_data_station_wrong_input_time_resolution(inmet):
 
 
 def test_get_data_station_wrong_input_station_id_type(inmet):
-    with pytest.raises(TypeError, match = "'station_id should be list.'"):
+    with pytest.raises(TypeError, match = 'station_id should be list.'):
         inmet.get_data_station("2021-01-01", "2021-02-01", "day", 'A701')
 
 
