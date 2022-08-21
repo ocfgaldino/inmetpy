@@ -24,8 +24,8 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
-#    lint:
-#      runs-on: ubuntu-latest
-#      steps:
-#        - uses: actions/checkout@v2
-#        - uses: psf/black@stable
+    lint:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v2
+        - uses: psf/black@stable
