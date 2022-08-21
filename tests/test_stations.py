@@ -1,4 +1,4 @@
-from ..inmetpy.stations import InmetStation
+from inmetpy.stations import InmetStation
 
 import pytest
 
