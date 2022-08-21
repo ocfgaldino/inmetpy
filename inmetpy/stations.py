@@ -7,7 +7,7 @@ import math
 import numpy as np
 from yaspin import yaspin
 from yaspin.spinners import Spinners
-from exceptions import RequestTooLarge
+from .exceptions import RequestTooLarge
 
 
 
@@ -646,8 +646,12 @@ class InmetStation:
 
         self._check_date_format(start_date)
         self._check_date_format(end_date)
-        self._check_is_station(station_id)
-                
+
+        if isinstance(station_id, list):
+            self._check_is_station(station_id)
+        else:
+            raise TypeError("station_id should be list.")
+
 
         if chunks == False:
             self._check_request_size(start_date, end_date)
@@ -665,56 +669,51 @@ class InmetStation:
         else:
             raise ValueError("Wrong time resolution. by should be 'hour' or 'day'.") 
 
-        if isinstance(station_id, list):
+        stations_df = pd.DataFrame()
 
-            stations_df = pd.DataFrame()
+        with yaspin(Spinners.weather) as spinner:
+            print()
+            for period in range(len(start_date_list)):
 
-            with yaspin(Spinners.weather) as spinner:
-                print()
-                for period in range(len(start_date_list)):
+                start_date = start_date_list[period]
+                end_date = end_date_list[period]
 
-                    start_date = start_date_list[period]
-                    end_date = end_date_list[period]
+                for station in station_id:
+                    print(f"Requesting data for station {station} from {start_date} to {end_date}.")
+                    
+                    full_query = base_query.copy()                            
+                    full_query.extend([start_date, end_date, station])
+                    r = requests.get("/".join(full_query))
+                    if r.status_code == 200:
+                        df_station = pd.json_normalize(r.json())
+                        with yaspin(Spinners.weather, text=f"Requesting data from station {station} from {start_date} to {end_date}.") as sp:
+                            if self._check_data_station(df_station, by):
+                                stations_df = pd.concat([stations_df, df_station])
+                                sp.write("✔ Data available.")
+                                print("="*63)
+                            else:
+                                sp.write(f"✕ No data available")
+                                print("="*63)
+                                continue
+                    else:
+                        print(f"Request error: Request status {r.status_code}")
+            spinner.color = 'green'
+            spinner.ok('END')
 
-                    for station in station_id:
-                        print(f"Requesting data for station {station} from {start_date} to {end_date}.")
-                        
-                        full_query = base_query.copy()                            
-                        full_query.extend([start_date, end_date, station])
-                        r = requests.get("/".join(full_query))
-                        if r.status_code == 200:
-                            df_station = pd.json_normalize(r.json())
-                            with yaspin(Spinners.weather, text=f"Requesting data from station {station} from {start_date} to {end_date}.") as sp:
-                                if self._check_data_station(df_station, by):
-                                    stations_df = pd.concat([stations_df, df_station])
-                                    sp.write("✔ Data available.")
-                                    print("="*63)
-                                else:
-                                    sp.write(f"✕ No data available")
-                                    print("="*63)
-                                    continue
-                        else:
-                            print(f"Request error: Request status {r.status_code}")
-                spinner.color = 'green'
-                spinner.ok('END')
+        if stations_df.empty:
+            print("No data for the whole period for stations: " + ", ".join(f'"{station}"' for station in station_id))
+            return None
 
-            if stations_df.empty:
-                print("No data for the whole period for stations: " + ", ".join(f'"{station}"' for station in station_id))
-                return None
+        stations_df = self._rename_vars_to_cf(stations_df, by)
+        stations_df = self._create_date_time(stations_df, by)
+        stations_df = self._change_data_type(stations_df, by)
+        stations_df.reset_index(inplace = True, drop=True)
 
-            stations_df = self._rename_vars_to_cf(stations_df, by)
-            stations_df = self._create_date_time(stations_df, by)
-            stations_df = self._change_data_type(stations_df, by)
-            stations_df.reset_index(inplace = True, drop=True)
-
-            if save_file:
-                stations_df.to_csv(f"inmet_data_{start_date}_{end_date}.csv", index=False)
-                print(f"file 'inmet_data_{start_date}_{end_date}.csv' was downloaded")
-            else:
-                return stations_df
-
+        if save_file:
+            stations_df.to_csv(f"inmet_data_{start_date}_{end_date}.csv", index=False)
+            print(f"file 'inmet_data_{start_date}_{end_date}.csv' was downloaded")
         else:
-            raise TypeError("station_id should be list.")
+            return stations_df
 
 
     def search_station_by_state(self, 
