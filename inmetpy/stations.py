@@ -663,7 +663,7 @@ class InmetStation:
         elif by == "day":
             base_query = [self._api, "estacao", "diaria"]
         else:
-            raise ValueError("by argument is missing") 
+            raise ValueError("Wrong time resolution. by should be 'hour' or 'day'.") 
 
         if isinstance(station_id, list):
 
