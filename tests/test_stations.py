@@ -42,6 +42,30 @@ def test_get_data_station_wrong_station_id(inmet):
         inmet.get_data_station("2021-01-01", "2021-02-01", "day", stations_id)
         assert exe_info.value == 'There is no station(s): "A7124"'
 
+def test_search_station_by_state_wrong_state(inmet):
+    
+    states = ['SP','TT']
+    with pytest.raises(ValueError) as exe_info:
+        inmet.search_station_by_state(states)
+        assert exe_info.value == 'There is no state(s): "TT"'
+
+def test_search_station_by_state_wrong_type_station(inmet):
+    
+    states = ['SP','RJ']
+    with pytest.raises(ValueError) as exe_info:
+        inmet.search_station_by_state(states, "Auto")
+        assert exe_info.value == 'station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"'
+
+def test_search_station_by_coords_wrong_coords_type(inmet):
+
+    lat = '-22.44'
+    lon = '-24.44'
+    with pytest.raises(TypeError) as exe_info:
+        inmet.search_station_by_coords(lat, lon)
+        assert exe_info.value == "Coordinates (lat,lon) values must be type 'float'"
+
+
+
 
 
 
