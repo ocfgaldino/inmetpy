@@ -784,12 +784,7 @@ class InmetStation:
 
         self._check_station_type(station_type)
 
-        if station_type == "A":
-            stations = self.get_auto_stations()
-        elif station_type == "M":
-            stations = self.get_manual_stations()
-        else:
-            stations = self._stations
+        stations = self.get_all_stations(type=station_type)
 
         stations['DISTANCE'] = stations.apply(lambda x: self._haversine(x['LATITUDE'], x['LONGITUDE'], lat, lon), axis = 1)
 
