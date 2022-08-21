@@ -35,6 +35,11 @@ def test_get_data_station_wrong_input_time_resolution(inmet):
         inmet.get_data_station("2021-01-01", "2021-02-01", "month", ['A701'])
 
 
+def test_get_data_station_wrong_input_station_id_type(inmet):
+    with pytest.raises(TypeError, match = "'station_id should be list.'"):
+        inmet.get_data_station("2021-01-01", "2021-02-01", "day", 'A701')
+
+
 def test_get_data_station_wrong_station_id(inmet):
 
     stations_id = ['A701','A7124'] #First = Real Station, Last = Fake station
