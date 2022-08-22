@@ -48,14 +48,15 @@
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">inmetpy</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">inmetpy package</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-inmetpy.inmet_stations">inmetpy.inmet_stations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-inmetpy.exceptions">inmetpy.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-inmetpy.stations">inmetpy.stations module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-inmetpy">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/getting_started_inmetpy.html">Getting Started with Inmetpy</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/getting_started_inmetpy.html">Getting Started with Inmetpy</a></li>
 </ul>
 
         </div>
@@ -112,123 +113,181 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
 </section>
-<section id="module-inmetpy.inmet_stations">
-<span id="inmetpy-inmet-stations-module"></span><h2>inmetpy.inmet_stations module<a class="headerlink" href="#module-inmetpy.inmet_stations" title="Permalink to this heading"></a></h2>
+<section id="module-inmetpy.exceptions">
+<span id="inmetpy-exceptions-module"></span><h2>inmetpy.exceptions module<a class="headerlink" href="#module-inmetpy.exceptions" title="Permalink to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="inmetpy.exceptions.RequestTooLarge">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">inmetpy.exceptions.</span></span><span class="sig-name descname"><span class="pre">RequestTooLarge</span></span><a class="headerlink" href="#inmetpy.exceptions.RequestTooLarge" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-inmetpy.stations">
+<span id="inmetpy-stations-module"></span><h2>inmetpy.stations module<a class="headerlink" href="#module-inmetpy.stations" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="inmetpy.inmet_stations.InmetStation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">inmetpy.inmet_stations.</span></span><span class="sig-name descname"><span class="pre">InmetStation</span></span><a class="headerlink" href="#inmetpy.inmet_stations.InmetStation" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="inmetpy.stations.InmetStation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">inmetpy.stations.</span></span><span class="sig-name descname"><span class="pre">InmetStation</span></span><a class="headerlink" href="#inmetpy.stations.InmetStation" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#inmetpy.stations.InmetStation.get_all_stations" title="inmetpy.stations.InmetStation.get_all_stations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_stations</span></code></a>([date, save_file])</p></td>
+<td><p>Get data from all stations at given date.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#inmetpy.stations.InmetStation.get_data_station" title="inmetpy.stations.InmetStation.get_data_station"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data_station</span></code></a>(start_date, end_date, by, ...)</p></td>
+<td><p>Get data from all stations in 'stations_id'.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#inmetpy.stations.InmetStation.get_stations" title="inmetpy.stations.InmetStation.get_stations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_stations</span></code></a>([type])</p></td>
+<td><p>Get details of all stations available at INMET API.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#inmetpy.stations.InmetStation.search_station_by_coords" title="inmetpy.stations.InmetStation.search_station_by_coords"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_station_by_coords</span></code></a>(lat, lon[, ...])</p></td>
+<td><p>Search the closest 'n' stations for a given coordinate.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#inmetpy.stations.InmetStation.search_station_by_state" title="inmetpy.stations.InmetStation.search_station_by_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_station_by_state</span></code></a>(st[, station_type])</p></td>
+<td><p>Search available stations for specific states.</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py method">
-<dt class="sig sig-object py" id="inmetpy.inmet_stations.InmetStation.get_all_stations">
-<span class="sig-name descname"><span class="pre">get_all_stations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.inmet_stations.InmetStation.get_all_stations" title="Permalink to this definition"></a></dt>
-<dd><p>Get data from all stations at given date at “date”.</p>
+<dt class="sig sig-object py" id="inmetpy.stations.InmetStation.get_all_stations">
+<span class="sig-name descname"><span class="pre">get_all_stations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.stations.InmetStation.get_all_stations" title="Permalink to this definition"></a></dt>
+<dd><p>Get data from all stations at given date.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>date</strong> (<em>str</em>) – Date to query data.</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>date</strong><span class="classifier">str</span></dt><dd><p>Date to query data.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A pandas dataframe with data from all stations available at given date.</p>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A pandas dataframe with data from all stations available at given date.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="inmetpy.inmet_stations.InmetStation.get_auto_stations">
-<span class="sig-name descname"><span class="pre">get_auto_stations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.inmet_stations.InmetStation.get_auto_stations" title="Permalink to this definition"></a></dt>
-<dd><p>Get a list of detailhs of all automatic stations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A pandas dataframe containing details of all automatic stations.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inmetpy.inmet_stations.InmetStation.get_data_station">
-<span class="sig-name descname"><span class="pre">get_data_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.inmet_stations.InmetStation.get_data_station" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="inmetpy.stations.InmetStation.get_data_station">
+<span class="sig-name descname"><span class="pre">get_data_station</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.stations.InmetStation.get_data_station" title="Permalink to this definition"></a></dt>
 <dd><p>Get data from all stations in ‘stations_id’. The data can be downloaded
 either by ‘hour’ or ‘day’. In case a long period is request, the ‘chunks’
 argument can be set to True (default is False).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A dataframe containing the data for the whole period and all stations
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>start_date</strong><span class="classifier">str</span></dt><dd><p>Query start date. Format <code class="docutils literal notranslate"><span class="pre">'%Y-%m-%d'</span></code>.</p>
+</dd>
+<dt><strong>end_date</strong><span class="classifier">str</span></dt><dd><p>Query end_date. Format <code class="docutils literal notranslate"><span class="pre">'%Y-%m-%d'</span></code>.</p>
+</dd>
+<dt><strong>by</strong><span class="classifier">{<code class="docutils literal notranslate"><span class="pre">'hour'</span></code>, <code class="docutils literal notranslate"><span class="pre">'day'</span></code>}</span></dt><dd><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'hour'</span></code>, then the request will be in hourly resolution.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'day'</span></code>, then the request will be in daily resolution.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A dataframe containing the data for the whole period and all stations
 requested.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>DataFrame</p>
+</dl>
 </dd>
 <dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ValueError</strong> – The ‘by’ argument should be ‘hour’ or ‘day’.</p></li>
-<li><p><strong>MemoryError</strong> – The period requested is too large. Use ‘chunks=True’ to divide
-    the request.</p></li>
-<li><p><strong>ValueError</strong> – The ‘station_id’ should be a list.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>The <cite>by</cite> argument should be <code class="docutils literal notranslate"><span class="pre">'hour'</span></code> or <code class="docutils literal notranslate"><span class="pre">'day'</span></code>.</p>
+</dd>
+<dt>TypeError</dt><dd><p>The <cite>station_id</cite> should be a list.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="inmetpy.inmet_stations.InmetStation.get_manual_stations">
-<span class="sig-name descname"><span class="pre">get_manual_stations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.inmet_stations.InmetStation.get_manual_stations" title="Permalink to this definition"></a></dt>
-<dd><p>Get a list of detailhs of all traditional/manual stations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A pandas dataframe containing details of all manual stations.</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inmetpy.inmet_stations.InmetStation.search_station_by_coords">
-<span class="sig-name descname"><span class="pre">search_station_by_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ALL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.inmet_stations.InmetStation.search_station_by_coords" title="Permalink to this definition"></a></dt>
-<dd><p>Search the closest ‘n’ stations for a given coordinate.</p>
-<dl class="field-list simple">
+<dt class="sig sig-object py" id="inmetpy.stations.InmetStation.get_stations">
+<span class="sig-name descname"><span class="pre">get_stations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ALL'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.stations.InmetStation.get_stations" title="Permalink to this definition"></a></dt>
+<dd><p>Get details of all stations available at INMET API. It can return
+either ALL types of stations, automatic stations or manual stations.</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>lat</strong> (<em>float</em>) – The latitude of point searched.</p></li>
-<li><p><strong>lon</strong> (<em>float</em>) – The longitude of point searched.</p></li>
-<li><p><strong>station_type</strong> (<em>Type of station searched. &quot;A&quot; for automatic</em><em>, </em><em>&quot;M&quot; for manual</em>) – </p></li>
-<li><p><strong>&quot;ALL&quot;.</strong> (<em>and &quot;ALL&quot; for both types. Default is</em>) – </p></li>
-<li><p><strong>n_stations</strong> (<em>int</em>) – The number of stations to return. Default is 1.</p></li>
+<dd class="field-odd"><dl>
+<dt><strong>type</strong><span class="classifier">{<code class="docutils literal notranslate"><span class="pre">'ALL'</span></code>,``’A’<code class="docutils literal notranslate"><span class="pre">,</span></code>’M’<code class="docutils literal notranslate"><span class="pre">},</span> <span class="pre">default</span> <span class="pre">=</span> <span class="pre">``'ALL'</span></code></span></dt><dd><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'ALL'</span></code>, then all types of stations will be searched.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'A'</span></code>, then just automatic stations will be searched.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'M'</span></code>, then just manual stations will be searched.</p></li>
 </ul>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A pandas dataframe with details of the closest ‘n’ stations for
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A pandas dataframe containing details of stations.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inmetpy.stations.InmetStation.search_station_by_coords">
+<span class="sig-name descname"><span class="pre">search_station_by_coords</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ALL'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_stations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.stations.InmetStation.search_station_by_coords" title="Permalink to this definition"></a></dt>
+<dd><p>Search the closest ‘n’ stations for a given coordinate.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>lat</strong><span class="classifier">float</span></dt><dd><p>The latitude of point searched.</p>
+</dd>
+<dt><strong>lon</strong><span class="classifier">float</span></dt><dd><p>The longitude of point searched.</p>
+</dd>
+<dt><strong>station_type</strong><span class="classifier">{<code class="docutils literal notranslate"><span class="pre">'ALL'</span></code>,``’A’<code class="docutils literal notranslate"><span class="pre">,</span></code>’M’<code class="docutils literal notranslate"><span class="pre">},</span> <span class="pre">default</span> <span class="pre">=</span> <span class="pre">``'ALL'</span></code></span></dt><dd><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'ALL'</span></code>, then all types of stations will be searched.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'A'</span></code>, then just automatic stations will be searched.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'M'</span></code>, then just manual stations will be searched.</p></li>
+</ul>
+</dd>
+<dt><strong>n_stations</strong><span class="classifier">int, default = <code class="docutils literal notranslate"><span class="pre">1</span></code></span></dt><dd><p>The number of stations to return.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A pandas dataframe with details of the closest ‘n’ stations for
 the given coordinates.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="inmetpy.inmet_stations.InmetStation.search_station_by_state">
-<span class="sig-name descname"><span class="pre">search_station_by_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">st</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ALL'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.inmet_stations.InmetStation.search_station_by_state" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="inmetpy.stations.InmetStation.search_station_by_state">
+<span class="sig-name descname"><span class="pre">search_station_by_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">st</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">station_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'ALL'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="headerlink" href="#inmetpy.stations.InmetStation.search_station_by_state" title="Permalink to this definition"></a></dt>
 <dd><p>Search available stations for specific states.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>st</strong> (<em>List</em>) – A list with the brazilian states searched (abbreviated).</p></li>
-<li><p><strong>station_type</strong> (<em>Type of station searched. &quot;A&quot; for automatic</em><em>, </em><em>&quot;M&quot; for manual</em>) – </p></li>
-<li><p><strong>&quot;ALL&quot;.</strong> (<em>and &quot;ALL&quot; for both types. Default is</em>) – </p></li>
+<dd class="field-odd"><dl>
+<dt><strong>st</strong><span class="classifier">List</span></dt><dd><p>A list with the brazilian states searched (abbreviated).</p>
+</dd>
+<dt><strong>station_type</strong><span class="classifier">{<code class="docutils literal notranslate"><span class="pre">'ALL'</span></code>,``’A’<code class="docutils literal notranslate"><span class="pre">,</span></code>’M’<code class="docutils literal notranslate"><span class="pre">},</span> <span class="pre">default</span> <span class="pre">=</span> <span class="pre">``'ALL'</span></code></span></dt><dd><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'ALL'</span></code>, then all types of stations will be searched.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'A'</span></code>, then just automatic stations will be searched.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'M'</span></code>, then just manual stations will be searched.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A pandas dataframe with all stations available in the searched states.</p>
+</dl>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A pandas dataframe with all stations available in the searched states.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
