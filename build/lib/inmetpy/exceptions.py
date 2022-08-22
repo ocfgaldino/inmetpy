@@ -1,0 +1,2 @@
+class RequestTooLarge(Exception):
+    pass
