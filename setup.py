@@ -13,8 +13,8 @@ requirements = [x.strip() for x in content if "git+" not in x]
 
 setup(
     name="inmetpy",
-    version="0.1.21",
-    description="An unofficial package to consume the API of the Brazilian National Institute of Meteorology",
+    version="0.2.1",
+    description="A Python API Client to consume the API of the Brazilian National Institute of Meteorology - INMET",
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
