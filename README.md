@@ -25,14 +25,8 @@ Install using pip
 pip install inmetpy
 ```
 
-# Class attributes
-
-The InmetStation class has only one instance attributes:
-- InmetStations.stations -> A list of all stations available at INMET API.
-
 # Methods
-- get_manual_stations -> Filter the manual stations;
-- get_auto_stations -> Filter the automatic stations;
+- get_stations: Get a list of details of all stations available at INMET API.
 - get_all_stations: get data from all stations at given date;
 - get_data_station: get data for a list of stations for a given date interval;
 - search_station_by_state: search for all stations available for a given state(s);
@@ -54,14 +48,14 @@ inmetpy get_data_station 2021-09-01 2021-09-10 '[A652,A667]'
 
 ```python
 # import the library
-from inmetpy.inmet_stations import InmetStation
+from inmetpy.stations import InmetStation
 inmet = InmetStation()
 
 # list all inmet stations available
-stations = inmet.stations # get details of all stations available
+stations = inmet.get_stations() # get details of all stations available
 
-auto_stations = inmet.get_auto_stations() # details of all automatic stations
-manual_stations = inmet.get_manual_stations() # details of all manual stations
+auto_stations = inmet.get_stations("A") # details of all automatic stations
+manual_stations = inmet.get_stations("M") # details of all manual stations
 
 # get data from all inmet station after a selected date
 inmet.get_all_stations(date) # date in format YYYY-MM-DD"
