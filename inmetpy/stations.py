@@ -1,12 +1,14 @@
-import requests
-import pandas as pd
 import datetime
-from typing import Optional, Union, List
-from pandas.core.frame import DataFrame
 import math
+from typing import List, Optional, Union
+
 import numpy as np
+import pandas as pd
+import requests
+from pandas.core.frame import DataFrame
 from yaspin import yaspin
 from yaspin.spinners import Spinners
+
 from .exceptions import RequestTooLarge
 
 
