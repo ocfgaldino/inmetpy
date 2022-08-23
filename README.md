@@ -5,7 +5,6 @@
 ![Codiga](https://api.codiga.io/project/34449/score/svg)
 ![!Codiga](https://api.codiga.io/project/34449/status/svg)
 
-https://api.codiga.io/project/34449/status/svg
 
 # InmetPy - A Python API Client for the Brazilian National Institute of Meteorology - INMet
 
