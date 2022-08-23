@@ -1,7 +1,6 @@
-from inmetpy.stations import InmetStation
-from inmetpy.exceptions import RequestTooLarge 
-
 import pytest
+from inmetpy.exceptions import RequestTooLarge
+from inmetpy.stations import InmetStation
 
 
 @pytest.fixture
@@ -119,20 +118,25 @@ def test_search_station_by_coords_wrong_coords_type(inmet):
         inmet.search_station_by_coords(lat, lon)
         assert exe_info.value == "Coordinates (lat,lon) values must be type 'float'"
 
+
 def test_search_station_by_coords_wrong_station_type(inmet):
 
     lat = -22.44
     lon = -24.44
     station_type = "auto"
-    with pytest.raises(ValueError, match=r'station_type must be either "A" \(Automatic\), "M" \(Manual\) or "ALL" \(All stations\)"'):
+    with pytest.raises(
+        ValueError,
+        match=r'station_type must be either "A" \(Automatic\), "M" \(Manual\) or "ALL" \(All stations\)"',
+    ):
         inmet.search_station_by_coords(lat, lon, station_type)
 
+
 def test_get_data_station_split_date_request_too_large_error(inmet):
-    
+
     start_date = "2020-01-01"
     end_date = "2022-01-01"
-    with pytest.raises(RequestTooLarge, 
-     match="The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request"):
+    with pytest.raises(
+        RequestTooLarge,
+        match="The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request",
+    ):
         inmet.get_data_station(start_date, end_date, "day", ["A701"])
-
-        
