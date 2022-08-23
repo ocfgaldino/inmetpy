@@ -1,6 +1,5 @@
-from inmetpy.stations import InmetStation
-
 import pytest
+from inmetpy.stations import InmetStation
 
 
 @pytest.fixture
