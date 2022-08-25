@@ -3,8 +3,8 @@ from inmetpy.exceptions import RequestTooLarge
 from inmetpy.stations import InmetStation
 
 
-@pytest.fixture
-def inmet():
+@pytest.fixture(name="inmet")
+def fixture_inmet():
     return InmetStation()
 
 
