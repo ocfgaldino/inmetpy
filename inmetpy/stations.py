@@ -422,36 +422,35 @@ class InmetStation:
         if total_days < max_days:
             return None
 
-        else:
-            total_chunks = math.ceil(total_days / max_days)
+        total_chunks = math.ceil(total_days / max_days)
 
-            days_end = list()
-            days_diff = max_days
+        days_end = list()
+        days_diff = max_days
 
-            list_dates = {"start_date": [], "end_date": []}
-            add_day = 0
+        list_dates = {"start_date": [], "end_date": []}
+        add_day = 0
 
-            for n in range(total_chunks):
+        for n in range(total_chunks):
 
-                if n + 1 == total_chunks:
-                    days_diff = total_days % max_days
+            if n + 1 == total_chunks:
+                days_diff = total_days % max_days
 
-                if n != 0:
-                    add_day = 1
+            if n != 0:
+                add_day = 1
 
-                days_start = n * max_days
-                days_end = days_start + days_diff
+            days_start = n * max_days
+            days_end = days_start + days_diff
 
-                start_date = first_date + datetime.timedelta(days=days_start + add_day)
-                end_date = first_date + datetime.timedelta(days=days_end)
+            start_date = first_date + datetime.timedelta(days=days_start + add_day)
+            end_date = first_date + datetime.timedelta(days=days_end)
 
-                start_date_str = datetime.datetime.strftime(start_date, "%Y-%m-%d")
-                end_date_str = datetime.datetime.strftime(end_date, "%Y-%m-%d")
+            start_date_str = datetime.datetime.strftime(start_date, "%Y-%m-%d")
+            end_date_str = datetime.datetime.strftime(end_date, "%Y-%m-%d")
 
-                list_dates["start_date"].append(start_date_str)
-                list_dates["end_date"].append(end_date_str)
+            list_dates["start_date"].append(start_date_str)
+            list_dates["end_date"].append(end_date_str)
 
-            return list_dates
+        return list_dates
 
     def _is_state(self, st: List) -> None:
         """Check if input is a valid brazilian state abbreviation
@@ -767,7 +766,7 @@ class InmetStation:
 
         with yaspin(Spinners.weather) as spinner:
             print()
-            for period in range(len(start_date_list)):
+            for _, period in enumerate(start_date_list):
 
                 start_date = start_date_list[period]
                 end_date = end_date_list[period]
