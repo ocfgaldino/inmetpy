@@ -262,8 +262,7 @@ class InmetStation:
 
         if any(df.drop(columns=cols_filled).count() != 0):
             return True
-        else:
-            return False
+        return False
 
     def _create_date_time(self, df: DataFrame, by: str) -> DataFrame:
         """Create a datetime column in the queried data.
@@ -505,8 +504,6 @@ class InmetStation:
                 "There is no state(s): "
                 + ", ".join(f'"{state}"' for state in unexist_states)
             )
-        else:
-            pass
 
     def _haversine(
         self, lat_1: float, lon_1: float, lat_2: float, lon_2: float
@@ -566,8 +563,8 @@ class InmetStation:
             df_stations = pd.json_normalize(stations)
 
             return self._rename_cols_to_en(df_stations)
-        else:
-            raise ConnectionError(f"API error code: {r.status_code}")
+
+        raise ConnectionError(f"API error code: {r.status_code}")
 
     def _get_all_stations(self):
         """Get details of all stations available on INMET API.
@@ -607,8 +604,6 @@ class InmetStation:
                 "There is no station(s): "
                 + ", ".join(f'"{station}"' for station in unexist_stations)
             )
-        else:
-            pass
 
     def _check_station_type(self, station_type):
         """Check if input for station_type is valid.
@@ -628,8 +623,6 @@ class InmetStation:
             raise ValueError(
                 'station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"'
             )
-        else:
-            pass
 
     def _check_request_size(self, start_date, end_date):
         """Check the size of requested data
@@ -656,8 +649,6 @@ class InmetStation:
             raise RequestTooLarge(
                 """The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request"""
             )
-        else:
-            pass
 
     def get_stations(self, type: str = "ALL") -> DataFrame:
         """Get details of all stations available at INMET API. It can return
@@ -756,7 +747,7 @@ class InmetStation:
         else:
             raise TypeError("station_id should be list.")
 
-        if chunks == False:
+        if chunks is False:
             self._check_request_size(start_date, end_date)
             dates = {"start_date": [start_date], "end_date": [end_date]}
         else:
