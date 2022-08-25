@@ -692,7 +692,7 @@ class InmetStation:
             A pandas dataframe with data from all stations available at given date.
         """
 
-        if date == None:
+        if date is None:
             date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
 
         self._check_date_format(date)
@@ -868,7 +868,7 @@ class InmetStation:
             A pandas dataframe with details of the closest 'n' stations for
             the given coordinates.
         """
-        if type(lat) != float or type(lon) != float:
+        if not all(isinstance(coord, float) for coord in [lat, lon]):
             raise TypeError("Coordinates (lat,lon) values must be type 'float'")
 
         self._check_station_type(station_type)
