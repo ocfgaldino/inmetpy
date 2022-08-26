@@ -1,12 +1,14 @@
-import requests
-import pandas as pd
 import datetime
-from typing import Optional, Union, List
-from pandas.core.frame import DataFrame
 import math
+from typing import List, Optional, Union
+
+import requests
 import numpy as np
+import pandas as pd
+from pandas.core.frame import DataFrame
 from yaspin import yaspin
 from yaspin.spinners import Spinners
+
 from .exceptions import RequestTooLarge
 
 
@@ -260,8 +262,7 @@ class InmetStation:
 
         if any(df.drop(columns=cols_filled).count() != 0):
             return True
-        else:
-            return False
+        return False
 
     def _create_date_time(self, df: DataFrame, by: str) -> DataFrame:
         """Create a datetime column in the queried data.
@@ -421,36 +422,35 @@ class InmetStation:
         if total_days < max_days:
             return None
 
-        else:
-            total_chunks = math.ceil(total_days / max_days)
+        total_chunks = math.ceil(total_days / max_days)
 
-            days_end = list()
-            days_diff = max_days
+        days_end = list()
+        days_diff = max_days
 
-            list_dates = {"start_date": [], "end_date": []}
-            add_day = 0
+        list_dates = {"start_date": [], "end_date": []}
+        add_day = 0
 
-            for n in range(total_chunks):
+        for n in range(total_chunks):
 
-                if n + 1 == total_chunks:
-                    days_diff = total_days % max_days
+            if n + 1 == total_chunks:
+                days_diff = total_days % max_days
 
-                if n != 0:
-                    add_day = 1
+            if n != 0:
+                add_day = 1
 
-                days_start = n * max_days
-                days_end = days_start + days_diff
+            days_start = n * max_days
+            days_end = days_start + days_diff
 
-                start_date = first_date + datetime.timedelta(days=days_start + add_day)
-                end_date = first_date + datetime.timedelta(days=days_end)
+            start_date = first_date + datetime.timedelta(days=days_start + add_day)
+            end_date = first_date + datetime.timedelta(days=days_end)
 
-                start_date_str = datetime.datetime.strftime(start_date, "%Y-%m-%d")
-                end_date_str = datetime.datetime.strftime(end_date, "%Y-%m-%d")
+            start_date_str = datetime.datetime.strftime(start_date, "%Y-%m-%d")
+            end_date_str = datetime.datetime.strftime(end_date, "%Y-%m-%d")
 
-                list_dates["start_date"].append(start_date_str)
-                list_dates["end_date"].append(end_date_str)
+            list_dates["start_date"].append(start_date_str)
+            list_dates["end_date"].append(end_date_str)
 
-            return list_dates
+        return list_dates
 
     def _is_state(self, st: List) -> None:
         """Check if input is a valid brazilian state abbreviation
@@ -503,8 +503,6 @@ class InmetStation:
                 "There is no state(s): "
                 + ", ".join(f'"{state}"' for state in unexist_states)
             )
-        else:
-            pass
 
     def _haversine(
         self, lat_1: float, lon_1: float, lat_2: float, lon_2: float
@@ -564,8 +562,8 @@ class InmetStation:
             df_stations = pd.json_normalize(stations)
 
             return self._rename_cols_to_en(df_stations)
-        else:
-            raise ConnectionError(f"API error code: {r.status_code}")
+
+        raise ConnectionError(f"API error code: {r.status_code}")
 
     def _get_all_stations(self):
         """Get details of all stations available on INMET API.
@@ -605,8 +603,6 @@ class InmetStation:
                 "There is no station(s): "
                 + ", ".join(f'"{station}"' for station in unexist_stations)
             )
-        else:
-            pass
 
     def _check_station_type(self, station_type):
         """Check if input for station_type is valid.
@@ -626,8 +622,6 @@ class InmetStation:
             raise ValueError(
                 'station_type must be either "A" (Automatic), "M" (Manual) or "ALL" (All stations)"'
             )
-        else:
-            pass
 
     def _check_request_size(self, start_date, end_date):
         """Check the size of requested data
@@ -654,8 +648,6 @@ class InmetStation:
             raise RequestTooLarge(
                 """The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request"""
             )
-        else:
-            pass
 
     def get_stations(self, type: str = "ALL") -> DataFrame:
         """Get details of all stations available at INMET API. It can return
@@ -699,7 +691,7 @@ class InmetStation:
             A pandas dataframe with data from all stations available at given date.
         """
 
-        if date == None:
+        if date is None:
             date = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d")
 
         self._check_date_format(date)
@@ -754,7 +746,7 @@ class InmetStation:
         else:
             raise TypeError("station_id should be list.")
 
-        if chunks == False:
+        if chunks is False:
             self._check_request_size(start_date, end_date)
             dates = {"start_date": [start_date], "end_date": [end_date]}
         else:
@@ -774,7 +766,7 @@ class InmetStation:
 
         with yaspin(Spinners.weather) as spinner:
             print()
-            for period in range(len(start_date_list)):
+            for _, period in enumerate(start_date_list):
 
                 start_date = start_date_list[period]
                 end_date = end_date_list[period]
@@ -875,7 +867,7 @@ class InmetStation:
             A pandas dataframe with details of the closest 'n' stations for
             the given coordinates.
         """
-        if type(lat) != float or type(lon) != float:
+        if not all(isinstance(coord, float) for coord in [lat, lon]):
             raise TypeError("Coordinates (lat,lon) values must be type 'float'")
 
         self._check_station_type(station_type)
