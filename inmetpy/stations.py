@@ -47,12 +47,14 @@ class InmetStation:
                     print(
                         f"file 'inmet_data_{station_id}_{start_date}_{end_date}.csv' was downloaded"
                     )
+                    return None
                 if date:
                     print("date")
                     print("station_id")
 
                     df_stations.to_csv(f"inmet_data_{date}.csv", index=False)
                     print(f"file 'inmet_data_{date}.csv' was downloaded")
+                    return None
             else:
                 return df_stations
         else:
