@@ -49,6 +49,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../modules.html">inmetpy</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with Inmetpy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Loading-package">Loading package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Stations">Stations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Search-stations-by-coordinates">Search stations by coordinates</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#Get-details-of-all-stations">Get details of all stations</a></li>
 </ul>
 </li>
@@ -358,6 +363,991 @@ div.rendered_html tbody tr:hover {
 </style>
 <section id="Getting-Started-with-Inmetpy">
 <h1>Getting Started with Inmetpy<a class="headerlink" href="#Getting-Started-with-Inmetpy" title="Permalink to this heading"></a></h1>
+<p>Welcome! The INMetPy provides some straight methods to obtain details and data from all meteorological stations of the Brazilian National Institute of Meteoroly, <em>INMET</em>. Some examples of how to use the INMetPy API are showed below.</p>
+<section id="Loading-package">
+<h2>Loading package<a class="headerlink" href="#Loading-package" title="Permalink to this heading"></a></h2>
+<p>To load the package:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">inmetpy.stations</span> <span class="kn">import</span> <span class="n">InmetStation</span>
+
+<span class="n">inmet</span> <span class="o">=</span> <span class="n">InmetStation</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Stations">
+<h2>Stations<a class="headerlink" href="#Stations" title="Permalink to this heading"></a></h2>
+<p>The first thing to know about the meteorological stations is their Code ID. These ids will be used in other methods to query the meteorological data. The method <code class="docutils literal notranslate"><span class="pre">get_stations</span></code> shows the details of each station.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">get_stations</span><span class="p">()</span>
+<span class="n">stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CD_OSCAR</th>
+      <th>STATION_NAME</th>
+      <th>CD_STATION</th>
+      <th>TP_STATION</th>
+      <th>START_DATE_OPERATION</th>
+      <th>END_DATE_OPERATION</th>
+      <th>LONGITUDE</th>
+      <th>LATITUDE</th>
+      <th>HEIGHT</th>
+      <th>CD_SITUATION</th>
+      <th>CD_WSI</th>
+      <th>IS_CAPITAL</th>
+      <th>CD_DISTRICT</th>
+      <th>INSTITUTE</th>
+      <th>STATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0-2000-0-86765</td>
+      <td>ABROLHOS</td>
+      <td>A422</td>
+      <td>Automatic</td>
+      <td>2008-07-21 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-38.703333</td>
+      <td>-17.963056</td>
+      <td>20.93</td>
+      <td>Down</td>
+      <td>0-76-0-2906907000000408</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0-2000-0-81755</td>
+      <td>ACARAU</td>
+      <td>A360</td>
+      <td>Automatic</td>
+      <td>2009-04-22 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-40.087222</td>
+      <td>-3.121111</td>
+      <td>67.15</td>
+      <td>Operative</td>
+      <td>0-76-0-2300200000000446</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>CE</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0-2000-0-86827</td>
+      <td>AFONSO CLAUDIO</td>
+      <td>A657</td>
+      <td>Automatic</td>
+      <td>2011-09-24 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-41.106944</td>
+      <td>-20.104167</td>
+      <td>507.48</td>
+      <td>Operative</td>
+      <td>0-76-0-3200102000000478</td>
+      <td>False</td>
+      <td>06</td>
+      <td>INMET</td>
+      <td>ES</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0-2000-0-86686</td>
+      <td>AGUA BOA</td>
+      <td>A908</td>
+      <td>Automatic</td>
+      <td>2006-12-16 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-52.211667</td>
+      <td>-14.016389</td>
+      <td>440.00</td>
+      <td>Operative</td>
+      <td>0-76-0-5100201000000157</td>
+      <td>False</td>
+      <td>09</td>
+      <td>INMET</td>
+      <td>MT</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0-2000-0-86812</td>
+      <td>AGUA CLARA</td>
+      <td>A756</td>
+      <td>Automatic</td>
+      <td>2010-08-14 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-52.875833</td>
+      <td>-20.444444</td>
+      <td>323.63</td>
+      <td>Operative</td>
+      <td>0-76-0-5000203000000463</td>
+      <td>False</td>
+      <td>07</td>
+      <td>INMET</td>
+      <td>MS</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0-2000-0-86716</td>
+      <td>AGUAS EMENDADAS</td>
+      <td>A045</td>
+      <td>Automatic</td>
+      <td>2008-10-03 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-47.625801</td>
+      <td>-15.596491</td>
+      <td>1030.36</td>
+      <td>Operative</td>
+      <td>0-76-0-5300108000000435</td>
+      <td>False</td>
+      <td>10</td>
+      <td>INMET</td>
+      <td>DF</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0-2000-0-86722</td>
+      <td>AGUAS VERMELHAS</td>
+      <td>A549</td>
+      <td>Automatic</td>
+      <td>2007-09-09 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-41.457787</td>
+      <td>-15.751536</td>
+      <td>754.07</td>
+      <td>Operative</td>
+      <td>0-76-0-3101003000000252</td>
+      <td>False</td>
+      <td>05</td>
+      <td>INMET</td>
+      <td>MG</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0-2000-0-86803</td>
+      <td>AIMORES</td>
+      <td>A534</td>
+      <td>Automatic</td>
+      <td>2007-08-05 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-41.090833</td>
+      <td>-19.532778</td>
+      <td>287.74</td>
+      <td>Operative</td>
+      <td>0-76-0-3101102000000239</td>
+      <td>False</td>
+      <td>05</td>
+      <td>INMET</td>
+      <td>MG</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0-2000-0-86828</td>
+      <td>ALEGRE</td>
+      <td>A617</td>
+      <td>Automatic</td>
+      <td>2006-10-25 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-41.488889</td>
+      <td>-20.750556</td>
+      <td>138.00</td>
+      <td>Operative</td>
+      <td>0-76-0-3200201000000125</td>
+      <td>False</td>
+      <td>06</td>
+      <td>INMET</td>
+      <td>ES</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0-2000-0-86975</td>
+      <td>ALEGRETE</td>
+      <td>A826</td>
+      <td>Automatic</td>
+      <td>2006-09-28 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-55.525556</td>
+      <td>-29.709167</td>
+      <td>120.88</td>
+      <td>Operative</td>
+      <td>0-76-0-4300406000000113</td>
+      <td>False</td>
+      <td>08</td>
+      <td>INMET</td>
+      <td>RS</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Above is showed all the meteorological stations that are avaible on INMET API. These includes either automatic stations and manual stations. To filter in the query, use <code class="docutils literal notranslate"><span class="pre">type</span></code> to indicate which type of station is searched. For automatic, uses <code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;A&quot;</span></code>, for manual <code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;M&quot;</span></code>. The default value is <code class="docutils literal notranslate"><span class="pre">type</span> <span class="pre">=</span> <span class="pre">&quot;ALL&quot;</span></code>, which shows both types.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">automatic_stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">get_stations</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+<span class="n">automatic_stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CD_OSCAR</th>
+      <th>STATION_NAME</th>
+      <th>CD_STATION</th>
+      <th>TP_STATION</th>
+      <th>START_DATE_OPERATION</th>
+      <th>END_DATE_OPERATION</th>
+      <th>LONGITUDE</th>
+      <th>LATITUDE</th>
+      <th>HEIGHT</th>
+      <th>CD_SITUATION</th>
+      <th>CD_WSI</th>
+      <th>IS_CAPITAL</th>
+      <th>CD_DISTRICT</th>
+      <th>INSTITUTE</th>
+      <th>STATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0-2000-0-86765</td>
+      <td>ABROLHOS</td>
+      <td>A422</td>
+      <td>Automatic</td>
+      <td>2008-07-21 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-38.703333</td>
+      <td>-17.963056</td>
+      <td>20.93</td>
+      <td>Down</td>
+      <td>0-76-0-2906907000000408</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0-2000-0-81755</td>
+      <td>ACARAU</td>
+      <td>A360</td>
+      <td>Automatic</td>
+      <td>2009-04-22 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-40.087222</td>
+      <td>-3.121111</td>
+      <td>67.15</td>
+      <td>Operative</td>
+      <td>0-76-0-2300200000000446</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>CE</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0-2000-0-86827</td>
+      <td>AFONSO CLAUDIO</td>
+      <td>A657</td>
+      <td>Automatic</td>
+      <td>2011-09-24 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-41.106944</td>
+      <td>-20.104167</td>
+      <td>507.48</td>
+      <td>Operative</td>
+      <td>0-76-0-3200102000000478</td>
+      <td>False</td>
+      <td>06</td>
+      <td>INMET</td>
+      <td>ES</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0-2000-0-86686</td>
+      <td>AGUA BOA</td>
+      <td>A908</td>
+      <td>Automatic</td>
+      <td>2006-12-16 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-52.211667</td>
+      <td>-14.016389</td>
+      <td>440.00</td>
+      <td>Operative</td>
+      <td>0-76-0-5100201000000157</td>
+      <td>False</td>
+      <td>09</td>
+      <td>INMET</td>
+      <td>MT</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0-2000-0-86812</td>
+      <td>AGUA CLARA</td>
+      <td>A756</td>
+      <td>Automatic</td>
+      <td>2010-08-14 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-52.875833</td>
+      <td>-20.444444</td>
+      <td>323.63</td>
+      <td>Operative</td>
+      <td>0-76-0-5000203000000463</td>
+      <td>False</td>
+      <td>07</td>
+      <td>INMET</td>
+      <td>MS</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manual_stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">get_stations</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">)</span>
+<span class="n">manual_stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CD_OSCAR</th>
+      <th>STATION_NAME</th>
+      <th>CD_STATION</th>
+      <th>TP_STATION</th>
+      <th>START_DATE_OPERATION</th>
+      <th>END_DATE_OPERATION</th>
+      <th>LONGITUDE</th>
+      <th>LATITUDE</th>
+      <th>HEIGHT</th>
+      <th>CD_SITUATION</th>
+      <th>CD_WSI</th>
+      <th>IS_CAPITAL</th>
+      <th>CD_DISTRICT</th>
+      <th>INSTITUTE</th>
+      <th>STATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>573</th>
+      <td>0-2000-0-82989</td>
+      <td>AGUA BRANCA</td>
+      <td>82989</td>
+      <td>Traditional</td>
+      <td>1928-05-05 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-37.938056</td>
+      <td>-9.264722</td>
+      <td>603.42</td>
+      <td>Operative</td>
+      <td>0-76-0-2700102000W82989</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>AL</td>
+    </tr>
+    <tr>
+      <th>574</th>
+      <td>0-2000-0-82353</td>
+      <td>ALTAMIRA</td>
+      <td>82353</td>
+      <td>Traditional</td>
+      <td>1927-04-24 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-52.213056</td>
+      <td>-3.214167</td>
+      <td>101.51</td>
+      <td>Operative</td>
+      <td>0-76-0-1500602000W82353</td>
+      <td>False</td>
+      <td>02</td>
+      <td>INMET</td>
+      <td>PA</td>
+    </tr>
+    <tr>
+      <th>575</th>
+      <td>0-2000-0-83007</td>
+      <td>ALTO DA BOA VISTA</td>
+      <td>83007</td>
+      <td>Traditional</td>
+      <td>1966-06-01 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-43.279167</td>
+      <td>-22.965833</td>
+      <td>347.10</td>
+      <td>Operative</td>
+      <td>0-76-0-3304557000W83007</td>
+      <td>False</td>
+      <td>06</td>
+      <td>INMET</td>
+      <td>RJ</td>
+    </tr>
+    <tr>
+      <th>576</th>
+      <td>0-2000-0-82590</td>
+      <td>APODI</td>
+      <td>82590</td>
+      <td>Traditional</td>
+      <td>1962-12-18 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-37.815000</td>
+      <td>-5.626667</td>
+      <td>131.37</td>
+      <td>Operative</td>
+      <td>0-76-0-2401008000W82590</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>RN</td>
+    </tr>
+    <tr>
+      <th>577</th>
+      <td>0-2000-0-83442</td>
+      <td>ARACUAI</td>
+      <td>83442</td>
+      <td>Traditional</td>
+      <td>1918-09-06 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-42.060833</td>
+      <td>-16.848889</td>
+      <td>317.67</td>
+      <td>Operative</td>
+      <td>0-76-0-3103405000W83442</td>
+      <td>False</td>
+      <td>05</td>
+      <td>INMET</td>
+      <td>MG</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>It is also possible to search stations for specific states of Brazil using <code class="docutils literal notranslate"><span class="pre">search_station_by_state</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;PE&#39;</span><span class="p">,</span><span class="s1">&#39;BA&#39;</span><span class="p">,</span><span class="s1">&#39;SE&#39;</span><span class="p">,</span><span class="s1">&#39;PI&#39;</span><span class="p">]</span>
+<span class="n">stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">search_station_by_state</span><span class="p">(</span><span class="n">st</span><span class="o">=</span><span class="n">states</span><span class="p">)</span>
+<span class="n">stations</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CD_OSCAR</th>
+      <th>STATION_NAME</th>
+      <th>CD_STATION</th>
+      <th>TP_STATION</th>
+      <th>START_DATE_OPERATION</th>
+      <th>END_DATE_OPERATION</th>
+      <th>LONGITUDE</th>
+      <th>LATITUDE</th>
+      <th>HEIGHT</th>
+      <th>CD_SITUATION</th>
+      <th>CD_WSI</th>
+      <th>IS_CAPITAL</th>
+      <th>CD_DISTRICT</th>
+      <th>INSTITUTE</th>
+      <th>STATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0-2000-0-86765</td>
+      <td>ABROLHOS</td>
+      <td>A422</td>
+      <td>Automatic</td>
+      <td>2008-07-21 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-38.703333</td>
+      <td>-17.963056</td>
+      <td>20.93</td>
+      <td>Down</td>
+      <td>0-76-0-2906907000000408</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>0-2000-0-81846</td>
+      <td>ALVORADA DO GURGUEIA</td>
+      <td>A336</td>
+      <td>Automatic</td>
+      <td>2007-11-17 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-43.865556</td>
+      <td>-8.441667</td>
+      <td>261.26</td>
+      <td>Operative</td>
+      <td>0-76-0-2202307000000274</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>PI</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>0-2000-0-86675</td>
+      <td>AMARGOSA</td>
+      <td>A434</td>
+      <td>Automatic</td>
+      <td>2008-07-11 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-39.616944</td>
+      <td>-13.009444</td>
+      <td>397.80</td>
+      <td>Down</td>
+      <td>0-76-0-2901007000000398</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>0-2000-0-81867</td>
+      <td>ANGICAL DO PIAUI</td>
+      <td>A377</td>
+      <td>Automatic</td>
+      <td>2019-11-14 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-42.727500</td>
+      <td>-6.089444</td>
+      <td>183.00</td>
+      <td>Operative</td>
+      <td>0-76-0-2200608000000597</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>PI</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>0-2000-0-86616</td>
+      <td>ARACAJU</td>
+      <td>A409</td>
+      <td>Automatic</td>
+      <td>2003-02-12 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-37.054444</td>
+      <td>-10.952500</td>
+      <td>3.72</td>
+      <td>Down</td>
+      <td>0-76-0-2800308000000055</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>SE</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>To search for a specific type of station, use the <code class="docutils literal notranslate"><span class="pre">type</span></code> argument.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">manual_stations</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">search_station_by_state</span><span class="p">(</span><span class="n">st</span><span class="o">=</span><span class="n">states</span><span class="p">,</span> <span class="n">station_type</span><span class="o">=</span><span class="s2">&quot;M&quot;</span><span class="p">)</span>
+<span class="n">manual_stations</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CD_OSCAR</th>
+      <th>STATION_NAME</th>
+      <th>CD_STATION</th>
+      <th>TP_STATION</th>
+      <th>START_DATE_OPERATION</th>
+      <th>END_DATE_OPERATION</th>
+      <th>LONGITUDE</th>
+      <th>LATITUDE</th>
+      <th>HEIGHT</th>
+      <th>CD_SITUATION</th>
+      <th>CD_WSI</th>
+      <th>IS_CAPITAL</th>
+      <th>CD_DISTRICT</th>
+      <th>INSTITUTE</th>
+      <th>STATE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>709</th>
+      <td>0-2000-0-82879</td>
+      <td>SAO JOAO DO PIAUI</td>
+      <td>82879</td>
+      <td>Traditional</td>
+      <td>1975-09-30 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-42.250278</td>
+      <td>-8.365000</td>
+      <td>237.02</td>
+      <td>Operative</td>
+      <td>0-76-0-2210003000W82879</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>PI</td>
+    </tr>
+    <tr>
+      <th>717</th>
+      <td>0-2000-0-83190</td>
+      <td>SERRINHA</td>
+      <td>83190</td>
+      <td>Traditional</td>
+      <td>1904-01-31 23:59:56+00:00</td>
+      <td>NaT</td>
+      <td>-39.001944</td>
+      <td>-11.668056</td>
+      <td>362.39</td>
+      <td>Operative</td>
+      <td>0-76-0-2930501000W83190</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+    </tr>
+    <tr>
+      <th>719</th>
+      <td>0-2000-0-82797</td>
+      <td>SURUBIM</td>
+      <td>82797</td>
+      <td>Traditional</td>
+      <td>1929-10-01 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-35.801056</td>
+      <td>-7.839628</td>
+      <td>421.44</td>
+      <td>Operative</td>
+      <td>0-76-0-2614501000W82797</td>
+      <td>False</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>PE</td>
+    </tr>
+    <tr>
+      <th>723</th>
+      <td>0-2000-0-82578</td>
+      <td>TERESINA</td>
+      <td>82578</td>
+      <td>Traditional</td>
+      <td>1911-03-20 23:59:56+00:00</td>
+      <td>NaT</td>
+      <td>-42.801389</td>
+      <td>-5.034722</td>
+      <td>75.73</td>
+      <td>Operative</td>
+      <td>0-76-0-2211001000W82578</td>
+      <td>True</td>
+      <td>03</td>
+      <td>INMET</td>
+      <td>PI</td>
+    </tr>
+    <tr>
+      <th>730</th>
+      <td>0-2000-0-83344</td>
+      <td>VITORIA DA CONQUISTA</td>
+      <td>83344</td>
+      <td>Traditional</td>
+      <td>1936-01-01 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-40.801389</td>
+      <td>-14.886389</td>
+      <td>879.47</td>
+      <td>Operative</td>
+      <td>0-76-0-2933307000W83344</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<section id="Search-stations-by-coordinates">
+<h3>Search stations by coordinates<a class="headerlink" href="#Search-stations-by-coordinates" title="Permalink to this heading"></a></h3>
+<p>If you want to search stations that are near by a specific location, you can use the <code class="docutils literal notranslate"><span class="pre">search_station_by_coords</span></code> method, using the coordinates of the central point searched. It can be specified the number of stations that will return using <code class="docutils literal notranslate"><span class="pre">n_stations</span></code> (default = 1).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stations_nearby</span> <span class="o">=</span> <span class="n">inmet</span><span class="o">.</span><span class="n">search_station_by_coords</span><span class="p">(</span><span class="n">lat</span><span class="o">=-</span><span class="mf">22.42</span><span class="p">,</span> <span class="n">lon</span><span class="o">=-</span><span class="mf">24.42</span><span class="p">,</span> <span class="n">n_stations</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">stations_nearby</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CD_OSCAR</th>
+      <th>STATION_NAME</th>
+      <th>CD_STATION</th>
+      <th>TP_STATION</th>
+      <th>START_DATE_OPERATION</th>
+      <th>END_DATE_OPERATION</th>
+      <th>LONGITUDE</th>
+      <th>LATITUDE</th>
+      <th>HEIGHT</th>
+      <th>CD_SITUATION</th>
+      <th>CD_WSI</th>
+      <th>IS_CAPITAL</th>
+      <th>CD_DISTRICT</th>
+      <th>INSTITUTE</th>
+      <th>STATE</th>
+      <th>DISTANCE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0-2000-0-86765</td>
+      <td>ABROLHOS</td>
+      <td>A422</td>
+      <td>Automatic</td>
+      <td>2008-07-21 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-38.703333</td>
+      <td>-17.963056</td>
+      <td>20.93</td>
+      <td>Down</td>
+      <td>0-76-0-2906907000000408</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+      <td>1569.912307</td>
+    </tr>
+    <tr>
+      <th>612</th>
+      <td>0-2000-0-83498</td>
+      <td>CARAVELAS</td>
+      <td>83498</td>
+      <td>Traditional</td>
+      <td>1930-05-01 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-39.258611</td>
+      <td>-17.739444</td>
+      <td>6.05</td>
+      <td>Operative</td>
+      <td>0-76-0-2906907000W83498</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+      <td>1633.686893</td>
+    </tr>
+    <tr>
+      <th>122</th>
+      <td>0-2000-0-86764</td>
+      <td>CARAVELAS</td>
+      <td>A405</td>
+      <td>Automatic</td>
+      <td>2002-12-20 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-39.258611</td>
+      <td>-17.739444</td>
+      <td>6.05</td>
+      <td>Down</td>
+      <td>0-76-0-2906907000000039</td>
+      <td>False</td>
+      <td>04</td>
+      <td>INMET</td>
+      <td>BA</td>
+      <td>1633.686893</td>
+    </tr>
+    <tr>
+      <th>290</th>
+      <td>0-2000-0-86805</td>
+      <td>LINHARES</td>
+      <td>A614</td>
+      <td>Automatic</td>
+      <td>2006-10-27 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-40.068611</td>
+      <td>-19.356944</td>
+      <td>40.00</td>
+      <td>Operative</td>
+      <td>0-76-0-3203205000000128</td>
+      <td>False</td>
+      <td>06</td>
+      <td>INMET</td>
+      <td>ES</td>
+      <td>1660.074084</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>0-2000-0-86786</td>
+      <td>SAO MATEUS</td>
+      <td>A616</td>
+      <td>Automatic</td>
+      <td>2006-10-25 00:00:00+00:00</td>
+      <td>NaT</td>
+      <td>-39.864167</td>
+      <td>-18.676111</td>
+      <td>28.66</td>
+      <td>Operative</td>
+      <td>0-76-0-3204906000000124</td>
+      <td>False</td>
+      <td>06</td>
+      <td>INMET</td>
+      <td>ES</td>
+      <td>1660.088788</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
@@ -389,6 +1379,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+</section>
+</section>
+<hr class="docutils" />
 <section id="Get-details-of-all-stations">
 <h2>Get details of all stations<a class="headerlink" href="#Get-details-of-all-stations" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
@@ -1337,7 +2330,7 @@ Looking for station A627...
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/examples_getting_started_inmetpy_19_1.png" src="../_images/examples_getting_started_inmetpy_19_1.png" />
+<img alt="../_images/examples_getting_started_inmetpy_34_1.png" src="../_images/examples_getting_started_inmetpy_34_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
