@@ -20,7 +20,6 @@ class InmetStation:
         self._change_data_type_station_details()
         self._reorder_station_cols()
 
-
     def _rename_vars_to_cf(self, df: DataFrame, by: str) -> DataFrame:
         """Rename original columns names to metric systems (https://dev.meteostat.net/formats.html#time-format)
 
@@ -153,7 +152,7 @@ class InmetStation:
 
         self._stations = self._stations[cols]
 
-    def _reorder_all_data_stations_cols(self, station_df:DataFrame) -> DataFrame:
+    def _reorder_all_data_stations_cols(self, station_df: DataFrame) -> DataFrame:
         """Reorder the columns of station details to more apropriate way."""
 
         cols = [
@@ -179,11 +178,10 @@ class InmetStation:
             "MAX_RH",
             "HUMI",
             "GLO_RAD",
-            "RAIN"
+            "RAIN",
         ]
 
         return station_df[cols]
-
 
     def _is_capital(self) -> DataFrame:
         """Change 'IS_CAPITAL' column from string to boolen"""
@@ -695,24 +693,21 @@ class InmetStation:
 
         if r.status_code == 200:
             df_stations = pd.json_normalize(r.json())
-            df_stations = self._rename_vars_to_cf(df_stations, 'hour')
-            df_stations = self._create_date_time(df_stations, 'hour')
+            df_stations = self._rename_vars_to_cf(df_stations, "hour")
+            df_stations = self._create_date_time(df_stations, "hour")
             df_stations = self._reorder_all_data_stations_cols(df_stations)
 
             if save_file:
                 df_stations.to_csv(
                     f"inmet_data_data_all_stations_{date}.csv",
                     index=False,
-                    )
-                print(
-                    f"file 'inmet_data_all_stations_{date}.csv' was downloaded"
                 )
+                print(f"file 'inmet_data_all_stations_{date}.csv' was downloaded")
                 return None
-            
+
             return df_stations
         else:
             raise ConnectionError(f"API error code: {r.status_code}")
-
 
     def get_data_station(
         self,
