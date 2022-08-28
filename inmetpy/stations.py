@@ -20,45 +20,6 @@ class InmetStation:
         self._change_data_type_station_details()
         self._reorder_station_cols()
 
-    def _get_request(
-        self,
-        request: requests.models.Response,
-        save_file=False,
-        date=None,
-        station_id=None,
-        start_date=None,
-        end_date=None,
-    ) -> Union[DataFrame, int]:
-
-        if request.status_code == 200:
-            stations = request.json()
-            df_stations = pd.json_normalize(stations)
-            df_stations = self._rename_vars_to_cf(df_stations, "hour")
-
-            if save_file:
-                if station_id:
-                    print("date")
-                    print("station_id")
-
-                    df_stations.to_csv(
-                        f"inmet_data_{station_id}_{start_date}_{end_date}.csv",
-                        index=False,
-                    )
-                    print(
-                        f"file 'inmet_data_{station_id}_{start_date}_{end_date}.csv' was downloaded"
-                    )
-                    return None
-                if date:
-                    print("date")
-                    print("station_id")
-
-                    df_stations.to_csv(f"inmet_data_{date}.csv", index=False)
-                    print(f"file 'inmet_data_{date}.csv' was downloaded")
-                    return None
-            else:
-                return df_stations
-        else:
-            return request.status_code
 
     def _rename_vars_to_cf(self, df: DataFrame, by: str) -> DataFrame:
         """Rename original columns names to metric systems (https://dev.meteostat.net/formats.html#time-format)
