@@ -712,7 +712,7 @@ class InmetStation:
         return stations
 
     def get_all_stations(self, date: str = None, save_file=False) -> DataFrame:
-        """Get data from all stations at given date.
+        """Get data from all stations at given date. Hourly resolution.
 
         Parameters
         ----------
@@ -737,6 +737,16 @@ class InmetStation:
             df_stations = self._rename_vars_to_cf(df_stations, 'hour')
             df_stations = self._create_date_time(df_stations, 'hour')
             df_stations = self._reorder_all_data_stations_cols(df_stations)
+
+            if save_file:
+                df_stations.to_csv(
+                    f"inmet_data_data_all_stations_{date}.csv",
+                    index=False,
+                    )
+                print(
+                    f"file 'inmet_data_all_stations_{date}.csv' was downloaded"
+                )
+                return None
             
             return df_stations
         else:
