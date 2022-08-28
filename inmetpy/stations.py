@@ -82,13 +82,13 @@ class InmetStation:
                 "DC_NOME": "STATION_NAME",
                 "PRE_INS": "PRES",
                 "TEM_SEN": "TEM_SEN",
-                "VL_LATITUDE": "LAT",
+                "VL_LATITUDE": "LATITUDE",
                 "PRE_MAX": "MAX_PRES",
                 "UF": "ST",
                 "RAD_GLO": "GLO_RAD",
                 "PTO_INS": "DWPT",
                 "TEM_MIN": "MIN_TEMP",
-                "VL_LONGITUDE": "LONG",
+                "VL_LONGITUDE": "LONGITUDE",
                 "UMD_MIN": "MIN_RH",
                 "PTO_MAX": "MAX_DWPT",
                 "VEN_DIR": "WDIR",
@@ -112,10 +112,10 @@ class InmetStation:
 
             cols_daily_cf = {
                 "DC_NOME": "STATION_NAME",
-                "VL_LATITUDE": "LAT",
+                "VL_LATITUDE": "LATITUDE",
                 "UF": "ST",
                 "TEM_MIN": "MIN_TEMP",
-                "VL_LONGITUDE": "LONG",
+                "VL_LONGITUDE": "LONGITUDE",
                 "UMID_MIN": "MIN_RH",
                 "DT_MEDICAO": "DATE",
                 "CHUVA": "RAIN",
@@ -357,11 +357,11 @@ class InmetStation:
             to_float = [
                 "PRES",
                 "TEM_SEN",
-                "LAT",
+                "LATITUDE",
                 "MAX_PRES",
                 "DWPT",
                 "MIN_TEMP",
-                "LONG",
+                "LONGITUDE",
                 "MAX_DWPT",
                 "RAIN",
                 "MIN_PRES",
@@ -375,8 +375,8 @@ class InmetStation:
         elif by == "day":
             to_int = ["MIN_RH"]
             to_float = [
-                "LAT",
-                "LONG",
+                "LATITUDE",
+                "LONGITUDE",
                 "AVG_RH",
                 "TEMP_MED",
                 "RAIN",
@@ -389,7 +389,7 @@ class InmetStation:
         df[to_float] = (
             df[to_float].apply(pd.to_numeric, errors="coerce").astype("float64")
         )
-        df[["LAT", "LONG"]] = round(df[["LAT", "LONG"]], 5)
+        df[["LATITUDE", "LONGITUDE"]] = round(df[["LATITUDE", "LONGITUDE"]], 5)
 
         return df
 
@@ -732,7 +732,16 @@ class InmetStation:
 
         r = requests.get("/".join([self._api, "estacao", "dados", date]))
 
-        return self._get_request(r, save_file=save_file, date=date)
+        if r.status_code == 200:
+            df_stations = pd.json_normalize(r.json())
+            df_stations = self._rename_vars_to_cf(df_stations, 'hour')
+            df_stations = self._create_date_time(df_stations, 'hour')
+            df_stations = self._reorder_all_data_stations_cols(df_stations)
+            
+            return df_stations
+        else:
+            raise ConnectionError(f"API error code: {r.status_code}")
+
 
     def get_data_station(
         self,
