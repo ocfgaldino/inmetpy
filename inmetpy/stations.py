@@ -20,46 +20,6 @@ class InmetStation:
         self._change_data_type_station_details()
         self._reorder_station_cols()
 
-    def _get_request(
-        self,
-        request: requests.models.Response,
-        save_file=False,
-        date=None,
-        station_id=None,
-        start_date=None,
-        end_date=None,
-    ) -> Union[DataFrame, int]:
-
-        if request.status_code == 200:
-            stations = request.json()
-            df_stations = pd.json_normalize(stations)
-            df_stations = self._rename_vars_to_cf(df_stations, "hour")
-
-            if save_file:
-                if station_id:
-                    print("date")
-                    print("station_id")
-
-                    df_stations.to_csv(
-                        f"inmet_data_{station_id}_{start_date}_{end_date}.csv",
-                        index=False,
-                    )
-                    print(
-                        f"file 'inmet_data_{station_id}_{start_date}_{end_date}.csv' was downloaded"
-                    )
-                    return None
-                if date:
-                    print("date")
-                    print("station_id")
-
-                    df_stations.to_csv(f"inmet_data_{date}.csv", index=False)
-                    print(f"file 'inmet_data_{date}.csv' was downloaded")
-                    return None
-            else:
-                return df_stations
-        else:
-            return request.status_code
-
     def _rename_vars_to_cf(self, df: DataFrame, by: str) -> DataFrame:
         """Rename original columns names to metric systems (https://dev.meteostat.net/formats.html#time-format)
 
@@ -82,13 +42,13 @@ class InmetStation:
                 "DC_NOME": "STATION_NAME",
                 "PRE_INS": "PRES",
                 "TEM_SEN": "TEM_SEN",
-                "VL_LATITUDE": "LAT",
+                "VL_LATITUDE": "LATITUDE",
                 "PRE_MAX": "MAX_PRES",
                 "UF": "ST",
                 "RAD_GLO": "GLO_RAD",
                 "PTO_INS": "DWPT",
                 "TEM_MIN": "MIN_TEMP",
-                "VL_LONGITUDE": "LONG",
+                "VL_LONGITUDE": "LONGITUDE",
                 "UMD_MIN": "MIN_RH",
                 "PTO_MAX": "MAX_DWPT",
                 "VEN_DIR": "WDIR",
@@ -112,10 +72,10 @@ class InmetStation:
 
             cols_daily_cf = {
                 "DC_NOME": "STATION_NAME",
-                "VL_LATITUDE": "LAT",
+                "VL_LATITUDE": "LATITUDE",
                 "UF": "ST",
                 "TEM_MIN": "MIN_TEMP",
-                "VL_LONGITUDE": "LONG",
+                "VL_LONGITUDE": "LONGITUDE",
                 "UMID_MIN": "MIN_RH",
                 "DT_MEDICAO": "DATE",
                 "CHUVA": "RAIN",
@@ -191,6 +151,37 @@ class InmetStation:
         ]
 
         self._stations = self._stations[cols]
+
+    def _reorder_all_data_stations_cols(self, station_df: DataFrame) -> DataFrame:
+        """Reorder the columns of station details to more apropriate way."""
+
+        cols = [
+            "STATION_NAME",
+            "STATION_ID",
+            "ST",
+            "DATETIME",
+            "LONGITUDE",
+            "LATITUDE",
+            "WDIR",
+            "WSPD",
+            "WGST",
+            "MIN_PRES",
+            "MAX_PRES",
+            "PRES",
+            "MIN_TEMP",
+            "MAX_TEMP",
+            "TEMP",
+            "MIN_DWPT",
+            "MAX_DWPT",
+            "DWPT",
+            "MIN_RH",
+            "MAX_RH",
+            "HUMI",
+            "GLO_RAD",
+            "RAIN",
+        ]
+
+        return station_df[cols]
 
     def _is_capital(self) -> DataFrame:
         """Change 'IS_CAPITAL' column from string to boolen"""
@@ -325,11 +316,11 @@ class InmetStation:
             to_float = [
                 "PRES",
                 "TEM_SEN",
-                "LAT",
+                "LATITUDE",
                 "MAX_PRES",
                 "DWPT",
                 "MIN_TEMP",
-                "LONG",
+                "LONGITUDE",
                 "MAX_DWPT",
                 "RAIN",
                 "MIN_PRES",
@@ -343,8 +334,8 @@ class InmetStation:
         elif by == "day":
             to_int = ["MIN_RH"]
             to_float = [
-                "LAT",
-                "LONG",
+                "LATITUDE",
+                "LONGITUDE",
                 "AVG_RH",
                 "TEMP_MED",
                 "RAIN",
@@ -357,7 +348,7 @@ class InmetStation:
         df[to_float] = (
             df[to_float].apply(pd.to_numeric, errors="coerce").astype("float64")
         )
-        df[["LAT", "LONG"]] = round(df[["LAT", "LONG"]], 5)
+        df[["LATITUDE", "LONGITUDE"]] = round(df[["LATITUDE", "LONGITUDE"]], 5)
 
         return df
 
@@ -680,7 +671,7 @@ class InmetStation:
         return stations
 
     def get_all_stations(self, date: str = None, save_file=False) -> DataFrame:
-        """Get data from all stations at given date.
+        """Get data from all stations at given date. Hourly resolution.
 
         Parameters
         ----------
@@ -700,7 +691,23 @@ class InmetStation:
 
         r = requests.get("/".join([self._api, "estacao", "dados", date]))
 
-        return self._get_request(r, save_file=save_file, date=date)
+        if r.status_code == 200:
+            df_stations = pd.json_normalize(r.json())
+            df_stations = self._rename_vars_to_cf(df_stations, "hour")
+            df_stations = self._create_date_time(df_stations, "hour")
+            df_stations = self._reorder_all_data_stations_cols(df_stations)
+
+            if save_file:
+                df_stations.to_csv(
+                    f"inmet_data_data_all_stations_{date}.csv",
+                    index=False,
+                )
+                print(f"file 'inmet_data_all_stations_{date}.csv' was downloaded")
+                return None
+
+            return df_stations
+        else:
+            raise ConnectionError(f"API error code: {r.status_code}")
 
     def get_data_station(
         self,
