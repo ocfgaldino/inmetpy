@@ -183,6 +183,39 @@ class InmetStation:
 
         return station_df[cols]
 
+    def _reorder_data_station_cols(self, station_df: DataFrame) -> DataFrame:
+        """Reorder the columns of station details to more apropriate way."""
+
+        cols = [
+            "DATETIME",
+            "STATION_NAME",
+            "STATION_ID",
+            "ST",
+            "LONGITUDE",
+            "LATITUDE",
+            "WDIR",
+            "WSPD",
+            "WGST",
+            "MIN_PRES",
+            "MAX_PRES",
+            "PRES",
+            "MIN_TEMP",
+            "MAX_TEMP",
+            "TEMP",
+            "MIN_DWPT",
+            "MAX_DWPT",
+            "DWPT",
+            "MIN_RH",
+            "MAX_RH",
+            "HUMI",
+            "GLO_RAD",
+            "RAIN",
+            "TEN_BAT",
+            "TEM_CPU"
+        ]
+
+        return station_df[cols]
+
     def _is_capital(self) -> DataFrame:
         """Change 'IS_CAPITAL' column from string to boolen"""
         self._stations["IS_CAPITAL"] = self._stations["IS_CAPITAL"].apply(
