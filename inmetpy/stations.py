@@ -850,6 +850,7 @@ class InmetStation:
         stations_df = self._rename_vars_to_cf(stations_df, by)
         stations_df = self._create_date_time(stations_df, by)
         stations_df = self._change_data_type(stations_df, by)
+        stations_df = self._reorder_data_station_cols(stations_df)
         stations_df.reset_index(inplace=True, drop=True)
 
         if save_file:
