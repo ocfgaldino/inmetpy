@@ -775,7 +775,7 @@ class InmetStation:
 
         with yaspin(Spinners.weather) as spinner:
             print()
-            for _, period in enumerate(start_date_list):
+            for period, _ in enumerate(start_date_list):
 
                 start_date = start_date_list[period]
                 end_date = end_date_list[period]
