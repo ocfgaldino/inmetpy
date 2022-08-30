@@ -139,3 +139,37 @@ def test_get_data_station_split_date_request_too_large_error(inmet):
         match="The maximum interval is 1 year between start_date and end_date. Use 'chunks=True' to split your request",
     ):
         inmet.get_data_station(start_date, end_date, "day", ["A701"])
+
+
+def test_get_all_stations(inmet):
+
+    cols = [
+        "DATETIME",
+        "STATION_NAME",
+        "STATION_ID",
+        "ST",
+        "LONGITUDE",
+        "LATITUDE",
+        "WDIR",
+        "WSPD",
+        "WGST",
+        "MIN_PRES",
+        "MAX_PRES",
+        "PRES",
+        "MIN_TEMP",
+        "MAX_TEMP",
+        "TEMP",
+        "MIN_DWPT",
+        "MAX_DWPT",
+        "DWPT",
+        "MIN_RH",
+        "MAX_RH",
+        "HUMI",
+        "GLO_RAD",
+        "RAIN",
+        "TEN_BAT",
+        "TEM_CPU",
+    ]
+
+    df_test = inmet.get_data_station("2019-01-01", "2019-01-02", "hour", ["A701"])
+    assert df_test.columns.tolist() == cols
