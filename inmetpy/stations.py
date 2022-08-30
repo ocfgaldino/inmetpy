@@ -211,7 +211,7 @@ class InmetStation:
             "GLO_RAD",
             "RAIN",
             "TEN_BAT",
-            "TEM_CPU"
+            "TEM_CPU",
         ]
 
         return station_df[cols]
