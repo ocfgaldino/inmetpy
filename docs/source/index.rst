@@ -33,7 +33,7 @@ with data from more than 700 meteorological stations spread across Brazil.
    usage
    modules
    getting_started
-   notebooks/getting_started_inmetpy
+   examples/getting_started_inmetpy
    
 
 

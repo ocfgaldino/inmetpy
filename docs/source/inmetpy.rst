@@ -4,10 +4,18 @@ inmetpy package
 Submodules
 ----------
 
-inmetpy.inmet\_stations module
-------------------------------
+inmetpy.exceptions module
+-------------------------
 
-.. automodule:: inmetpy.inmet_stations
+.. automodule:: inmetpy.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+inmetpy.stations module
+-----------------------
+
+.. automodule:: inmetpy.stations
    :members:
    :undoc-members:
    :show-inheritance:
