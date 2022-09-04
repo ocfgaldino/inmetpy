@@ -61,12 +61,36 @@ Once the inmetpy is initialzed, all stations details are loaded. To get a datafr
 stations = inmet.stations()
 ```
 
-The INMET has two types of meteorological stations, automatic and traditional stations. Traditional stations are basically manual stations, to in inmetPy it is possible to filter a specific type with "A" or "M" when the station method is called. 
+The INMET has two types of meteorological stations, automatic and traditional stations. Traditional stations are basically manual stations, so in inmetPy is possible to filter a specific type with "A" or "M" when the station method is called. 
 
 ```python
 automatic_stations = inmet.stations("A") # All automatic stations
 manual_stations = inmet.stations("M") # All manual/traditional stations
 ```
+
+### Seach stations 
+
+It is possible to seach by stations at specific state(s) or near by a specific coordinate, using the methods `search_station_by_state` and `search_station_by_coords`. 
+
+```python
+states = ['RJ','SP','MG','BA']
+stations = inmet.search_station_by_state(states)
+```
+
+To use the a central coordinate to search the most `n` stations close by:
+
+```python
+# Brasilia coordinates
+lat = -15.7975
+lon = -47.8919
+
+stations = inmet.search_station_by_coords(lat=lat, lon=lon, n_stations = 5)
+# It returns the 5 closest stations of lat,lon.
+
+```
+
+It is also possible to filter the type of stations using `station_type` on the methods above.
+
 
 
 
