@@ -46,6 +46,30 @@ inmetpy get_data_station 2021-09-01 2021-09-10 '[A652,A667]'
 
 # Basic usage
 
+## To start the API.
+
+```python
+from inmetpy.stations import InmetStation
+inmet = InmetStation()
+```
+
+## List stations
+
+Once the inmetpy is initialzed, all stations details are loaded. To get a dataframe with all stations:
+
+```python
+stations = inmet.stations()
+```
+
+The INMET has two types of meteorological stations, automatic and traditional stations. Traditional stations are basically manual stations, to in inmetPy it is possible to filter a specific type with "A" or "M" when the station method is called. 
+
+```python
+automatic_stations = inmet.stations("A") # All automatic stations
+manual_stations = inmet.stations("M") # All manual/traditional stations
+```
+
+
+
 ```python
 # import the library
 from inmetpy.stations import InmetStation
