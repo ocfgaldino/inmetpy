@@ -85,12 +85,15 @@ lat = -15.7975
 lon = -47.8919
 
 stations = inmet.search_station_by_coords(lat=lat, lon=lon, n_stations = 5)
-# It returns the 5 closest stations of lat,lon.
+# It returns the 5 closest stations of lat,lon. The dataframe returned contains a new attribute `DISTANCE`, with the distance of that stations of lat,lon, in kilometers.
 
 ```
 
-It is also possible to filter the type of stations using `station_type` on the methods above.
+It is also possible to filter the station type using `station_type` on the methods above.
 
+---
+
+### Get data from stations
 
 
 
