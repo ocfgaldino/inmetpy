@@ -127,22 +127,3 @@ station_data = inmet.get_data_station(start_date, end_date, stations_id, 'hour',
 ```
 
 
-
-
-```python
-# import the library
-from inmetpy.stations import InmetStation
-inmet = InmetStation()
-
-# list all inmet stations available
-stations = inmet.get_stations() # get details of all stations available
-
-auto_stations = inmet.get_stations("A") # details of all automatic stations
-manual_stations = inmet.get_stations("M") # details of all manual stations
-
-# get data from all inmet station after a selected date
-inmet.get_all_stations(date) # date in format YYYY-MM-DD"
-
-# get data from a station or a list of stations
-inmet.get_data_station(start_date, end_date, by, station_id) # stations must be a list of strings with the "CD_STATION" (ID) of the stations desired.
-```
