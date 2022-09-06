@@ -77,7 +77,7 @@ states = ['RJ','SP','MG','BA']
 stations = inmet.search_station_by_state(states)
 ```
 
-To use the a central coordinate to search the most `n` stations close by:
+To use the a central coordinate to search the closest `n` stations:
 
 ```python
 # Brasilia coordinates
