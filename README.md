@@ -95,6 +95,17 @@ It is also possible to filter the station type using `station_type` on the metho
 
 ### Get data from stations
 
+To request data from stations, there are 3 methods. `get_all_stations`, which request all data from all stations for a specific date (the current day is the default). `get_data_station` request data from specific stations within a time range period. In this case, the data can be request in two time resolutions: `hourly` or `daily`.
+
+```python
+# To request data from the current moment
+weather_data = inmet.get_all_stations() 
+
+# To request data for specific day, YYYY-MM-DD
+weather_data = inmet.get_all_stations('2021-01-01') 
+
+```
+
 
 
 ```python
