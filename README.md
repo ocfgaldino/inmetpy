@@ -106,6 +106,27 @@ weather_data = inmet.get_all_stations('2021-01-01')
 
 ```
 
+```python
+stations_id = ['A701','A801','A458']
+start_date = '2021-01-01'
+end_date = '2021-05-01'
+
+station_data = inmet.get_data_station(start_date, end_date, stations_id, 'hour')
+
+```
+
+The INMET API has a request limit of one year maximum, otherwise an error is raised and no data is returned. In case of a long period request, is possible to use `chunks=True` to split the request into smaller requests. Once is finished, all data is concatened into one single dataframe.
+
+```python
+stations_id = ['A701','A801','A458']
+start_date = '2015-01-01'
+end_date = '2022-05-01'
+
+station_data = inmet.get_data_station(start_date, end_date, stations_id, 'hour', chunks=True)
+
+```
+
+
 
 
 ```python
