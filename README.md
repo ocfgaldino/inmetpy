@@ -7,7 +7,7 @@
 
 
 
-> :warning: **Package development in progress!** 
+> :warning: **Deprecated package! The INMET has changed the access for the API. Therefore (and unfortunately) this package is no longer working. Official communication: https://portal.inmet.gov.br/manual/manual-de-uso-da-api-esta%C3%A7%C3%B5es** 
 
 
 *This is an **unofficial** (from INMET) python package for the INMET API.*
